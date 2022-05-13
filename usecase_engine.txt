@@ -1,0 +1,18 @@
+Use Case Riders 1:
+- Login
+- Register
+
+Use Case Riders 2:
+- Look into deliveries
+- Accept / Refuse delivery
+- Check data
+- Confirm delivery
+
+
+
+Use Case Management 1:
+- Automatic Assignment for riders -> region
+- Statistics dashboard per shop
+- Riders data -> online (login) / new (register) / general data
+- Add / delete riders
+- Add / delete shop

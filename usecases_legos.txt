@@ -1,0 +1,58 @@
+Scenario 1:
+- John has coronavirus, he cant leave his home, he doesnt enjoy nothing but building legos
+- John cant go to the store and buy himself a lego set
+- John will use our application to buy and order a lego set
+- John can now play with his lego set at home
+
+Scenario 2:
+- Margaret needs to buy a lego set for her son, as its his birthday and she didn't buy it sooner
+- Margaret cant leave her house, as the party is starting
+- Margaret will use our application to buy and order a lego set
+- Margarets son can now play with his new lego set on his birthday
+
+Scenario 3:
+- Hector works all day and does not have any way to enjoy the night, as he does not like to go clubing
+- Hector doesnt have time or will to go to a store and buy some legos
+- Hector will use our application to buy and order a lego set
+- Hector can now enjoy his night every once in a while
+
+Scenario 4:
+- Charlotte needs to buy a lego set for her son
+- Charlotte goes to every store but cant find the right one
+- Charlotte will use our application to buy and order the lego set
+- Charlottes son can now play with his new lego set that he always wanted
+
+
+
+Use Case 1:
+- John will access our application
+- He looks at the second lego set and he seems to like it
+- He adds the product to the cart
+- He makes the transaction
+- He will wait for the order to arrive
+
+Use Case 2:
+- Charlotte will access our application
+- She searches in the search bar for the specific lego set
+- She finds the lego set and adds it to the cart
+- She makes the transation
+- She will wait for the order to arrive
+
+Use Case 3:
+- Hector will access our application
+- He looks at a lego set that he likes
+- He adds the product to the cart
+- He chooses the option of delivering in a specific hour
+- He makes the transaction
+- He will wait for the order to arrive
+
+Use Case 4:
+- Margaret will access our application
+- She looks at the filter bar and filters the legos by her sons likes
+- She finds a lego set and adds it to the cart
+- She makes the transation
+- She will wait for the order to arrive
+
+Use Case 5:
+- Login
+- Register
