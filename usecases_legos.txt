@@ -8,21 +8,25 @@ Scenario 2:
 - Margaret needs to buy a lego set for her son, as its his birthday and she didn't buy it sooner
 - Margaret cant leave her house, as the party is starting
 - Margaret will use our application to buy and order a lego set
-- Margarets son can now play with his new lego set on his birthday
+- Margaret now has a lego set that she can gift her son for his birthday
 
 Scenario 3:
-- Hector works all day and does not have any way to enjoy the night, as he does not like to go clubing
-- Hector doesnt have time or will to go to a store and buy some legos
-- Hector will use our application to buy and order a lego set
-- Hector can now enjoy his night every once in a while
+- John works all day and does not have any way to enjoy the night, as he does not like to go clubing
+- John doesnt have time or will to go to a store and buy some legos
+- John will use our application to buy and order a lego set
+- John can now enjoy his night every once in a while
 
 Scenario 4:
-- Charlotte needs to buy a lego set for her son
-- Charlotte goes to every store but cant find the right one
-- Charlotte will use our application to buy and order the lego set
-- Charlottes son can now play with his new lego set that he always wanted
+- Margaret is thinking of buying a lego set for her son
+- Margaret knows her son likes superheroes from Marvel
+- Margaret will use our application to filter the lego sets from Marvel and to buy and order the lego set
+- Margaret now has a lego set of Marvel superheroes for her son
 
-
+Scenario 5:
+- Margaret's son told her that he wanted a specific Lego set
+- Margaret wants to remember what Lego set her son wants for future reference
+- Margaret will use our application mark the Lego set as favorite
+- Margaret now has the Lego set that her son wants marked
 
 Use Case 1:
 - John will access our application
@@ -48,10 +52,16 @@ Use Case 3:
 
 Use Case 4:
 - Margaret will access our application
-- She looks at the filter bar and filters the legos by her sons likes
+- She looks at the filter bar and filters the legos by the ones her sons likes
 - She finds a lego set and adds it to the cart
 - She makes the transation
 - She will wait for the order to arrive
+
+Use Case 5:
+- Margaret will access our application
+- She selects the Lego Set her son wanted
+- She marks it has 'Favorite'
+- She goes to the 'Favorite' page
 
 Use Case 5:
 - Login
