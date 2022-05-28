@@ -7,18 +7,67 @@ import './assets/css/material-dashboard.min.css';
 import './assets/css/nucleo-svg.css';
 import './assets/css/nucleo-icons.css';
 import { Link } from 'react-router-dom';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,
+} from 'chart.js';
+import { Line, Bar } from 'react-chartjs-2';
 
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
-const charts = () => {
+const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: 'top',
+    },
+    title: {
+      display: true,
+      text: 'Chart.js Line Chart',
+    },
+  },
+};
 
-  
+const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
 
-}
-
-
+const data = {
+  labels,
+  datasets: [
+    {
+      label: 'Dataset 1',
+      data: [1, 2, 3, 4, 5, 6, 7],
+      borderColor: 'rgb(255, 99, 132)',
+      backgroundColor: 'rgba(255, 99, 132, 0.5)'
+    },
+    {
+      label: 'Dataset 2',
+      data: [7, 6, 5, 4, 3, 2, 1],
+      borderColor: 'rgb(53, 162, 235)',
+      backgroundColor: 'rgba(53, 162, 235, 0.5)'
+    },
+  ],
+};
 
 class App extends Component {
+  
   render() {
+    
     return (
       <div className="App">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"></meta>
@@ -26,6 +75,7 @@ class App extends Component {
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"></link>
         <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
         <script async defer src="https://buttons.github.io/buttons.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
         <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3   bg-gradient-dark" id="sidenav-main">
         <div class="sidenav-header">
@@ -200,7 +250,7 @@ class App extends Component {
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
               <div class="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1">
                 <div class="chart">
-                  <canvas id="chart-bars" class="chart-canvas" height="170"></canvas>
+                  <Bar options={options} data={data} className="class-canvas"/>
                 </div>
               </div>
             </div>
@@ -220,7 +270,7 @@ class App extends Component {
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
               <div class="bg-gradient-success shadow-success border-radius-lg py-3 pe-1">
                 <div class="chart">
-                  <canvas id="chart-line" class="chart-canvas" height="170"></canvas>
+                <Line options={options} data={data} className="class-canvas"/>
                 </div>
               </div>
             </div>
@@ -240,7 +290,7 @@ class App extends Component {
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
               <div class="bg-gradient-dark shadow-dark border-radius-lg py-3 pe-1">
                 <div class="chart">
-                  <canvas id="chart-line-tasks" class="chart-canvas" height="170"></canvas>
+                <Line options={options} data={data} className="class-canvas"/>
                 </div>
               </div>
             </div>
