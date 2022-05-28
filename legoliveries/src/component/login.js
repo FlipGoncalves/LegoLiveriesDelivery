@@ -15,13 +15,13 @@ const Login = () => {
             <nav class="nav-home-aside">
                 <h6 class="title-category">MY MARKETS <i class="d-md-none icon fa fa-chevron-down"></i></h6>
                 <ul class="menu-category">
-                    <li><a href="#">Fashion and clothes</a></li>
-                    <li><a href="#">Automobile and motors</a></li>
-                    <li><a href="#">Gardening and agriculture</a></li>
-                    <li><a href="#">Electronics and tech</a></li>
-                    <li><a href="#">Packaginf and printing</a></li>
-                    <li><a href="#">Home and kitchen</a></li>
-                    <li><a href="#">Digital goods</a></li>
+                    <li><a >Fashion and clothes</a></li>
+                    <li><a >Automobile and motors</a></li>
+                    <li><a >Gardening and agriculture</a></li>
+                    <li><a >Electronics and tech</a></li>
+                    <li><a >Packaginf and printing</a></li>
+                    <li><a >Home and kitchen</a></li>
+                    <li><a >Digital goods</a></li>
                 </ul>
             </nav>
         </aside> */}
@@ -46,11 +46,11 @@ const Login = () => {
           <img src="assets/images/banners/slide3.jpg" alt="Third slide" />
         </div>
       </div>
-      <a class="carousel-control-prev" href="#carousel1_indicator" role="button" data-slide="prev">
+      <a class="carousel-control-prev" role="button" data-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="sr-only">Previous</span>
       </a>
-      <a class="carousel-control-next" href="#carousel1_indicator" role="button" data-slide="next">
+      <a class="carousel-control-next"  role="button" data-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="sr-only">Next</span>
       </a>
@@ -65,7 +65,7 @@ const Login = () => {
                 <div class="card-banner border-bottom">
                   <div class="py-3" style={{width:80}}>
                     <h6 class="card-title">Men clothing</h6>
-                    <a href="#" class="btn btn-secondary btn-sm"> Source now </a>
+                    <a  class="btn btn-secondary btn-sm"> Source now </a>
                   </div> 
                   <img src="assets/images/items/1.jpg" height="80" class="img-bg" />
                 </div>
@@ -73,7 +73,7 @@ const Login = () => {
                 <div class="card-banner border-bottom">
                   <div class="py-3" style={{width:80}}>
                     <h6 class="card-title">Winter clothing </h6>
-                    <a href="#" class="btn btn-secondary btn-sm"> Source now </a>
+                    <a  class="btn btn-secondary btn-sm"> Source now </a>
                   </div> 
                   <img src="assets/images/items/2.jpg" height="80" class="img-bg" />
                 </div>
@@ -81,7 +81,7 @@ const Login = () => {
                 <div class="card-banner border-bottom">
                   <div class="py-3" style={{width:80}}>
                     <h6 class="card-title">Home inventory</h6>
-                    <a href="#" class="btn btn-secondary btn-sm"> Source now </a>
+                    <a  class="btn btn-secondary btn-sm"> Source now </a>
                   </div> 
                   <img src="assets/images/items/6.jpg" height="80" class="img-bg" />
                 </div>
@@ -108,7 +108,7 @@ const Login = () => {
         <div class="home-category-banner bg-light-orange">
             <h5 class="title">Best trending clothes only for summer</h5>
             <p>Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-            <a href="#" class="btn btn-outline-primary rounded-pill">Source now</a>
+            <a  class="btn btn-outline-primary rounded-pill">Source now</a>
             <img src="assets/images/items/2.jpg" class="img-bg" />
         </div>
     
@@ -116,7 +116,7 @@ const Login = () => {
         <div class="col-md-9">
     <ul class="row no-gutters bordered-cols">
         <li class="col-6 col-lg-3 col-md-4">
-    <a href="#" class="item"> 
+    <a  class="item"> 
         <div class="card-body">
             <h6 class="title">Well made women clothes with trending collection  </h6>
             <img class="img-sm float-right" src="assets/images/items/1.jpg" /> 
@@ -125,7 +125,7 @@ const Login = () => {
     </a>
         </li>
         <li class="col-6 col-lg-3 col-md-4">
-    <a href="#" class="item"> 
+    <a  class="item"> 
         <div class="card-body">
             <h6 class="title">Great clothes with trending collection  </h6>
             <img class="img-sm float-right" src="assets/images/items/2.jpg" /> 
@@ -134,7 +134,7 @@ const Login = () => {
     </a>
         </li>
         <li class="col-6 col-lg-3 col-md-4">
-    <a href="#" class="item"> 
+    <a  class="item"> 
         <div class="card-body">
             <h6 class="title">Demo clothes with sample collection  </h6>
             <img class="img-sm float-right" src="assets/images/items/3.jpg" /> 
@@ -143,7 +143,7 @@ const Login = () => {
     </a>
         </li>
         <li class="col-6 col-lg-3 col-md-4">
-    <a href="#" class="item"> 
+    <a  class="item"> 
         <div class="card-body">
             <h6 class="title">Home and kitchen electronic  stuff collection  </h6>
             <img class="img-sm float-right" src="assets/images/items/4.jpg" /> 
@@ -152,7 +152,7 @@ const Login = () => {
     </a>  
         </li>
         <li class="col-6 col-lg-3 col-md-4">
-    <a href="#" class="item"> 
+    <a  class="item"> 
         <div class="card-body">
             <h6 class="title">Home and kitchen electronic  stuff collection  </h6>
             <img class="img-sm float-right" src="assets/images/items/5.jpg" /> 
@@ -161,7 +161,7 @@ const Login = () => {
     </a>
         </li>
         <li class="col-6 col-lg-3 col-md-4">
-    <a href="#" class="item"> 
+    <a  class="item"> 
         <div class="card-body">
             <h6 class="title">Home and kitchen electronic  stuff collection  </h6>
             <img class="img-sm float-right" src="assets/images/items/6.jpg" /> 
@@ -170,7 +170,7 @@ const Login = () => {
     </a>
         </li>
         <li class="col-6 col-lg-3 col-md-4">
-    <a href="#" class="item"> 
+    <a  class="item"> 
         <div class="card-body">
             <h6 class="title">Well made clothes with trending collection </h6>
             <img class="img-sm float-right" src="assets/images/items/7.jpg" /> 
@@ -180,7 +180,7 @@ const Login = () => {
     </a>
         </li>
         <li class="col-6 col-lg-3 col-md-4">
-    <a href="#" class="item"> 
+    <a  class="item"> 
         <div class="card-body">
             <h6 class="title">Home and kitchen interior  stuff collection   </h6>
             <img class="img-sm float-right" src="assets/images/items/6.jpg" /> 
@@ -204,108 +204,108 @@ const Login = () => {
     <div class="row row-sm">
         <div class="col-xl-2 col-lg-3 col-md-4 col-6">
             <div class="card card-sm card-product-grid">
-                <a href="#" class="img-wrap"> <img src="assets/images/items/1.jpg" /> </a>
+                <a  class="img-wrap"> <img src="assets/images/items/1.jpg" /> </a>
                 <figcaption class="info-wrap">
-                    <a href="#" class="title">Just another product name</a>
+                    <a  class="title">Just another product name</a>
                     <div class="price mt-1">$179.00</div>
                 </figcaption>
             </div>
         </div> 
         <div class="col-xl-2 col-lg-3 col-md-4 col-6">
             <div class="card card-sm card-product-grid">
-                <a href="#" class="img-wrap"> <img src="assets/images/items/2.jpg" /> </a>
+                <a  class="img-wrap"> <img src="assets/images/items/2.jpg" /> </a>
                 <figcaption class="info-wrap">
-                    <a href="#" class="title">Some item name here</a>
+                    <a  class="title">Some item name here</a>
                     <div class="price mt-1">$280.00</div> 
                 </figcaption>
             </div>
         </div>
         <div class="col-xl-2 col-lg-3 col-md-4 col-6">
             <div class="card card-sm card-product-grid">
-                <a href="#" class="img-wrap"> <img src="assets/images/items/3.jpg" /> </a>
+                <a  class="img-wrap"> <img src="assets/images/items/3.jpg" /> </a>
                 <figcaption class="info-wrap">
-                    <a href="#" class="title">Great product name here</a>
+                    <a  class="title">Great product name here</a>
                     <div class="price mt-1">$56.00</div> 
                 </figcaption>
             </div>
         </div>
         <div class="col-xl-2 col-lg-3 col-md-4 col-6">
             <div class="card card-sm card-product-grid">
-                <a href="#" class="img-wrap"> <img src="assets/images/items/4.jpg" /> </a>
+                <a  class="img-wrap"> <img src="assets/images/items/4.jpg" /> </a>
                 <figcaption class="info-wrap">
-                    <a href="#" class="title">Just another product name</a>
+                    <a  class="title">Just another product name</a>
                     <div class="price mt-1">$179.00</div> 
                 </figcaption>
             </div>
         </div> 
         <div class="col-xl-2 col-lg-3 col-md-4 col-6">
             <div class="card card-sm card-product-grid">
-                <a href="#" class="img-wrap"> <img src="assets/images/items/5.jpg" /> </a>
+                <a  class="img-wrap"> <img src="assets/images/items/5.jpg" /> </a>
                 <figcaption class="info-wrap">
-                    <a href="#" class="title">Just another product name</a>
+                    <a  class="title">Just another product name</a>
                     <div class="price mt-1">$179.00</div>
                 </figcaption>
             </div>
         </div> 
         <div class="col-xl-2 col-lg-3 col-md-4 col-6">
             <div class="card card-sm card-product-grid">
-                <a href="#" class="img-wrap"> <img src="assets/images/items/6.jpg" /> </a>
+                <a  class="img-wrap"> <img src="assets/images/items/6.jpg" /> </a>
                 <figcaption class="info-wrap">
-                    <a href="#" class="title">Some item name here</a>
+                    <a  class="title">Some item name here</a>
                     <div class="price mt-1">$280.00</div>
                 </figcaption>
             </div>
         </div> 
         <div class="col-xl-2 col-lg-3 col-md-4 col-6">
             <div class="card card-sm card-product-grid">
-                <a href="#" class="img-wrap"> <img src="assets/images/items/7.jpg" /> </a>
+                <a  class="img-wrap"> <img src="assets/images/items/7.jpg" /> </a>
                 <figcaption class="info-wrap">
-                    <a href="#" class="title">Great product name here</a>
+                    <a  class="title">Great product name here</a>
                     <div class="price mt-1">$56.00</div>
                 </figcaption>
             </div>
         </div>
         <div class="col-xl-2 col-lg-3 col-md-4 col-6">
             <div class="card card-sm card-product-grid">
-                <a href="#" class="img-wrap"> <img src="assets/images/items/9.jpg" /> </a>
+                <a  class="img-wrap"> <img src="assets/images/items/9.jpg" /> </a>
                 <figcaption class="info-wrap">
-                    <a href="#" class="title">Just another product name</a>
+                    <a  class="title">Just another product name</a>
                     <div class="price mt-1">$179.00</div> 
                 </figcaption>
             </div>
         </div> 
         <div class="col-xl-2 col-lg-3 col-md-4 col-6">
             <div class="card card-sm card-product-grid">
-                <a href="#" class="img-wrap"> <img src="assets/images/items/4.jpg" /> </a>
+                <a  class="img-wrap"> <img src="assets/images/items/4.jpg" /> </a>
                 <figcaption class="info-wrap">
-                    <a href="#" class="title">Just another product name</a>
+                    <a  class="title">Just another product name</a>
                     <div class="price mt-1">$179.00</div> 
                 </figcaption>
             </div>
         </div> 
         <div class="col-xl-2 col-lg-3 col-md-4 col-6">
             <div class="card card-sm card-product-grid">
-                <a href="#" class="img-wrap"> <img src="assets/images/items/5.jpg" /> </a>
+                <a  class="img-wrap"> <img src="assets/images/items/5.jpg" /> </a>
                 <figcaption class="info-wrap">
-                    <a href="#" class="title">Just another product name</a>
+                    <a  class="title">Just another product name</a>
                     <div class="price mt-1">$179.00</div> 
                 </figcaption>
             </div>
         </div> 
         <div class="col-xl-2 col-lg-3 col-md-4 col-6">
             <div class="card card-sm card-product-grid">
-                <a href="#" class="img-wrap"> <img src="assets/images/items/6.jpg" /> </a>
+                <a  class="img-wrap"> <img src="assets/images/items/6.jpg" /> </a>
                 <figcaption class="info-wrap">
-                    <a href="#" class="title">Some item name here</a>
+                    <a  class="title">Some item name here</a>
                     <div class="price mt-1">$280.00</div> 
                 </figcaption>
             </div>
         </div> 
         <div class="col-xl-2 col-lg-3 col-md-4 col-6">
             <div class="card card-sm card-product-grid">
-                <a href="#" class="img-wrap"> <img src="assets/images/items/7.jpg" /> </a>
+                <a  class="img-wrap"> <img src="assets/images/items/7.jpg" /> </a>
                 <figcaption class="info-wrap">
-                    <a href="#" class="title">Great product name here</a>
+                    <a  class="title">Great product name here</a>
                     <div class="price mt-1">$56.00</div> 
                 </figcaption>
             </div>
@@ -350,29 +350,29 @@ const Login = () => {
                     <aside class="col-md col-6">
                         <h6 class="title">Company</h6>
                         <ul class="list-unstyled">
-                            <li> <a href="#">About us</a></li>
-                            <li> <a href="#">Career</a></li>
-                            <li> <a href="#">Find a store</a></li>
-                            <li> <a href="#">Rules and terms</a></li>
-                            <li> <a href="#">Sitemap</a></li>
+                            <li> <a >About us</a></li>
+                            <li> <a >Career</a></li>
+                            <li> <a >Find a store</a></li>
+                            <li> <a >Rules and terms</a></li>
+                            <li> <a >Sitemap</a></li>
                         </ul>
                     </aside>
                     <aside class="col-md col-6">
                         <h6 class="title">Account</h6>
                         <ul class="list-unstyled">
-                            <li> <a href="#"> User Login </a></li>
-                            <li> <a href="#"> User register </a></li>
-                            <li> <a href="#"> Account Setting </a></li>
-                            <li> <a href="#"> My Orders </a></li>
+                            <li> <a > User Login </a></li>
+                            <li> <a > User register </a></li>
+                            <li> <a > Account Setting </a></li>
+                            <li> <a > My Orders </a></li>
                         </ul>
                     </aside>
                     <aside class="col-md">
                         <h6 class="title">Social</h6>
                         <ul class="list-unstyled">
-                            <li><a href="#"> <i class="fab fa-facebook"></i> Facebook </a></li>
-                            <li><a href="#"> <i class="fab fa-twitter"></i> Twitter </a></li>
-                            <li><a href="#"> <i class="fab fa-instagram"></i> Instagram </a></li>
-                            <li><a href="#"> <i class="fab fa-youtube"></i> Youtube </a></li>
+                            <li><a > <i class="fab fa-facebook"></i> Facebook </a></li>
+                            <li><a > <i class="fab fa-twitter"></i> Twitter </a></li>
+                            <li><a > <i class="fab fa-instagram"></i> Instagram </a></li>
+                            <li><a > <i class="fab fa-youtube"></i> Youtube </a></li>
                         </ul>
                     </aside>
                 </div> 
