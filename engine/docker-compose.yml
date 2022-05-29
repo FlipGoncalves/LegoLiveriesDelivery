@@ -1,0 +1,29 @@
+version: '1.0'
+
+services:
+  engine:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - spring.datasource.url=jdbc:mysql://mysqldb:3306/engine?useSSL=false
+    networks:
+      - network
+    
+  mysqldb:
+    image: mysql:5.7
+    networks:
+      - network
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=enginedb
+      - MYSQL_USER=sa
+      - MYSQL_PASSWORD=1234
+  
+networks:
+  network:
+    name: general_network
+
+    
