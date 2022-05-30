@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import restapi.tqs.Exceptions.BadRequestException;
 import restapi.tqs.Models.Lego;
+import restapi.tqs.Repositories.LegoRepository;
 import restapi.tqs.Service.LegoService;
 
 import org.slf4j.Logger;
@@ -28,15 +29,15 @@ public class RESTController {
     @Autowired
     private LegoService service;
 
-    // @Autowired
-    // private CovidDataRepository repositoryData;
+    @Autowired
+    private LegoRepository legoRepository;
     
     @CrossOrigin
     @GetMapping("/all_legos")
     public ResponseEntity<List<Lego>> getData() {
         log.info("GET Request -> All Lego Data");
-        // List<CovidData> covid = service.getAllData();
-        List<Lego> legos = Arrays.asList(new Lego("Lego 1", 22.99), new Lego("Lego 2", 44.99));
+        List<Lego> legos = service.getData();
+        //List<Lego> legos = Arrays.asList(new Lego("Lego 1", 22.99), new Lego("Lego 2", 44.99));
         System.out.println(legos);
 
         // repositoryData.saveAll(covid);
@@ -45,7 +46,7 @@ public class RESTController {
 
     @PutMapping("/insert_lego")
     public ResponseEntity<Lego> insertLego() {
-        Lego lego = service.insertData("Lego 3", 55.99);
+        Lego lego = service.insertData("Lego Duplo", 69.69, "https://www.continente.pt/dw/image/v2/BDVS_PRD/on/demandware.static/-/Sites-col-master-catalog/default/dwfd878172/images/col/725/7251750-direito.jpg?sw\u003d280\u0026sh\u003d280");
 
         return new ResponseEntity<>(lego, HttpStatus.OK);
     }
