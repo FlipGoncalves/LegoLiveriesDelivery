@@ -24,3 +24,7 @@ npx serve build
 npm install -g serve
 
 npm install react-router-dom
+
+# Dashboard
+npm i react-chartjs-2 chart.js
+npm i faker

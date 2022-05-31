@@ -6,11 +6,49 @@ import '../assets/css/material-dashboard.css.map';
 import '../assets/css/material-dashboard.min.css';
 import '../assets/css/nucleo-svg.css';
 import '../assets/css/nucleo-icons.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import Aside from './aside';
 
 
 class SignIn extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      error_message: ""
+    };
+  }
+
   render() {
+
+    const {navigation} = this.props;
+
+    const signin = () => {
+      let email = document.getElementById('email').value;
+      let pass = document.getElementById('pass').value;
+  
+      if (email === "" && pass === "") {
+        this.setState({error_message: "Please insert Email and Password"})
+        return false
+      } else if (pass === "") {
+        this.setState({error_message: "Please insert Password"})
+        return false
+      } else if (email === "") {
+        this.setState({error_message: "Please insert Email"})
+        return false
+      }
+      
+      this.setState({error_message: ""})
+
+      // do sign in magic here
+
+      localStorage.setItem('email', email)
+      localStorage.setItem('password', pass)
+      
+      navigation("/")
+
+    }
+
     return (
       <div className="App">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"></meta>
@@ -25,63 +63,7 @@ class SignIn extends Component {
         <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
         <script async defer src="https://buttons.github.io/buttons.js"></script>
 
-        <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3   bg-gradient-dark" id="sidenav-main">
-        <div class="sidenav-header">
-          <i class="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
-          <a class="navbar-brand m-0" href=" https://demos.creative-tim.com/material-dashboard/pages/dashboard " target="_blank">
-            <img src={logo} class="navbar-brand-img h-100" alt="main_logo" />
-            <span class="ms-1 font-weight-bold text-white">LegoLiveries</span>
-          </a>
-        </div>
-        <hr class="horizontal light mt-0 mb-2" />
-        <div class="collapse navbar-collapse  w-auto  max-height-vh-100" id="sidenav-collapse-main">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <Link to="/">
-                <a class="nav-link text-white active bg-gradient-primary">
-                  <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                    <i class="material-icons opacity-10">dashboard</i>
-                  </div>
-                  <span class="nav-link-text ms-1">Dashboard</span>
-                </a>
-              </Link>
-            </li>
-            <li class="nav-item mt-3">
-              <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Account pages</h6>
-            </li>
-            <li class="nav-item">
-              <Link to="/profile">
-                <a class="nav-link text-white ">
-                  <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                    <i class="material-icons opacity-10">person</i>
-                  </div>
-                  <span class="nav-link-text ms-1">Profile</span>
-                </a>
-              </Link>
-            </li>
-            <li class="nav-item">
-              <Link to="/sign-in">
-                <a class="nav-link text-white ">
-                  <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                    <i class="material-icons opacity-10">login</i>
-                  </div>
-                  <span class="nav-link-text ms-1">Sign In</span>
-                </a>
-              </Link>
-            </li>
-            <li class="nav-item">
-              <Link to="/sign-up">
-                <a class="nav-link text-white ">
-                  <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                    <i class="material-icons opacity-10">assignment</i>
-                  </div>
-                  <span class="nav-link-text ms-1">Sign Up</span>
-                </a>
-              </Link>
-            </li>
-          </ul>
-        </div>
-      </aside>
+        <Aside></Aside>
 
 
 
@@ -96,17 +78,17 @@ class SignIn extends Component {
                         <h4 class="text-white font-weight-bolder text-center mt-2 mb-0">Sign in</h4>
                         <div class="row mt-3">
                             <div class="col-2 text-center ms-auto">
-                            <a class="btn btn-link px-3" href="javascript:;">
+                            <a class="btn btn-link px-3">
                                 <i class="fa fa-facebook text-white text-lg"></i>
                             </a>
                             </div>
                             <div class="col-2 text-center px-1">
-                            <a class="btn btn-link px-3" href="javascript:;">
+                            <a class="btn btn-link px-3">
                                 <i class="fa fa-github text-white text-lg"></i>
                             </a>
                             </div>
                             <div class="col-2 text-center me-auto">
-                            <a class="btn btn-link px-3" href="javascript:;">
+                            <a class="btn btn-link px-3">
                                 <i class="fa fa-google text-white text-lg"></i>
                             </a>
                             </div>
@@ -116,23 +98,32 @@ class SignIn extends Component {
                     <div class="card-body">
                         <form role="form" class="text-start">
                         <div class="input-group input-group-outline my-3">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-control"/>
+                            <input type="email" class="form-control" id="email" placeholder="Email"/>
                         </div>
                         <div class="input-group input-group-outline mb-3">
-                            <label class="form-label">Password</label>
-                            <input type="password" class="form-control"/>
+                            <input type="password" class="form-control" id="pass" placeholder="Password"/>
                         </div>
                         <div class="form-check form-switch d-flex align-items-center mb-3">
                             <input class="form-check-input" type="checkbox" id="rememberMe"/>
-                            <label class="form-check-label mb-0 ms-2" for="rememberMe">Remember me</label>
+                            <label class="form-check-label mb-0 ms-2">Remember me</label>
                         </div>
+
+                        {this.state.error_message !== "" ? <>
+                          <div>
+                            <label class="form-check-label mb-0 ms-2" style={{color: 'red'}}>{this.state.error_message}</label>
+                          </div>
+                        </> : null}
+
                         <div class="text-center">
-                            <button type="button" class="btn bg-gradient-primary w-100 my-4 mb-2">Sign in</button>
+                          {/* <Link to="/"> */}
+                            <button type="button" class="btn bg-gradient-primary w-100 my-4 mb-2" onClick={signin}>Sign in</button>
+                          {/* </Link> */}
                         </div>
                         <p class="mt-4 text-sm text-center">
                             Don't have an account?
-                            <a href=".pages/sign-up" class="text-primary text-gradient font-weight-bold">Sign up</a>
+                            <Link to="/sign-up">
+                              <a class="text-primary text-gradient font-weight-bold">Sign up</a>
+                            </Link>
                         </p>
                         </form>
                     </div>
@@ -147,4 +138,8 @@ class SignIn extends Component {
   }
 }
 
-export default SignIn;
+export default function(props) {
+  const navigation = useNavigate();
+
+  return <SignIn {...props} navigation={navigation} />;
+}
