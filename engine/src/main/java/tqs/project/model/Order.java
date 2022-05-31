@@ -14,7 +14,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "order")
+@Table(name = "`order`")
 public class Order {
     
     @Id
@@ -25,7 +25,7 @@ public class Order {
     private long externalOrderId;
     @Column(name = "clientName")
     private String clientName;
-    @Column(name = "date")
+    @Column(name = "`date`")
     @Temporal(TemporalType.DATE)
     private Date date;
     @Column(name = "time_of_delivery")
@@ -38,7 +38,7 @@ public class Order {
     private Store store;
 
     @ManyToOne
-    @JoinColumn(name = "rider_id", referencedColumnName = "rider_id")
+    //@JoinColumn(name = "rider_id", referencedColumnName = "rider_id")
     private Rider rider;
 
     @ManyToOne
