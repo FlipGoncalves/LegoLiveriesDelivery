@@ -6,7 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/lego")
 public class RESTController {
     private static final Logger log = LoggerFactory.getLogger(RESTController.class);
@@ -29,10 +32,6 @@ public class RESTController {
     @Autowired
     private LegoService service;
 
-    @Autowired
-    private LegoRepository legoRepository;
-    
-    @CrossOrigin
     @GetMapping("/all_legos")
     public ResponseEntity<List<Lego>> getData() {
         log.info("GET Request -> All Lego Data");
@@ -44,14 +43,13 @@ public class RESTController {
         return new ResponseEntity<>(legos, HttpStatus.OK);
     }
 
-    @PutMapping("/insert_lego")
-    public ResponseEntity<Lego> insertLego() {
-        Lego lego = service.insertData("Lego Duplo", 69.69, "https://www.continente.pt/dw/image/v2/BDVS_PRD/on/demandware.static/-/Sites-col-master-catalog/default/dwfd878172/images/col/725/7251750-direito.jpg?sw\u003d280\u0026sh\u003d280");
+    @PostMapping("/insert_lego")
+    public ResponseEntity<Lego> insertLego(@RequestBody Lego lego) {
+        Lego lego2 = service.insertData(lego);
 
         return new ResponseEntity<>(lego, HttpStatus.OK);
     }
 
-    @CrossOrigin
     @GetMapping("/get_lego/name")
     public ResponseEntity<List<Lego>> getLegoByName(@RequestParam(value = "name", required = true) String name) throws BadRequestException {
         log.info("GET Request -> Lego Data by name: {}", name);
@@ -65,7 +63,6 @@ public class RESTController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
-    @CrossOrigin
     @GetMapping("/get_lego/price")
     public ResponseEntity<List<Lego>> getLegoByPrice(@RequestParam(value = "price", required = true) String price) throws BadRequestException {
         log.info("GET Request -> Lego Data by price: {}", price);

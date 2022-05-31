@@ -2,6 +2,7 @@ package restapi.tqs.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.standard.expression.LessOrEqualToExpression;
 
 import restapi.tqs.Models.Lego;
 import restapi.tqs.Repositories.LegoRepository;
@@ -45,14 +46,9 @@ public class LegoService {
         //return Arrays.asList(new Lego("Lego Service by Price", 2.0));
     }
 
-    public Lego insertData(String name, double price, String imageUrl) {
+    public Lego insertData(Lego lego) {
         log.info("Getting Cached Data");
-        
-        Lego lego = new Lego();
-        lego.setName(name);
-        lego.setPrice(price);
-        lego.setImageUrl(imageUrl);
-
+         
         return legorep.save(lego);
 
         //return new Lego("Lego Service by Insert", 2.0);
