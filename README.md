@@ -28,3 +28,4 @@ npm install react-router-dom
 # Dashboard
 npm i react-chartjs-2 chart.js
 npm i faker
+npm install -g serve
