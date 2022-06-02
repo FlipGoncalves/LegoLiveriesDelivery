@@ -5,6 +5,8 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
@@ -17,6 +19,7 @@ import javax.persistence.Table;
 public class Rider {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "rider_id")
     private long riderId;
     @Column(name = "review_sum")
@@ -36,8 +39,7 @@ public class Rider {
 
     }
 
-    public Rider(long riderId, int reviewSum, int totalReviews) {
-        this.riderId = riderId;
+    public Rider(int reviewSum, int totalReviews) {
         this.reviewSum = reviewSum;
         this.totalReviews = totalReviews;
     }
