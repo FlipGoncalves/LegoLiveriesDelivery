@@ -14,7 +14,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "client_wow")
+@Table(name = "`client`")
 public class Client {
     
     @Id

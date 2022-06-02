@@ -9,7 +9,7 @@ import restapi.tqs.Models.Lego;
 
 @Repository
 public interface LegoRepository extends JpaRepository<Lego, Long> {
-    List<Lego> findAllByName(String name);
+    List<Lego> findAllByNameContainingIgnoreCase(String name);
     List<Lego> findAllByPrice(double price);
 }
 

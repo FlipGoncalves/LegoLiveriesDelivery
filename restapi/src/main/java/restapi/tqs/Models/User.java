@@ -9,7 +9,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "user_wow")
+@Table(name = "`user`")
 public class User {
     
     @Id
@@ -20,7 +20,7 @@ public class User {
     private String username;
     @Column(name = "email")
     private String email;
-    @Column(name = "password_wow")
+    @Column(name = "`password`")
     private String password;
 
     @OneToOne(mappedBy = "user")

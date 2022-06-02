@@ -35,7 +35,6 @@ public class Lego {
     public Lego() {
 
     }
-    
 
     public long getLegoId() {
         return this.legoId;
