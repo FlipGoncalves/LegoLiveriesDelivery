@@ -23,7 +23,9 @@ class SignUp extends Component {
 
     const {navigation} = this.props;
 
-    const signup = () => {
+    const signup = (event) => {
+      event.preventDefault();
+
       let email = document.getElementById('email').value;
       let pass = document.getElementById('pass').value;
       let name = document.getElementById('name').value;
@@ -47,7 +49,12 @@ class SignUp extends Component {
       formData.append("password", pass);   
 
       let resp = fetch('http://localhost:8080/api/register', {
-          method: 'POST'
+          method: 'POST',
+          body: JSON.stringify({
+            email: formData.email,
+            username: formData.username,
+            password: formData.password
+          }),
       }).then((data) => {
           console.log(data)
           if (data.status === 200) {
@@ -60,7 +67,7 @@ class SignUp extends Component {
           }
       })
 
-      this.setState({error_message: "ERROR doing sign up"})
+      this.setState({error_message: "ERROR during sign up"})
 
     }
 
@@ -94,7 +101,7 @@ class SignUp extends Component {
                     <p class="mb-0">Enter your email and password to register</p>
                     </div>
                     <div class="card-body">
-                    <form role="form">
+                    <form role="form" onSubmit={signup} method="POST">
                         <div class="input-group input-group-outline mb-3">
                         <input type="text" class="form-control" id="name" placeholder="Name"/>
                         </div>
@@ -112,7 +119,7 @@ class SignUp extends Component {
                         </> : null}
 
                         <div class="text-center">
-                        <button type="button" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0" onClick={signup}>Sign Up</button>
+                        <button type="submit" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Sign Up</button>
                         </div>
                     </form>
                     </div>
