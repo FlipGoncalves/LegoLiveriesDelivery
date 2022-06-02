@@ -8,14 +8,14 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class OrderLegoId implements Serializable{
     
-    private long clientId;
+    private long orderId;
     private long legoId;
 
     public OrderLegoId() {
     }
 
-    public OrderLegoId(long clientId, long legoId) {
-        this.clientId = clientId;
+    public OrderLegoId(long orderId, long legoId) {
+        this.orderId = orderId;
         this.legoId = legoId;
     }
 
@@ -27,21 +27,21 @@ public class OrderLegoId implements Serializable{
             return false;
         }
         OrderLegoId orderLegoId = (OrderLegoId) o;
-        return clientId == orderLegoId.clientId && legoId == orderLegoId.legoId;
+        return orderId == orderLegoId.orderId && legoId == orderLegoId.legoId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(clientId, legoId);
+        return Objects.hash(orderId, legoId);
     } 
 
 
-    public long getClientId() {
-        return this.clientId;
+    public long getOrderId() {
+        return this.orderId;
     }
 
-    public void setClientId(long clientId) {
-        this.clientId = clientId;
+    public void setOrderId(long orderId) {
+        this.orderId = orderId;
     }
 
     public long getLegoId() {
@@ -55,7 +55,7 @@ public class OrderLegoId implements Serializable{
     @Override
     public String toString() {
         return "{" +
-            " clientId='" + getClientId() + "'" +
+            " clientId='" + getOrderId() + "'" +
             ", legoId='" + getLegoId() + "'" +
             "}";
     }

@@ -38,6 +38,10 @@ public class OrderLego {
         return this.id;
     }
 
+    public void setId(OrderLegoId id) {
+        this.id = id;
+    }
+
     public Order getOrder() {
         return this.order;
     }

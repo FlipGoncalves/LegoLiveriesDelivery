@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "`order`")
@@ -24,7 +26,16 @@ public class Order {
     @Column(name = "order_id")
     private long orderId;
     @Column(name = "date")
+    @Temporal(TemporalType.DATE)
     private Date date;
+    @Column(name = "time_of_delivery")
+    private int timeOfDelivery;
+    @Column(name = "scheduled_time_of_delivery")
+    private int scheduledtimeOfDelivery;
+    @Column(name = "rider_name")
+    private String riderName;
+    @Column(name = "total_price")
+    private double totalPrice;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id", referencedColumnName = "address_id")
@@ -38,10 +49,15 @@ public class Order {
     private Set<OrderLego> orderLego = new HashSet<>();
 
     public Order() {
+        this.scheduledtimeOfDelivery = -1;
     }
-
+    
     public long getOrderId() {
         return this.orderId;
+    }
+
+    public void setOrderId(long orderId) {
+        this.orderId = orderId;
     }
 
     public Date getDate() {
@@ -50,6 +66,30 @@ public class Order {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public int getTimeOfDelivery() {
+        return this.timeOfDelivery;
+    }
+
+    public void setTimeOfDelivery(int timeOfDelivery) {
+        this.timeOfDelivery = timeOfDelivery;
+    }
+
+    public int getScheduledtimeOfDelivery() {
+        return this.scheduledtimeOfDelivery;
+    }
+
+    public void setScheduledtimeOfDelivery(int scheduledtimeOfDelivery) {
+        this.scheduledtimeOfDelivery = scheduledtimeOfDelivery;
+    }
+
+    public String getRiderName() {
+        return this.riderName;
+    }
+
+    public void setRiderName(String riderName) {
+        this.riderName = riderName;
     }
 
     public Address getAddress() {
@@ -76,6 +116,13 @@ public class Order {
         this.orderLego = orderLego;
     }
 
+    public double getTotalPrice() {
+        return this.totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
 
     @Override
     public String toString() {

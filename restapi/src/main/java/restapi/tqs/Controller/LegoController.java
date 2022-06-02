@@ -23,8 +23,8 @@ import org.springframework.http.ResponseEntity;
 @RestController
 @CrossOrigin
 @RequestMapping("/lego")
-public class RESTController {
-    private static final Logger log = LoggerFactory.getLogger(RESTController.class);
+public class LegoController {
+    private static final Logger log = LoggerFactory.getLogger(LegoController.class);
 
     @Autowired
     private LegoService legoService;
