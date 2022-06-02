@@ -48,8 +48,7 @@ public class Order {
     public Order() {
     }
 
-    public Order(long orderId, long externalOrderId, String clientName, Date date, int timeOfDelivery, int review) {
-        this.orderId = orderId;
+    public Order(long externalOrderId, String clientName, Date date, int timeOfDelivery, int review) {
         this.externalOrderId = externalOrderId;
         this.clientName = clientName;
         this.date = date;
