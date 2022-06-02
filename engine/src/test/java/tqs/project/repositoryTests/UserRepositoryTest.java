@@ -1,4 +1,4 @@
-package tqs.project.repositoriesTests;
+package tqs.project.repositoryTests;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
+
 import tqs.project.repositories.UserRepository;
 import tqs.project.model.User;
 
@@ -45,6 +46,6 @@ public class UserRepositoryTest {
         Optional<User> data_get = rep.findById(data.getUserId());
 
         assertThat(data_get).isNotNull();
-        assertEquals(data, data_get);
+        assertEquals(data, data_get.get());
     }
 }
