@@ -45,13 +45,13 @@ const Login = ({setToken}) => {
                         <form accept-charset="utf-8" onSubmit={handleSubmit}> {/*method="post"*/}
                             <div className="form-group">
                                 <b><label htmlFor="name" style={{border: 1}}>User Name or Email</label></b>
-                                <input className="form-control input-filled-valid" id="name" name="name" required=""
+                                <input className="form-control input-filled-valid" id="name" name="name" required
                                        type="text" value={username} onChange={(e) => setUserName(e.target.value)}/>
                             </div>
                             <div className="form-group">
                                 <b><label htmlFor="password">Password</label></b>
                                 <input className="form-control input-filled-valid" id="password" name="password"
-                                       required="" type="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+                                       required type="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
                             </div>
                             <div className="row pt-3">
                                  <div className="col-md-6">
@@ -71,9 +71,7 @@ const Login = ({setToken}) => {
                 </main>
             </section>
         </div>
-
-        <Footer />
-
+        
     </div>
   );
 }
