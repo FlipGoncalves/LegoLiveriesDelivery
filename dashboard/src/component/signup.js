@@ -39,10 +39,28 @@ class SignUp extends Component {
         return
       }
 
-      this.setState({error_message: ""})
-      
-      // do sign up magic here
-      navigation("/")
+      console.log("Register")
+
+      let formData = new FormData();
+      formData.append("email", email);
+      formData.append("username", name);
+      formData.append("password", pass);   
+
+      let resp = fetch('http://localhost:8080/api/register', {
+          method: 'POST'
+      }).then((data) => {
+          console.log(data)
+          if (data.status === 200) {
+              this.setState({error_message: ""})
+              this.setState({items: []})
+              console.log("HERE")
+              // navigation("/")
+          } else {
+              this.setState({error_message: "ERROR during sign up"})
+          }
+      })
+
+      this.setState({error_message: "ERROR doing sign up"})
 
     }
 
