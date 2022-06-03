@@ -1,14 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-<<<<<<< HEAD
 import { BrowserRouter as Router,Routes, Route, Link } from 'react-router-dom';
-import Login from './component/login';
-import Home from './component/home'
-import Register from "./component/Register";
-import ResetPassword from "./component/ResetPassword";
-=======
-import { Link } from 'react-router-dom';
->>>>>>> imp/engine/controllers
 
 class App extends Component {
 
@@ -178,9 +170,11 @@ class App extends Component {
                         <div class="container">
                             <div class="row align-items-center">
                                 <div class="col-xl-2 col-lg-3 col-md-12">
-                                    <a  class="brand-wrap">
-                                    LegoLiveries
-                                    </a> 
+                                    <Link to="/">
+                                        <a class="brand-wrap">
+                                            LegoLiveries
+                                        </a> 
+                                    </Link>
                                 </div>
                                 <div class="col-xl-6 col-lg-5 col-md-6">
                                         <div class="input-group w-100">

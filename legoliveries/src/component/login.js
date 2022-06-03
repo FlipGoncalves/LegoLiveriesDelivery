@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { useNavigate} from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Footer from "./Footer";
-import '../login.css'
+import Navbar from './Navbar';
+
 
 {/*async function loginUser(credentials) {
     return fetch('http://localhost:8080/login', {
@@ -40,6 +41,8 @@ const Login = ({setToken}) => {
     <div>
     <div class="container">
 
+        <Navbar />
+
         <section class="section-main padding-y">
             <main class="card">
                     <div class="card-body">
@@ -68,6 +71,12 @@ const Login = ({setToken}) => {
                             {/*  <input id="nonce" name="nonce" type="hidden"
                                    value="4de40d521855b547366a912e4e1bc559f4d858b92ab4e1779ecaa67e1efcfaf8"/> */}
                         </form>
+                        <p class="mb-2 text-sm mx-auto">
+                            Don't have an account ?
+                            <Link to="/register">
+                                <a class="text-primary text-gradient font-weight-bold">Sign up</a>
+                            </Link>
+                        </p>
                     </div>
                 </main>
             </section>
