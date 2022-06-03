@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
 import './App.css';
+<<<<<<< HEAD
+import { BrowserRouter as Router,Routes, Route, Link } from 'react-router-dom';
+import Login from './component/login';
+import Home from './component/home'
+import Register from "./component/Register";
+import ResetPassword from "./component/ResetPassword";
+=======
 import { Link } from 'react-router-dom';
+>>>>>>> imp/engine/controllers
 
 class App extends Component {
 
