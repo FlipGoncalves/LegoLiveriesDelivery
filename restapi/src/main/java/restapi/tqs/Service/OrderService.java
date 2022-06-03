@@ -67,7 +67,7 @@ public class OrderService {
         }
 
         //The Pageable here can be used later on for filtering and sorting by date, name, etc.
-        List<Order> orders = orderRepository.findAllByClient(clientId, Pageable.unpaged());
+        List<Order> orders = orderRepository.findAllByClient(client.get(), Pageable.unpaged());
 
         return orders;
     }
