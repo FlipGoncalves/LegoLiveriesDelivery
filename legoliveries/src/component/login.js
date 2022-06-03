@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate} from 'react-router-dom';
 import Footer from "./Footer";
+import '../login.css'
 
 {/*async function loginUser(credentials) {
     return fetch('http://localhost:8080/login', {
@@ -36,7 +37,7 @@ const Login = ({setToken}) => {
     }
 
     return (
-    <div className="App">
+    <div>
     <div class="container">
 
         <section class="section-main padding-y">
@@ -44,7 +45,7 @@ const Login = ({setToken}) => {
                     <div class="card-body">
                         <form accept-charset="utf-8" onSubmit={handleSubmit}> {/*method="post"*/}
                             <div className="form-group">
-                                <b><label htmlFor="name" style={{border: 1}}>User Name or Email</label></b>
+                                <b><label htmlFor="name" >User Name or Email</label></b>
                                 <input className="form-control input-filled-valid" id="name" name="name" required
                                        type="text" value={username} onChange={(e) => setUserName(e.target.value)}/>
                             </div>
@@ -54,11 +55,11 @@ const Login = ({setToken}) => {
                                        required type="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
                             </div>
                             <div className="row pt-3">
-                                 <div className="col-md-6">
+                                {/*   <div className="col-md-6">
                                     <a className="float-left align-text-to-button" href="/reset_password">
                                         Forgot your password?
                                     </a>
-                                </div>
+                                </div> */}
                                 <div className="col-md-6">
                                     <input className="btn btn-md btn-primary btn-outlined float-right" id="_submit"
                                            name="_submit" type="submit" value="Submit" />

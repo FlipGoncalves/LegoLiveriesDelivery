@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate} from 'react-router-dom';
 import '../App.css';
 import Footer from "./Footer";
+import Navbar from "./Navbar";
 
 {/*async function loginUser(credentials) {
     return fetch('http://localhost:8080/login', {
@@ -41,7 +42,11 @@ const Register = () => {
     }
 
     return (
-        <div >
+        <div>
+            <Navbar />
+        <div class='container'>
+            <section className="section-main padding-y">
+                <main className="card">
         <div className="row">
             <div className="col-md-6 offset-md-3">
                 <form method="post" accept-charset="utf-8" autoComplete="off" role="form" onSubmit={handleSubmit}>
@@ -92,6 +97,10 @@ const Register = () => {
                 </form>
 
             </div>
+
+        </div>
+                </main>
+            </section>
         </div>
             <Footer />
         </div>

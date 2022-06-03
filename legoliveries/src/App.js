@@ -14,7 +14,7 @@ class App extends Component {
                         <Route exact path='/' element={< Home />}></Route>
                         <Route exact path='/login' element={< Login />}></Route>
                         <Route exact path='/register' element={<Register />}></Route>
-                        <Route exact path='/reset_password' element={<ResetPassword />}></Route>
+                        {/*  <Route exact path='/reset_password' element={<ResetPassword />}></Route> */}
                     </Routes>
             </Router>
         );

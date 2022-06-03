@@ -31,7 +31,9 @@ const ResetPassword = () => {
     }
 
     return (
-        <div className="App">
+        <div>
+            <section className="section-main padding-y">
+                <main className="card">
             <div className="row">
                 <div className="col-md-6 offset-md-3">
                     <div>
@@ -63,6 +65,8 @@ const ResetPassword = () => {
 
                 </div>
             </div>
+                </main>
+            </section>
             <Footer />
         </div>
     );
