@@ -43,39 +43,7 @@ class SignUp extends Component {
       }
 
       console.log("Register")
-
-      let formData = new FormData();
-      formData.append("email", email);
-      formData.append("username", name);
-      formData.append("password", pass);   
-
-      // let resp = fetch('http://localhost:8080/api/register', {
-      //     method: 'POST',
-      //     body: JSON.stringify({
-      //       email: formData.email,
-      //       username: formData.username,
-      //       password: formData.password
-      //     }),
-      // }).then((data) => {
-      //     console.log(data)
-      //     if (data.status === 200) {
-      //         this.setState({error_message: ""})
-      //         this.setState({items: []})
-      //         console.log("HERE")
-      //         // navigation("/")
-      //     } else {
-      //         this.setState({error_message: "ERROR during sign up"})
-      //     }
-      // })
-
-      axios.get('http://localhost:8080/api/all_riders')
-      .then(function (response) {
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-
+      
       axios.post('http://localhost:8080/api/register', {
         "email": email,
         "username": name,
@@ -87,9 +55,7 @@ class SignUp extends Component {
           this.setState({error_message: ""})
           this.setState({items: []})
           console.log("HERE")
-          // navigation("/")
-        } else {
-            this.setState({error_message: "ERROR during sign up"})
+          navigation("/")
         }
       })
       .catch((error) => {

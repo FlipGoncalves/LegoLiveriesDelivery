@@ -14,7 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
 import tqs.project.model.User;
-import tqs.project.model.UserDTO;
+import tqs.project.model.RegisterDTO;
 import tqs.project.repositories.UserRepository;
 import tqs.project.service.UserService;
 
@@ -53,17 +53,10 @@ class UserServiceTest {
     }
 
     @Test
-    void testInsertUser() {
-        service.insertUser(this.user);
-
-        verify(rep, times(1)).save(any());
-    }
-
-    @Test
     void testRegisterValid() {
         when(rep.findByEmail("filipeg@ua.pt")).thenReturn(null);
 
-        UserDTO user = new UserDTO("Filipe", "filipeg@ua.pt", "filipe");
+        RegisterDTO user = new RegisterDTO("Filipe", "filipeg@ua.pt", "filipe");
 
         service.register(user);
 
@@ -75,7 +68,7 @@ class UserServiceTest {
     void testRegisterInvalid() {
         when(rep.findByEmail("filipeg@ua.pt")).thenReturn(this.user);
 
-        UserDTO user = new UserDTO("Filipe", "filipeg@ua.pt", "filipe");
+        RegisterDTO user = new RegisterDTO("Filipe", "filipeg@ua.pt", "filipe");
 
         service.register(user);    
 

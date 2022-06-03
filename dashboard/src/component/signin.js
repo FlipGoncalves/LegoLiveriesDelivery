@@ -8,6 +8,7 @@ import '../assets/css/nucleo-svg.css';
 import '../assets/css/nucleo-icons.css';
 import { Link, useNavigate } from 'react-router-dom';
 import Aside from './aside';
+import axios from 'axios';
 
 
 class SignIn extends Component {
@@ -40,13 +41,29 @@ class SignIn extends Component {
       
       this.setState({error_message: ""})
 
-      // do sign in magic here
-
-      localStorage.setItem('email', email)
-      localStorage.setItem('password', pass)
+      console.log("Login")
       
-      navigation("/")
+      axios.get('http://localhost:8080/api/login/'+email)
+      .then((response) => {
+        console.log(response);
+        if (response.status === 200 || response.status === 201) {
 
+          if (response.data["password"] != pass) {
+            this.setState({error_message: "Wrong Credentials"})
+            return
+          }
+
+          this.setState({error_message: ""})
+          localStorage.setItem('email', email)
+          localStorage.setItem('password', pass)
+          console.log("HERE")
+          navigation("/")
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        this.setState({error_message: "ERROR during sign in"})
+      });
     }
 
     return (

@@ -1,26 +1,23 @@
 package tqs.project.controller;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
 import tqs.project.model.Order;
 import tqs.project.model.Rider;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import javax.validation.Valid;
 import org.springframework.validation.annotation.Validated;
 
 import tqs.project.exceptions.BadRequestException;
-import tqs.project.model.Order;
-import tqs.project.model.Rider;
 import tqs.project.model.User;
-import tqs.project.model.UserDTO;
+import tqs.project.model.RegisterDTO;
 import tqs.project.service.OrderService;
 import tqs.project.service.RiderService;
 import tqs.project.service.UserService;
@@ -55,34 +52,38 @@ public class APIController {
         return new ResponseEntity<>(riders, HttpStatus.OK);
     }
 
-    @GetMapping("/login")
-    public ResponseEntity<User> getUserinLogin(@RequestParam(value = "email", required = true) String email) throws BadRequestException {
-        log.info("GET Request -> User Data for login: {}", email);
+    @GetMapping("/login/{email}")
+    public ResponseEntity<User> getUserinLogin(@PathVariable String email) throws BadRequestException {
+        log.info("GET Request -> User Data for login email: {}", email);
 
-        User user = userservice.getUser(email);
+        User userLog = userservice.getUser(email);
 
-        if (user == null) {
-            throw new BadRequestException("ERROR getting User data in login");
+        if (userLog == null) {
+            log.info("Login -> User does not exist");
+            throw new BadRequestException("User does not exist");
         }
 
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        log.info("Login -> User logged in");
+        return new ResponseEntity<>(userLog, HttpStatus.OK);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> insertUserinRegister(@Valid @RequestBody UserDTO user) throws BadRequestException {
-        log.info("PUT Request -> User Data for login: {}", user);
+    public ResponseEntity<User> insertUserinRegister(@RequestBody RegisterDTO user) throws BadRequestException {
+        log.info("POST Request -> User Data for register: {}", user);
 
         User userReg = userservice.register(user);
 
         if (userReg == null) {
-            throw new BadRequestException("ERROR getting User data in login");
+            log.info("Register -> User already exists");
+            throw new BadRequestException("User already exists");
         }
 
+        log.info("Register -> User registered");
         return new ResponseEntity<>(userReg, HttpStatus.OK);
     }
 
     @GetMapping("/orders")
-    public ResponseEntity<List<Order>> getAllOrders() throws BadRequestException {
+    public ResponseEntity<List<Order>> getAllOrders() {
         log.info("GET Request -> All Orders Data");
 
         List<Order> orders = orderservice.getAllOrders();

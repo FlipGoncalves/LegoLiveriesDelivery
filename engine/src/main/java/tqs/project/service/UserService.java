@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tqs.project.model.User;
-import tqs.project.model.UserDTO;
+import tqs.project.model.RegisterDTO;
 import tqs.project.repositories.UserRepository;
 
 import org.slf4j.Logger;
@@ -22,21 +22,17 @@ public class UserService {
 
         User user = rep.findByEmail(email);
 
+        log.info("Got User: {}", user);
         return user;
     }
 
-    public User insertUser(User user) {
-        log.info("Inserting User");
-
-        return rep.save(user);
-    }
-
-    public User register(UserDTO user) {
+    public User register(RegisterDTO user) {
         log.info("Registering User: {}", user);
 
         User registerUser = new User();
 
         if (rep.findByEmail(user.getEmail()) != null) {
+            log.info("User already exists: {}", user);
             return null;
         }
 
@@ -44,6 +40,9 @@ public class UserService {
         registerUser.setPassword(user.getPassword());
         registerUser.setUsername(user.getUsername());
 
-        return rep.save(registerUser);
+        rep.save(registerUser);
+        log.info("User Registered: {}", registerUser);
+
+        return registerUser;
     }
 }
