@@ -8,6 +8,7 @@ import '../assets/css/nucleo-svg.css';
 import '../assets/css/nucleo-icons.css';
 import { Link, useNavigate } from 'react-router-dom';
 import Aside from './aside';
+import axios from 'axios';
 
 
 class SignUp extends Component {
@@ -48,24 +49,53 @@ class SignUp extends Component {
       formData.append("username", name);
       formData.append("password", pass);   
 
-      let resp = fetch('http://localhost:8080/api/register', {
-          method: 'POST',
-          body: JSON.stringify({
-            email: formData.email,
-            username: formData.username,
-            password: formData.password
-          }),
-      }).then((data) => {
-          console.log(data)
-          if (data.status === 200) {
-              this.setState({error_message: ""})
-              this.setState({items: []})
-              console.log("HERE")
-              // navigation("/")
-          } else {
-              this.setState({error_message: "ERROR during sign up"})
-          }
+      // let resp = fetch('http://localhost:8080/api/register', {
+      //     method: 'POST',
+      //     body: JSON.stringify({
+      //       email: formData.email,
+      //       username: formData.username,
+      //       password: formData.password
+      //     }),
+      // }).then((data) => {
+      //     console.log(data)
+      //     if (data.status === 200) {
+      //         this.setState({error_message: ""})
+      //         this.setState({items: []})
+      //         console.log("HERE")
+      //         // navigation("/")
+      //     } else {
+      //         this.setState({error_message: "ERROR during sign up"})
+      //     }
+      // })
+
+      axios.get('http://localhost:8080/api/all_riders')
+      .then(function (response) {
+        console.log(response.data);
       })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+      axios.post('http://localhost:8080/api/register', {
+        "email": email,
+        "username": name,
+        "password": pass
+      })
+      .then((response) => {
+        console.log(response);
+        if (response.status === 200 || response.status === 201) {
+          this.setState({error_message: ""})
+          this.setState({items: []})
+          console.log("HERE")
+          // navigation("/")
+        } else {
+            this.setState({error_message: "ERROR during sign up"})
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        this.setState({error_message: "ERROR during sign up"})
+      });
 
       this.setState({error_message: "ERROR during sign up"})
 

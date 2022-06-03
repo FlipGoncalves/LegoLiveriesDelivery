@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import javax.validation.Valid;
+import org.springframework.validation.annotation.Validated;
 
 import tqs.project.exceptions.BadRequestException;
 import tqs.project.model.Order;
@@ -30,7 +32,8 @@ import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:3000")
+@Validated
+@CrossOrigin(origins = "*")
 public class APIController {
     private static final Logger log = LoggerFactory.getLogger(APIController.class);
 
@@ -66,7 +69,7 @@ public class APIController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> insertUserinRegister(@RequestBody UserDTO user) throws BadRequestException {
+    public ResponseEntity<User> insertUserinRegister(@Valid @RequestBody UserDTO user) throws BadRequestException {
         log.info("PUT Request -> User Data for login: {}", user);
 
         User userReg = userservice.register(user);
