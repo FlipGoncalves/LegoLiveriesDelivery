@@ -6,6 +6,10 @@ import org.springframework.stereotype.Service;
 
 import restapi.tqs.DataModels.OrderDTO;
 import restapi.tqs.DataModels.OrderLegoDTO;
+import restapi.tqs.Exceptions.AddressNotFoundException;
+import restapi.tqs.Exceptions.BadScheduledTimeOfDeliveryException;
+import restapi.tqs.Exceptions.ClientNotFoundException;
+import restapi.tqs.Exceptions.LegoNotFoundException;
 import restapi.tqs.Models.Address;
 import restapi.tqs.Models.Client;
 import restapi.tqs.Models.Lego;
@@ -21,9 +25,11 @@ import restapi.tqs.Repositories.UserRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,23 +77,20 @@ public class OrderService {
 
         return orders;
     }
-
     
-    public Order makeOrder(OrderDTO orderDTO){
+    public Order makeOrder(OrderDTO orderDTO) throws BadScheduledTimeOfDeliveryException, ClientNotFoundException, AddressNotFoundException, LegoNotFoundException{
 
         Order order = new Order();
 
-        if (orderDTO.getScheduledtimeOfDelivery() > 2400 || orderDTO.getScheduledtimeOfDelivery() < 0){
-            //Has to be between 0000 and 2400, like military time 
-            return null;
+        if (orderDTO.getScheduledtimeOfDelivery() >= 2400 || orderDTO.getScheduledtimeOfDelivery() < 0){
+            throw new BadScheduledTimeOfDeliveryException("The ScheduledTimeOfDelivery " + orderDTO.getScheduledtimeOfDelivery() + ". It needs to be between 0000 and 2400");
         }
         order.setScheduledtimeOfDelivery(orderDTO.getScheduledtimeOfDelivery());
 
         Optional<Client> client = clientRepository.findById(orderDTO.getClientId());
         
         if (client.isEmpty()){
-            //Client does not exist in database
-            return null;
+            throw new ClientNotFoundException("The client with id " + orderDTO.getClientId() + " was not found.");
         }
 
         order.setClient(client.get());
@@ -95,8 +98,7 @@ public class OrderService {
         Optional<Address> address = addressRepository.findById(orderDTO.getAddressId());
 
         if (address.isEmpty()){
-            //Address does not exist in database
-            return null;
+            throw new AddressNotFoundException("The address with id " + orderDTO.getAddressId() + " was not found.");
         }
 
         order.setAddress(address.get());
@@ -109,8 +111,7 @@ public class OrderService {
             Optional<Lego> lego = legoRepository.findById(legoDTO.getLegoId());
 
             if(lego.isEmpty()){
-                //Lego does not exist in database
-                return null;
+                throw new LegoNotFoundException("The lego with id " + legoDTO.getLegoId() + " was not found.");
             }
             orderLegoMap.put(legoDTO.getLegoId(), lego.get());
             totalPrice += legoDTO.getQuantity() * legoDTO.getLegoPrice();
@@ -118,7 +119,7 @@ public class OrderService {
 
         order.setTotalPrice(totalPrice);
 
-        Order finalOrder = orderRepository.save(order);
+        Set<OrderLego> setOrderLegos = new HashSet<>();
 
         for (OrderLegoDTO legoDTO : orderDTO.getLegos()) {
 
@@ -130,8 +131,13 @@ public class OrderService {
             orderLego.setOrder(order);
             orderLego.setQuantity(legoDTO.getQuantity());
             orderLego.setPrice(legoDTO.getLegoPrice());
+            setOrderLegos.add(orderLego);
             orderLegoRepository.save(orderLego);
         }
+
+        order.setOrderLego(setOrderLegos);
+
+        Order finalOrder = orderRepository.save(order);
 
         return finalOrder;
     }

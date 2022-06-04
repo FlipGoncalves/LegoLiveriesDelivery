@@ -1,5 +1,7 @@
 package restapi.tqs.DataModels;
 
+import java.util.Objects;
+
 public class OrderLegoDTO {
     
     private long legoId;
@@ -47,6 +49,23 @@ public class OrderLegoDTO {
             ", quantity='" + getQuantity() + "'" +
             ", legoPrice='" + getLegoPrice() + "'" +
             "}";
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof OrderLegoDTO)) {
+            return false;
+        }
+        OrderLegoDTO orderLegoDTO = (OrderLegoDTO) o;
+        return legoId == orderLegoDTO.legoId && quantity == orderLegoDTO.quantity && legoPrice == orderLegoDTO.legoPrice;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(legoId, quantity, legoPrice);
     }
 
 }

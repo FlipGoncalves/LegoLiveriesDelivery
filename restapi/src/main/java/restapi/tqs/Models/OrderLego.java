@@ -1,5 +1,7 @@
 package restapi.tqs.Models;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -84,4 +86,22 @@ public class OrderLego {
             ", price='" + getPrice() + "'" +
             "}";
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof OrderLego)) {
+            return false;
+        }
+        OrderLego orderLego = (OrderLego) o;
+        return Objects.equals(id, orderLego.id) && Objects.equals(order, orderLego.order) && Objects.equals(lego, orderLego.lego) && quantity == orderLego.quantity && price == orderLego.price;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, order, lego, quantity, price);
+    }
+
 }

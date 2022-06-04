@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import restapi.tqs.DataModels.OrderDTO;
+import restapi.tqs.Exceptions.AddressNotFoundException;
+import restapi.tqs.Exceptions.BadScheduledTimeOfDeliveryException;
+import restapi.tqs.Exceptions.ClientNotFoundException;
+import restapi.tqs.Exceptions.LegoNotFoundException;
 import restapi.tqs.Models.Order;
 import restapi.tqs.Service.OrderService;
 
@@ -53,7 +57,14 @@ public class OrderController {
     @PostMapping()
     public ResponseEntity<Order> makeOrder(@RequestBody OrderDTO orderDTO){
         
-        Order order = service.makeOrder(orderDTO);
+        Order order;
+        try {
+            order = service.makeOrder(orderDTO);
+        } catch (BadScheduledTimeOfDeliveryException | ClientNotFoundException | AddressNotFoundException
+                | LegoNotFoundException e) {
+            order = null;
+            e.printStackTrace();
+        }
 
         if(order == null){
             return new ResponseEntity<>(order, HttpStatus.BAD_REQUEST);

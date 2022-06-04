@@ -50,8 +50,8 @@ public class OrderDTO {
         return this.legos;
     }
 
-    public void setLegos(List<OrderLegoDTO> legoIds) {
-        this.legos = legoIds;
+    public void setLegos(List<OrderLegoDTO> legos) {
+        this.legos = legos;
     }
 
 
