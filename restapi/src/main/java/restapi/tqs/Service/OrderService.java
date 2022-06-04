@@ -54,6 +54,13 @@ public class OrderService {
     @Autowired
     OrderLegoRepository orderLegoRepository;
 
+    public List<Order> getAllOrders(){
+
+        List<Order> orders = orderRepository.findAll();
+        
+        return orders;
+    }
+
     public Order getOrderById(long orderId){
         Optional<Order> order = orderRepository.findById(orderId);
 

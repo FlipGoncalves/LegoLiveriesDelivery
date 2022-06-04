@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
@@ -108,6 +109,8 @@ public class OrderServiceTest {
         orders.add(order3);
         client2.setOrders(orders);
 
+        Mockito.when(orderRepository.findAll()).thenReturn(new ArrayList<Order>(Arrays.asList(order1,order2,order3)));
+
         Mockito.when(orderRepository.findById(1l)).thenReturn(Optional.of(order1));
         Mockito.when(orderRepository.findById(2l)).thenReturn(Optional.of(order2));
         Mockito.when(orderRepository.findById(3l)).thenReturn(Optional.of(order3));
@@ -139,6 +142,17 @@ public class OrderServiceTest {
         orderDTO1 = new OrderDTO(1l, 1l, 2100, orderLegoDTO1);
         orderDTO2 = new OrderDTO(1l, 1l, 1500, orderLegoDTO2);
         orderDTO3 = new OrderDTO(2l, 2l, 2000, orderLegoDTO3);
+    }
+
+    @Test
+    void test_GetAllOrder_ReturnsCorrectOrders(){
+        List<Order> result = service.getAllOrders();
+        assertTrue(!result.isEmpty());
+        assertEquals(3, result.size());
+        assertTrue(result.contains(order1));
+        assertTrue(result.contains(order2));
+        assertTrue(result.contains(order3));
+
     }
 
     @Test
