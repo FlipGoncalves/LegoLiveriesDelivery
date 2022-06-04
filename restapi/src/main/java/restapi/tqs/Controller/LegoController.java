@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import restapi.tqs.Exceptions.BadRequestException;
+import restapi.tqs.DataModels.LegoDTO;
+import restapi.tqs.Exceptions.BadLegoDTOException;
 import restapi.tqs.Models.Lego;
 import restapi.tqs.Service.LegoService;
 
@@ -33,42 +34,47 @@ public class LegoController {
     public ResponseEntity<List<Lego>> getAllData() {
         log.info("GET Request -> All Lego Data");
         List<Lego> legos = legoService.getData();
-        //System.out.println(legos);
         return new ResponseEntity<>(legos, HttpStatus.OK);
     }
 
-    @PostMapping("/insert_lego")
-    public ResponseEntity<Lego> insertLego(@RequestBody Lego lego) {
-        log.info("Post Request -> Insert Lego: {}", lego);
-
-        Lego lego2 = legoService.insertData(lego);
-
-        return new ResponseEntity<>(lego2, HttpStatus.OK);
-    }
-
     @GetMapping("/get_lego/name")
-    public ResponseEntity<List<Lego>> getLegoByName(@RequestParam(value = "name", required = true) String name) throws BadRequestException {
+    public ResponseEntity<List<Lego>> getLegoByName(@RequestParam(value = "name", required = true) String name){
         log.info("GET Request -> Lego Data by name: {}", name);
 
         List<Lego> data = legoService.getData(name);
 
         if (data.isEmpty()) {
-            throw new BadRequestException("No data with name " + name);
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
     @GetMapping("/get_lego/price")
-    public ResponseEntity<List<Lego>> getLegoByPrice(@RequestParam(value = "price", required = true) String price) throws BadRequestException {
+    public ResponseEntity<List<Lego>> getLegoByPrice(@RequestParam(value = "price", required = true) String price){
         log.info("GET Request -> Lego Data by price: {}", price);
 
         List<Lego> data = legoService.getData(Double.parseDouble(price));
 
         if (data.isEmpty()) {
-            throw new BadRequestException("No data with price " + price);
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(data, HttpStatus.OK);
+    }
+
+    
+    @PostMapping("/insert_lego")
+    public ResponseEntity<Lego> insertLego(@RequestBody LegoDTO lego) {
+        log.info("Post Request -> Insert Lego: {}", lego);
+
+        Lego lego2;
+        try {
+            lego2 = legoService.insertData(lego);
+        } catch (BadLegoDTOException e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(lego2, HttpStatus.OK);
     }
 }

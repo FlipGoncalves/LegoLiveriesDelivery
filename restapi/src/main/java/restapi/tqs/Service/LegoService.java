@@ -3,6 +3,8 @@ package restapi.tqs.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import restapi.tqs.DataModels.LegoDTO;
+import restapi.tqs.Exceptions.BadLegoDTOException;
 import restapi.tqs.Models.Lego;
 import restapi.tqs.Repositories.LegoRepository;
 
@@ -41,9 +43,25 @@ public class LegoService {
 
     }
 
-    public Lego insertData(Lego lego) {
+    public Lego insertData(LegoDTO legoDTO) throws BadLegoDTOException {
         log.info("Inserting Lego");
-         
+        
+        try {
+            legoDTO.getImgUrl();
+            legoDTO.getName();
+            legoDTO.getPrice();
+        } catch (NullPointerException e) {
+            throw new BadLegoDTOException("The LegoDTO has a null attribute: " + legoDTO.toString());
+        }
+
+        if (legoDTO.getImgUrl().isBlank()|| legoDTO.getName().isBlank()|| legoDTO.getPrice() <= 0){
+            throw new BadLegoDTOException("The LegoDTO is invalid: " + legoDTO.toString());
+        }
+        Lego lego = new Lego();
+        lego.setName(legoDTO.getName());
+        lego.setImageUrl(legoDTO.getImgUrl());
+        lego.setPrice(legoDTO.getPrice());
+
         return legorep.save(lego);
     }
 }

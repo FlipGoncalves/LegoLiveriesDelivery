@@ -1,7 +1,9 @@
 package restapi.tqs.Services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -9,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.ObjectUtils.Null;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +20,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import restapi.tqs.DataModels.LegoDTO;
+import restapi.tqs.Exceptions.BadLegoDTOException;
 import restapi.tqs.Models.Lego;
 import restapi.tqs.Repositories.LegoRepository;
 import restapi.tqs.Service.LegoService;
@@ -95,14 +100,6 @@ public class LegoServiceTest {
     }
 
     @Test
-    void test_InsertData(){
-
-        service.insertData(lego2);
-
-        verify(legoRepository, times(1)).save(lego2);
-    }
-
-    @Test
     void test_GetDataByName_WithParcialName(){
         List<Lego> result = legoRepository.findAllByNameContainingIgnoreCase("Policial");
 
@@ -111,6 +108,59 @@ public class LegoServiceTest {
         assertTrue(!result.contains(lego1));
         assertTrue(result.contains(lego2));
         assertTrue(result.contains(lego3));
+    }
+
+    @Test
+    void test_InsertData_ValidLegoDTO() throws BadLegoDTOException{
+
+        LegoDTO legoDTO = new LegoDTO("A Lego Name", 30, "A Lego imgUrl");
+        service.insertData(legoDTO);
+
+        verify(legoRepository, times(1)).save(any(Lego.class));
+    }
+
+    @Test
+    void test_InsertData_NullLegoName_ThrowsBadLegoDTOException() throws BadLegoDTOException{
+
+        LegoDTO legoDTO = new LegoDTO(null, 30, "A Lego imgUrl");
+        
+        assertThrows(NullPointerException.class, () -> {service.insertData(legoDTO);});
+
+    }
+
+    @Test
+    void test_InsertData_BlankLegoName_ThrowsBadLegoDTOException() throws BadLegoDTOException{
+
+        LegoDTO legoDTO = new LegoDTO(" ", 30, "A Lego imgUrl");
+        
+        assertThrows(BadLegoDTOException.class, () -> {service.insertData(legoDTO);});
+    }
+
+    @Test
+    void test_InsertData_LegoPriceLessorEqualToZero_ThrowsBadLegoDTOException() throws BadLegoDTOException{
+
+        LegoDTO legoDTO = new LegoDTO("A Lego Name", 0, "A Lego imgUrl");
+        
+        assertThrows(BadLegoDTOException.class, () -> {service.insertData(legoDTO);});
+
+    }
+
+    @Test
+    void test_InsertData_NullLegoImgUrl_ThrowsBadLegoDTOException() throws BadLegoDTOException{
+
+        LegoDTO legoDTO = new LegoDTO("A Lego Name", 30, null);
+        
+        assertThrows(NullPointerException.class, () -> {service.insertData(legoDTO);});
+
+    }
+
+    @Test
+    void test_InsertData_BlankLegoImgUrl_ThrowsBadLegoDTOException() throws BadLegoDTOException{
+
+        LegoDTO legoDTO = new LegoDTO("A Lego Name", 30, "  ");
+        
+        assertThrows(BadLegoDTOException.class, () -> {service.insertData(legoDTO);});
+
     }
 
     Lego buildLegoObject(String name, double price, String imageUrl){

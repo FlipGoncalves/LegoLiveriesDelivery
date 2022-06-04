@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "lego")
 public class Lego {
@@ -26,9 +28,11 @@ public class Lego {
     @Column(name = "imageUrl")
     private String imageUrl;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "lego")
     private Set<Favorites> favorites = new HashSet<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "lego")
     private Set<OrderLego> orderLego = new HashSet<>();
 
