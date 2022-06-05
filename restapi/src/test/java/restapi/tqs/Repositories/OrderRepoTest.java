@@ -139,7 +139,7 @@ class OrderRepoTest {
         order.setClient(client);
         order.setAddress(address);
         order.setDate(date);
-        order.setScheduledtimeOfDelivery(2100);
+        order.setScheduledTimeOfDelivery(2100);
         order.setTimeOfDelivery(2110);
         order.setRiderName("Paulo " + id);
         order.setOrderLego(orderLegos);
@@ -147,12 +147,8 @@ class OrderRepoTest {
 
         entityManager.persist(client);
         entityManager.persist(address);
-        /*entityManager.persist(lego1);
-        entityManager.persist(lego2);
-        entityManager.persist(lego3);*/
         
         entityManager.persist(order);
-        //entityManager.flush();
 
         return order;
     }

@@ -7,9 +7,12 @@ import org.springframework.stereotype.Service;
 import restapi.tqs.DataModels.OrderDTO;
 import restapi.tqs.DataModels.OrderLegoDTO;
 import restapi.tqs.Exceptions.AddressNotFoundException;
+import restapi.tqs.Exceptions.BadOrderDTOException;
+import restapi.tqs.Exceptions.BadOrderLegoDTOException;
 import restapi.tqs.Exceptions.BadScheduledTimeOfDeliveryException;
 import restapi.tqs.Exceptions.ClientNotFoundException;
 import restapi.tqs.Exceptions.LegoNotFoundException;
+import restapi.tqs.Exceptions.OrderNotFoundException;
 import restapi.tqs.Models.Address;
 import restapi.tqs.Models.Client;
 import restapi.tqs.Models.Lego;
@@ -61,22 +64,22 @@ public class OrderService {
         return orders;
     }
 
-    public Order getOrderById(long orderId){
+    public Order getOrderById(long orderId) throws OrderNotFoundException{
         Optional<Order> order = orderRepository.findById(orderId);
 
         if (order.isEmpty()){
-            return null;
+            throw new OrderNotFoundException("The order was not found. ID: " + orderId);
         }
 
         return order.get();
     }
 
-    public List<Order> getClientOrders(long clientId){
+    public List<Order> getClientOrders(long clientId) throws ClientNotFoundException{
 
         Optional<Client> client = clientRepository.findById(clientId);
 
         if (client.isEmpty()){
-            return new ArrayList<>();
+            throw new ClientNotFoundException("The client was not found. ID: " + clientId);
         }
 
         //The Pageable here can be used later on for filtering and sorting by date, name, etc.
@@ -85,14 +88,14 @@ public class OrderService {
         return orders;
     }
     
-    public Order makeOrder(OrderDTO orderDTO) throws BadScheduledTimeOfDeliveryException, ClientNotFoundException, AddressNotFoundException, LegoNotFoundException{
+    public Order makeOrder(OrderDTO orderDTO) throws BadScheduledTimeOfDeliveryException, ClientNotFoundException, AddressNotFoundException, LegoNotFoundException, BadOrderLegoDTOException, BadOrderDTOException{
 
         Order order = new Order();
 
         if (orderDTO.getScheduledtimeOfDelivery() >= 2400 || orderDTO.getScheduledtimeOfDelivery() < 0){
             throw new BadScheduledTimeOfDeliveryException("The ScheduledTimeOfDelivery " + orderDTO.getScheduledtimeOfDelivery() + ". It needs to be between 0000 and 2400");
         }
-        order.setScheduledtimeOfDelivery(orderDTO.getScheduledtimeOfDelivery());
+        order.setScheduledTimeOfDelivery(orderDTO.getScheduledtimeOfDelivery());
 
         Optional<Client> client = clientRepository.findById(orderDTO.getClientId());
         
@@ -110,18 +113,32 @@ public class OrderService {
 
         order.setAddress(address.get());
 
+        try{
+            orderDTO.getLegos();
+        }catch(NullPointerException e){
+            throw new BadOrderDTOException("The orderDTO has a null list of orderLegoDTO: " + orderDTO);
+        }
+
+        if (orderDTO.getLegos().isEmpty()){
+            throw new BadOrderDTOException("The orderDTO has an empty list of orderLegoDTO: " + orderDTO);
+        }
+
         double totalPrice = 0;
 
         Map<Long,Lego> orderLegoMap = new HashMap<>();
 
-        for (OrderLegoDTO legoDTO : orderDTO.getLegos()) {
-            Optional<Lego> lego = legoRepository.findById(legoDTO.getLegoId());
+        for (OrderLegoDTO orderLegoDTO : orderDTO.getLegos()) {
+            Optional<Lego> lego = legoRepository.findById(orderLegoDTO.getLegoId());
 
             if(lego.isEmpty()){
-                throw new LegoNotFoundException("The lego with id " + legoDTO.getLegoId() + " was not found.");
+                throw new LegoNotFoundException("The lego with id " + orderLegoDTO.getLegoId() + " was not found.");
             }
-            orderLegoMap.put(legoDTO.getLegoId(), lego.get());
-            totalPrice += legoDTO.getQuantity() * legoDTO.getLegoPrice();
+
+            if (orderLegoDTO.getQuantity() <= 0 || orderLegoDTO.getLegoPrice() <= 0){
+                throw new BadOrderLegoDTOException("The orderDTo is invalid: " + orderLegoDTO.toString());
+            }
+            orderLegoMap.put(orderLegoDTO.getLegoId(), lego.get());
+            totalPrice += orderLegoDTO.getQuantity() * orderLegoDTO.getLegoPrice();
         }
 
         order.setTotalPrice(totalPrice);
