@@ -19,6 +19,7 @@ root.render(
         <Route exact path='/profile' element={< Profile />}></Route>
         <Route exact path='/sign-up' element={< SignUp />}></Route>
         <Route exact path='/sign-in' element={< SignIn />}></Route>
+        <Route exact path='/management' element={< App />}></Route>
       </Routes>
     </Router>
   </React.StrictMode>,

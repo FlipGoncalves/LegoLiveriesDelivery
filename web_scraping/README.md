@@ -12,12 +12,6 @@ The purpose of this small project is to obtain data to use in the client backend
  - We then use _GSON_ library to convert our list of __LegoSet__ objects into a json and write this json to the file __legoList.json__
  - Finally we flush and close the writer and close the driver
 
-## How to run
-
-Run the following command
-
-        mvn compile exec:java -Dexec.mainClass="pt.ua.tqs.project.App"
-
 ## Related links
 
 - Continente website : https://www.continente.pt/

@@ -6,11 +6,46 @@ import '../assets/css/material-dashboard.css.map';
 import '../assets/css/material-dashboard.min.css';
 import '../assets/css/nucleo-svg.css';
 import '../assets/css/nucleo-icons.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import Aside from './aside';
 
 
 class SignUp extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      error_message: ""
+    };
+  }
+
   render() {
+
+    const {navigation} = this.props;
+
+    const signup = () => {
+      let email = document.getElementById('email').value;
+      let pass = document.getElementById('pass').value;
+      let name = document.getElementById('name').value;
+  
+      if (name === "") {
+        this.setState({error_message: "Please insert Name"})
+        return
+      } else if (email === "") {
+        this.setState({error_message: "Please insert Email"})
+        return
+      } else if (pass === "") {
+        this.setState({error_message: "Please insert Password"})
+        return
+      }
+
+      this.setState({error_message: ""})
+      
+      // do sign up magic here
+      navigation("/")
+
+    }
+
     return (
       <div className="App">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"></meta>
@@ -25,63 +60,7 @@ class SignUp extends Component {
         <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
         <script async defer src="https://buttons.github.io/buttons.js"></script>
 
-        <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3   bg-gradient-dark" id="sidenav-main">
-        <div class="sidenav-header">
-          <i class="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
-          <a class="navbar-brand m-0" href=" https://demos.creative-tim.com/material-dashboard/pages/dashboard " target="_blank">
-            <img src={logo} class="navbar-brand-img h-100" alt="main_logo" />
-            <span class="ms-1 font-weight-bold text-white">LegoLiveries</span>
-          </a>
-        </div>
-        <hr class="horizontal light mt-0 mb-2" />
-        <div class="collapse navbar-collapse  w-auto  max-height-vh-100" id="sidenav-collapse-main">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <Link to="/">
-                <a class="nav-link text-white active bg-gradient-primary">
-                  <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                    <i class="material-icons opacity-10">dashboard</i>
-                  </div>
-                  <span class="nav-link-text ms-1">Dashboard</span>
-                </a>
-              </Link>
-            </li>
-            <li class="nav-item mt-3">
-              <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Account pages</h6>
-            </li>
-            <li class="nav-item">
-              <Link to="/profile">
-                <a class="nav-link text-white ">
-                  <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                    <i class="material-icons opacity-10">person</i>
-                  </div>
-                  <span class="nav-link-text ms-1">Profile</span>
-                </a>
-              </Link>
-            </li>
-            <li class="nav-item">
-              <Link to="/sign-in">
-                <a class="nav-link text-white ">
-                  <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                    <i class="material-icons opacity-10">login</i>
-                  </div>
-                  <span class="nav-link-text ms-1">Sign In</span>
-                </a>
-              </Link>
-            </li>
-            <li class="nav-item">
-              <Link to="/sign-up">
-                <a class="nav-link text-white ">
-                  <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                    <i class="material-icons opacity-10">assignment</i>
-                  </div>
-                  <span class="nav-link-text ms-1">Sign Up</span>
-                </a>
-              </Link>
-            </li>
-          </ul>
-        </div>
-      </aside>
+        <Aside></Aside>
 
 
 
@@ -99,32 +78,32 @@ class SignUp extends Component {
                     <div class="card-body">
                     <form role="form">
                         <div class="input-group input-group-outline mb-3">
-                        <label class="form-label">Name</label>
-                        <input type="text" class="form-control" />
+                        <input type="text" class="form-control" id="name" placeholder="Name"/>
                         </div>
                         <div class="input-group input-group-outline mb-3">
-                        <label class="form-label">Email</label>
-                        <input type="email" class="form-control" />
+                        <input type="email" class="form-control" id="email" placeholder="Email"/>
                         </div>
                         <div class="input-group input-group-outline mb-3">
-                        <label class="form-label">Password</label>
-                        <input type="password" class="form-control" />
+                        <input type="password" class="form-control" id="pass" placeholder="Password"/>
                         </div>
-                        <div class="form-check form-check-info text-start ps-0">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" defaultChecked />
-                        <label class="form-check-label">
-                            I agree the <a href="javascript:;" class="text-dark font-weight-bolder">Terms and Conditions</a>
-                        </label>
-                        </div>
+
+                        {this.state.error_message !== "" ? <>
+                          <div>
+                            <label class="form-check-label mb-0 ms-2" style={{color: 'red'}}>{this.state.error_message}</label>
+                          </div>
+                        </> : null}
+
                         <div class="text-center">
-                        <button type="button" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Sign Up</button>
+                        <button type="button" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0" onClick={signup}>Sign Up</button>
                         </div>
                     </form>
                     </div>
                     <div class="card-footer text-center pt-0 px-lg-2 px-1">
                     <p class="mb-2 text-sm mx-auto">
                         Already have an account?
-                        <a class="text-primary text-gradient font-weight-bold">Sign in</a>
+                        <Link to="/sign-in">
+                          <a class="text-primary text-gradient font-weight-bold">Sign in</a>
+                        </Link>
                     </p>
                     </div>
                 </div>
@@ -144,4 +123,8 @@ class SignUp extends Component {
   }
 }
 
-export default SignUp;
+export default function(props) {
+  const navigation = useNavigate();
+
+  return <SignUp {...props} navigation={navigation} />;
+}

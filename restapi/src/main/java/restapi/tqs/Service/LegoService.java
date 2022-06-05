@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import restapi.tqs.DataModels.LegoDTO;
 import restapi.tqs.Exceptions.BadLegoDTOException;
 import restapi.tqs.Models.Lego;
-import restapi.tqs.Repositories.LegoRepository;
 
 import java.util.List;
 
@@ -38,8 +37,8 @@ public class LegoService {
     public List<Lego> getData(double price) {
         log.info("Getting Lego By Price {}", price);
         
-        List<Lego> legos = legorep.findAllByPrice(price);
-        return legos;
+        // List<Lego> legos = legorep.findAllByPrice();
+        // return legos;
 
     }
 

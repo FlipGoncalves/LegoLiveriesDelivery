@@ -1,10 +1,10 @@
-package tqs.project;
+package restapi.tqs;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ProjectApplicationTests {
+class TqsApplicationTests {
 
 	@Test
 	void contextLoads() {

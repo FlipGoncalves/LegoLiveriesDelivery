@@ -8,9 +8,103 @@ class App extends Component {
         super(props);
         this.state = {
           items: [],
-          count: 1
+          count: 1,
+          cart: [],
+          total_price: 0,
+          total_products: 0,
         };
       }
+
+    additemtocart(item) {
+
+        this.setState({total_products: this.state.total_products + document.getElementById("qtty"+item["name"].replace(/\s/g, '')).value * 1})
+        this.setState({total_price: this.state.total_price + document.getElementById("qtty"+item["name"].replace(/\s/g, '')).value * item["price"]})
+
+        return (
+            <div class="row">
+                <a class="img-wrap"><img class="left" src="assets/images/items/1.jpg" height="130" width="auto"/></a>
+                <div class="d-flex justify-content-between align-items-center">
+                    <button type="button" class="close" aria-label="Close" onClick="Custombox.modal.close();">
+                    </button>
+                </div>
+                <span class="d-block font-size-1">{item["name"]}</span>
+                <span class="d-block text-primary font-weight-semi-bold">{item["price"]*document.getElementById("qtty"+item["name"].replace(/\s/g, '')).value}</span>
+                <small class="d-block text-muted">{document.getElementById("qtty"+item["name"].replace(/\s/g, '')).value}</small>
+            </div>
+        )
+    }
+
+    additemtoarray(item) {
+        return (
+        <div>
+            <div class="col-xl-2 col-lg-3 col-md-4 col-6">
+                        <div class="card card-sm card-product-grid">
+                        <button type="button" class="btn openmodal" data-toggle="modal" data-target={"#"+item["name"].replace(/\s/g, '')}>
+                            <a class="img-wrap"> <img src="assets/images/items/1.jpg" width= '70%'/> </a>
+                            <figcaption class="info-wrap">
+                                <a class="title">{item["name"]}</a>
+                                <div class="price mt-1">{item["price"]}</div>
+                            </figcaption>
+                        </button>
+                        </div>
+                    </div>
+                    <div class="modal fade" id={item["name"].replace(/\s/g, '')}>
+                        <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                        
+                            <div class="modal-header">
+                            <h4 class="modal-title">{item["name"]}</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            
+                            <div class="modal-body">
+                                <div class="container">
+                                <h6>Item Details</h6>
+                                <div class="row">
+                                    <div class="col">
+                                        <img class="img-fluid" src="assets/images/items/1.jpg" />
+                                    </div>
+                                </div>
+                                <h6>Order Details</h6>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <ul type="none">
+                                            <li class="left">Order number:</li>
+                                            <li class="left">Price:</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <ul class="right" type="none">
+                                            <li class="right"></li>
+                                            <li class="right">{item["price"]}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                    <h6>Quantity</h6>
+                                    <div class="row" style={{borderBottom: 'none'}}>
+                                        <div class="col-xs-6">
+                                            <select class="custom-select border-right" name="qtty" id={"qtty"+item["name"].replace(/\s/g, '')}>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                                
+                                <div class="modal-footer">
+                                    <button type="button" class="btn" onClick={() => this.setState(prevState => ({cart: [...prevState.cart, this.additemtocart(item)]}))} data-toggle="modal" data-target={"#"+item["name"].replace(/\s/g, '')}>Add to cart</button>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        )
+    }
 
     render() {
 
@@ -23,15 +117,9 @@ class App extends Component {
                 data.json().then((list) => {
                     let newArray = []
                     list.forEach((item) => {
-                        newArray.push(<div class="col-xl-2 col-lg-3 col-md-4 col-6">
-                                                            <div class="card card-sm card-product-grid">
-                                                                <a class="img-wrap"> <img src="assets/images/items/1.jpg" /> </a>
-                                                                <figcaption class="info-wrap">
-                                                                    <a class="title">{item["name"]}</a>
-                                                                    <div class="price mt-1">{item["price"]}</div>
-                                                                </figcaption>
-                                                            </div>
-                                                        </div>)
+                        newArray.push(
+                            this.additemtoarray(item)
+                        )
                     }); 
                     this.setState({ items: newArray})
                 });
@@ -55,15 +143,9 @@ class App extends Component {
                         data.json().then((list) => {
                             let newArray = []
                             list.forEach((item) => {
-                            newArray.push(<div class="col-xl-2 col-lg-3 col-md-4 col-6">
-                                                                <div class="card card-sm card-product-grid">
-                                                                    <a class="img-wrap"> <img src="assets/images/items/1.jpg" /> </a>
-                                                                    <figcaption class="info-wrap">
-                                                                        <a class="title">{item["name"]}</a>
-                                                                        <div class="price mt-1">{item["price"]}</div>
-                                                                    </figcaption>
-                                                                </div>
-                                                            </div>)
+                                newArray.push(
+                                    this.additemtoarray(item)
+                                )
                             }); 
                             this.setState({ items: newArray})
                         })
@@ -118,10 +200,13 @@ class App extends Component {
                                         </div>
                                         <div class="widget-header mr-3">
                                             <a  class="widget-view">
+                                            <button data-toggle="modal" data-target="#cart" style={{outline: 'none', backgroundColor: 'transparent', border: 'none'}}>
                                                 <div class="icon-area">
                                                     <i class="fa fa-shopping-cart"></i>
+                                                    <span class="notify">{this.state.cart.length}</span>
                                                 </div>
                                                 <small class="text"> Cart </small>
+                                            </button>
                                             </a>
                                         </div>
                                         <div class="widget-header mr-3">
@@ -136,7 +221,6 @@ class App extends Component {
                                             <a  class="widget-view">
                                                 <div class="icon-area">
                                                     <i class="fa fa-user"></i>
-                                                    <span class="notify">3</span>
                                                 </div>
                                                 <small class="text"> My profile </small>
                                             </a>
@@ -150,6 +234,42 @@ class App extends Component {
                     </header> 
 
                     <div class="container">
+
+
+                    <div class="modal fade" id="cart">
+                        <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                        
+                            <div class="modal-header">
+                            <h4 class="modal-title">Cart</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            
+                            <div class="modal-body">
+                                {this.state.cart}
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <ul type="none">
+                                            <li class="left">Total:</li>
+                                            <li class="left">Products:</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <ul class="right" type="none">
+                                            <li class="right">{this.state.total_price}</li>
+                                            <li class="right">{this.state.total_products}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                                
+                            <div class="modal-footer">
+                                <button type="button" class="btn" data-toggle="modal" data-target="#cart" onClick={() => console.log(this.state)}>Order</button>
+                            </div>
+                                
+                            </div>
+                        </div>
+                    </div>
                 
                     <section class="section-main padding-y">
                     <main class="card">
@@ -234,14 +354,13 @@ class App extends Component {
                         <div class="row row-sm">
                             {this.state.items}
                         </div>
+
                     </section>
 
                     <article class="my-4">
                         <img src="assets/images/banners/ad-sm.png" class="w-100" />
                     </article>
-                    </div>  
-                
-                    
+                    </div>
                 
                     <section class="section-subscribe padding-y-lg">
                     <div class="container">
