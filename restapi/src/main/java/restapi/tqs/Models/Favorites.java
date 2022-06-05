@@ -6,21 +6,28 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Entity
 @Table(name = "favorites")
 public class Favorites {
     
     @EmbeddedId
+    @JsonIgnore
     FavoritesId id;
 
     @ManyToOne
     @MapsId("clientId")
-    //@JoinColumn(name = "client_id", referencedColumnName = "client_id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Client client;
 
     @ManyToOne
     @MapsId("legoId")
-    //@JoinColumn(name = "lego_id",referencedColumnName = "lego_id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Lego lego;
 
 

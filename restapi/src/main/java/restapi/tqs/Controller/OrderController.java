@@ -13,13 +13,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import restapi.tqs.DataModels.OrderDTO;
 import restapi.tqs.Exceptions.AddressNotFoundException;
+import restapi.tqs.Exceptions.BadOrderLegoListException;
+import restapi.tqs.Exceptions.BadOrderLegoDTOException;
 import restapi.tqs.Exceptions.BadScheduledTimeOfDeliveryException;
 import restapi.tqs.Exceptions.ClientNotFoundException;
 import restapi.tqs.Exceptions.LegoNotFoundException;
+import restapi.tqs.Exceptions.OrderNotFoundException;
 import restapi.tqs.Models.Order;
 import restapi.tqs.Service.OrderService;
 
 import java.util.List;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,13 +38,20 @@ public class OrderController {
     @Autowired
     private OrderService service;
 
-    @GetMapping("/{id}")
+    @GetMapping()
+    public ResponseEntity<List<Order>> getAllOrders(){
+        List<Order> orders = service.getAllOrders();
+        return new ResponseEntity<>(orders, HttpStatus.OK);
+    }
+
+    @GetMapping("/{orderId}")
     public ResponseEntity<Order> getOrderById(@PathVariable long orderId){
 
-        Order order = service.getOrderById(orderId);
-
-        if(order == null){
-            return new ResponseEntity<>(order, HttpStatus.BAD_REQUEST);
+        Order order;
+        try {
+            order = service.getOrderById(orderId);
+        } catch (OrderNotFoundException e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(order, HttpStatus.OK);
@@ -49,7 +60,12 @@ public class OrderController {
     @GetMapping("/client/{clientId}")
     public ResponseEntity<List<Order>> getClientOrders(@PathVariable long clientId){
 
-        List<Order> order = service.getClientOrders(clientId);
+        List<Order> order;
+        try {
+            order = service.getClientOrders(clientId);
+        } catch (ClientNotFoundException e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
 
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
@@ -61,13 +77,8 @@ public class OrderController {
         try {
             order = service.makeOrder(orderDTO);
         } catch (BadScheduledTimeOfDeliveryException | ClientNotFoundException | AddressNotFoundException
-                | LegoNotFoundException e) {
-            order = null;
-            e.printStackTrace();
-        }
-
-        if(order == null){
-            return new ResponseEntity<>(order, HttpStatus.BAD_REQUEST);
+                | LegoNotFoundException | BadOrderLegoDTOException | BadOrderLegoListException e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(order, HttpStatus.CREATED);

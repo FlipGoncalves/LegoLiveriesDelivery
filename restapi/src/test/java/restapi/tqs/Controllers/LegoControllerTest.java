@@ -175,6 +175,7 @@ public class LegoControllerTest {
         mvc.perform(post("/lego/insert_lego")
         .content(objectMapper.writeValueAsString(legoDTO))
         .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
         .andExpect(status().isCreated())
         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.name", is(LEGO_NAME1)))
@@ -192,6 +193,7 @@ public class LegoControllerTest {
         mvc.perform(post("/lego/insert_lego")
         .content(objectMapper.writeValueAsString(legoDTO))
         .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
         .andExpect(status().isBadRequest());
     }
     

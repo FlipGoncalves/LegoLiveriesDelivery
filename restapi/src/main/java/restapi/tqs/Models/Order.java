@@ -17,6 +17,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "orderId")
 @Entity
 @Table(name = "`order`")
 public class Order {
@@ -31,7 +36,7 @@ public class Order {
     @Column(name = "time_of_delivery")
     private int timeOfDelivery;
     @Column(name = "scheduled_time_of_delivery")
-    private int scheduledtimeOfDelivery;
+    private int scheduledTimeOfDelivery;
     @Column(name = "rider_name")
     private String riderName;
     @Column(name = "total_price")
@@ -39,17 +44,19 @@ public class Order {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id", referencedColumnName = "address_id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Address address;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Client client;
 
     @OneToMany(mappedBy = "order")
     private Set<OrderLego> orderLego = new HashSet<>();
 
     public Order() {
-        this.scheduledtimeOfDelivery = -1;
+        this.scheduledTimeOfDelivery = -1;
     }
     
     public long getOrderId() {
@@ -76,12 +83,12 @@ public class Order {
         this.timeOfDelivery = timeOfDelivery;
     }
 
-    public int getScheduledtimeOfDelivery() {
-        return this.scheduledtimeOfDelivery;
+    public int getScheduledTimeOfDelivery() {
+        return this.scheduledTimeOfDelivery;
     }
 
-    public void setScheduledtimeOfDelivery(int scheduledtimeOfDelivery) {
-        this.scheduledtimeOfDelivery = scheduledtimeOfDelivery;
+    public void setScheduledTimeOfDelivery(int scheduledTimeOfDelivery) {
+        this.scheduledTimeOfDelivery = scheduledTimeOfDelivery;
     }
 
     public String getRiderName() {

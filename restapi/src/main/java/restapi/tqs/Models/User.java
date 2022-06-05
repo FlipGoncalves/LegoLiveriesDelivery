@@ -8,8 +8,14 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+
 @Entity
 @Table(name = "`user`")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "userId")
 public class User {
     
     @Id
@@ -24,6 +30,7 @@ public class User {
     private String password;
 
     @OneToOne(mappedBy = "user")
+    @JsonIdentityReference(alwaysAsId = true)
     private Client client;
 
     public User(){

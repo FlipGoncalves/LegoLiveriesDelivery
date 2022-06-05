@@ -13,6 +13,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "clientId")
 @Entity
 @Table(name = "`client`")
 public class Client {
@@ -26,13 +31,16 @@ public class Client {
     @MapsId
     private User user;
 
+    @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "client")
     private Set<Favorites> favorites = new HashSet<>();
 
+    @JsonIdentityReference(alwaysAsId = true)
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id", referencedColumnName = "address_id")
     private Address address;
 
+    @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "client")
     private Set<Order> orders = new HashSet<>();
 

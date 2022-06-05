@@ -10,21 +10,27 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "order_lego")
 public class OrderLego {
    
     @EmbeddedId
+    @JsonIgnore
     OrderLegoId id;
 
     @ManyToOne
     @MapsId("orderId")
     @JoinColumn(name = "order_id", referencedColumnName = "order_id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Order order;
 
     @ManyToOne
     @MapsId("legoId")
     @JoinColumn(name = "lego_id",referencedColumnName = "lego_id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Lego lego;
 
     @Column(name = "quantity")
@@ -86,7 +92,6 @@ public class OrderLego {
             ", price='" + getPrice() + "'" +
             "}";
     }
-
 
     @Override
     public boolean equals(Object o) {

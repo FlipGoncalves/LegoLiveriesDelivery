@@ -12,9 +12,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "lego")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "legoId")
 public class Lego {
 
     @Id
@@ -28,12 +32,14 @@ public class Lego {
     @Column(name = "imageUrl")
     private String imageUrl;
 
-    @JsonIgnore
+    
     @OneToMany(mappedBy = "lego")
+    @JsonIdentityReference(alwaysAsId = true)
     private Set<Favorites> favorites = new HashSet<>();
 
-    @JsonIgnore
+    
     @OneToMany(mappedBy = "lego")
+    @JsonIdentityReference(alwaysAsId = true)
     private Set<OrderLego> orderLego = new HashSet<>();
 
     public Lego() {
@@ -42,6 +48,10 @@ public class Lego {
 
     public long getLegoId() {
         return this.legoId;
+    }
+
+    public void setLegoId(long legoId) {
+        this.legoId = legoId;
     }
 
     public String getName() {
