@@ -26,7 +26,7 @@ import org.springframework.data.domain.Pageable;
 import restapi.tqs.DataModels.OrderDTO;
 import restapi.tqs.DataModels.OrderLegoDTO;
 import restapi.tqs.Exceptions.AddressNotFoundException;
-import restapi.tqs.Exceptions.BadOrderDTOException;
+import restapi.tqs.Exceptions.BadOrderLegoList;
 import restapi.tqs.Exceptions.BadOrderLegoDTOException;
 import restapi.tqs.Exceptions.BadScheduledTimeOfDeliveryException;
 import restapi.tqs.Exceptions.ClientNotFoundException;
@@ -231,7 +231,7 @@ public class OrderServiceTest {
     void test_MakeOrder_EmptyListOfOrderLegoDTO_ThrowsBadOrderDTOException(){
         OrderDTO orderDTOTest1 = new OrderDTO(1l, 1l, 2000, new ArrayList<>());
 
-        assertThrows(BadOrderDTOException.class, () -> {service.makeOrder(orderDTOTest1);});
+        assertThrows(BadOrderLegoList.class, () -> {service.makeOrder(orderDTOTest1);});
     }
 
     @Test
@@ -252,7 +252,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    void test_MakeOrder_AllValid_ReturnsCorrectOrder() throws BadScheduledTimeOfDeliveryException, ClientNotFoundException, AddressNotFoundException, LegoNotFoundException, BadOrderLegoDTOException, BadOrderDTOException{
+    void test_MakeOrder_AllValid_ReturnsCorrectOrder() throws BadScheduledTimeOfDeliveryException, ClientNotFoundException, AddressNotFoundException, LegoNotFoundException, BadOrderLegoDTOException, BadOrderLegoList{
         Mockito.when(orderRepository.save(any(Order.class))).thenReturn(order1);
         
         Order order = service.makeOrder(orderDTO1);

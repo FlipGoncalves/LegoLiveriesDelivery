@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import restapi.tqs.DataModels.OrderDTO;
 import restapi.tqs.DataModels.OrderLegoDTO;
 import restapi.tqs.Exceptions.AddressNotFoundException;
-import restapi.tqs.Exceptions.BadOrderDTOException;
+import restapi.tqs.Exceptions.BadOrderLegoList;
 import restapi.tqs.Exceptions.BadOrderLegoDTOException;
 import restapi.tqs.Exceptions.BadScheduledTimeOfDeliveryException;
 import restapi.tqs.Exceptions.ClientNotFoundException;
@@ -88,7 +88,7 @@ public class OrderService {
         return orders;
     }
     
-    public Order makeOrder(OrderDTO orderDTO) throws BadScheduledTimeOfDeliveryException, ClientNotFoundException, AddressNotFoundException, LegoNotFoundException, BadOrderLegoDTOException, BadOrderDTOException{
+    public Order makeOrder(OrderDTO orderDTO) throws BadScheduledTimeOfDeliveryException, ClientNotFoundException, AddressNotFoundException, LegoNotFoundException, BadOrderLegoDTOException, BadOrderLegoList{
 
         Order order = new Order();
 
@@ -116,11 +116,11 @@ public class OrderService {
         try{
             orderDTO.getLegos();
         }catch(NullPointerException e){
-            throw new BadOrderDTOException("The orderDTO has a null list of orderLegoDTO: " + orderDTO);
+            throw new BadOrderLegoList("The orderDTO has a null list of orderLegoDTO: " + orderDTO);
         }
 
         if (orderDTO.getLegos().isEmpty()){
-            throw new BadOrderDTOException("The orderDTO has an empty list of orderLegoDTO: " + orderDTO);
+            throw new BadOrderLegoList("The orderDTO has an empty list of orderLegoDTO: " + orderDTO);
         }
 
         double totalPrice = 0;
