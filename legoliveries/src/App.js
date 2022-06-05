@@ -313,10 +313,24 @@ class App extends Component {
                                         </>: 
                                         <>
                                         <div class="widget-header mr-3">
-                                            <div class="icon-area">
-                                                <i class="fa fa-user"></i>
-                                            </div>
-                                            <Link to="/login">Login</Link>
+                                            <Link to="/login">
+                                                <a class="widget-view">
+                                                    <div class="icon-area">
+                                                        <i class="fa fa-user"></i>
+                                                    </div>
+                                                    <small class="text"> Login </small>
+                                                </a>
+                                            </Link>
+                                        </div>
+                                        <div class="widget-header mr-3">
+                                            <Link to="/register">
+                                                <a class="widget-view">
+                                                    <div class="icon-area">
+                                                        <i class="fa fa-user"></i>
+                                                    </div>
+                                                    <small class="text"> Register </small>
+                                                </a>
+                                            </Link>
                                         </div>
                                         </>}
                                     </div> 
