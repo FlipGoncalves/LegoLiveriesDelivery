@@ -204,6 +204,8 @@ class App extends Component {
                 return false
             }
 
+            let time_of_delivery = document.getElementById("hour").value
+
             // create address
             let resp = fetch('http://localhost:8080/lego/address', {
                 method: 'POST',
@@ -392,6 +394,15 @@ class App extends Component {
                                             <input className="form-control input-filled-valid" id="postal" name="postal"
                                                 required type="text"/>
                                         </div>
+                                    </div>
+                                    <div className="form-group">
+                                        <b><label htmlFor="city">Delivery Time</label></b>
+                                        <select class="custom-select border-right" name="hour" id="hour">
+                                            <option value="Whenever">Whenever</option>
+                                            <option value="Today">Today</option>
+                                            <option value="Tomorrow">Tomorrow</option>
+                                            <option value="Next Week">Next Week</option>
+                                        </select>
                                     </div>
 
                                     {this.state.error_message !== "" ? <>
