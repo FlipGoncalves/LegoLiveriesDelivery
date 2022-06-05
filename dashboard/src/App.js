@@ -39,9 +39,34 @@ class App extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      count: 1,
+      sales: 0,
+      orders: 0,
+      riders: 0,
+      comp_orders: 0
+    };
   }
   
+
   render() {
+
+    const RequestMapping = () => {
+
+        let resp_rider = fetch('http://localhost:8080/api/statistics', {  
+            method: 'GET'
+        }).then((data) => {
+            data.json().then((obj) => {
+              this.setState({sales: obj["sales"], orders: obj["numorders"], riders: obj["numriders"], comp_orders: obj["completedorders"]})
+            });
+        })
+
+    }
+
+    if (this.state.count === 1) {
+        RequestMapping();
+        this.state.count += 1;
+    }
 
     defaults.color = 'white';
 
@@ -69,7 +94,7 @@ class App extends Component {
               </div>
               <div class="text-end pt-1">
                 <p class="text-sm mb-0 text-capitalize">Sales</p>
-                <h4 class="mb-0">$ sales</h4>
+                <h4 class="mb-0">{this.state.sales}</h4>
               </div>
             </div>
             <hr class="dark horizontal my-0" />
@@ -86,7 +111,7 @@ class App extends Component {
               </div>
               <div class="text-end pt-1">
                 <p class="text-sm mb-0 text-capitalize">Total Orders</p>
-                <h4 class="mb-0">2,300</h4>
+                <h4 class="mb-0">{this.state.orders}</h4>
               </div>
             </div>
             <hr class="dark horizontal my-0" />
@@ -103,7 +128,7 @@ class App extends Component {
               </div>
               <div class="text-end pt-1">
                 <p class="text-sm mb-0 text-capitalize">Today's Riders</p>
-                <h4 class="mb-0">3,462</h4>
+                <h4 class="mb-0">{this.state.riders}</h4>
               </div>
             </div>
             <hr class="dark horizontal my-0" />
@@ -120,7 +145,7 @@ class App extends Component {
               </div>
               <div class="text-end pt-1">
                 <p class="text-sm mb-0 text-capitalize">Completed Orders</p>
-                <h4 class="mb-0">10</h4>
+                <h4 class="mb-0">{this.state.comp_orders}</h4>
               </div>
             </div>
             <hr class="dark horizontal my-0" />

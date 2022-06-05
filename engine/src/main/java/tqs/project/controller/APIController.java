@@ -18,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import tqs.project.exceptions.BadRequestException;
 import tqs.project.model.User;
 import tqs.project.model.RegisterDTO;
+import tqs.project.model.StatisticDTO;
 import tqs.project.service.OrderService;
 import tqs.project.service.RiderService;
 import tqs.project.service.UserService;
@@ -43,7 +44,7 @@ public class APIController {
     @Autowired
     private OrderService orderservice;
     
-    @GetMapping("/all_riders")
+    @GetMapping("/riders")
     public ResponseEntity<List<Rider>> getData() {
         log.info("GET Request -> All Riders Data");
 
@@ -89,5 +90,19 @@ public class APIController {
         List<Order> orders = orderservice.getAllOrders();
 
         return new ResponseEntity<>(orders, HttpStatus.OK);
+    }
+
+    @GetMapping("/statistics")
+    public ResponseEntity<StatisticDTO> getStatistics() {
+        log.info("GET Request -> Statistic data");
+
+        StatisticDTO stats = new StatisticDTO();
+
+        stats.setNumorders(orderservice.getAllOrders().size());
+        stats.setNumriders(riderservice.getAllData().size());
+        stats.setCompletedorders(2);
+        stats.setSales(50);
+
+        return new ResponseEntity<>(stats, HttpStatus.OK);
     }
 }

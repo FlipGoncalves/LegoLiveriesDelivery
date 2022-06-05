@@ -74,8 +74,8 @@ class Management extends Component {
   render() {
 
     const RequestMapping = () => {
-      
-        let resp_rider = fetch('http://localhost:8080/api/all_riders', {
+
+        let resp_rider = fetch('http://localhost:8080/api/riders', {  
             method: 'GET'
         }).then((data) => {
             this.setState({riders: []})
