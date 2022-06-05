@@ -12,6 +12,8 @@ class App extends Component {
           cart: [],
           total_price: 0,
           total_products: 0,
+          order: false,
+          error_message: ""
         };
       }
 
@@ -27,9 +29,9 @@ class App extends Component {
                     <button type="button" class="close" aria-label="Close" onClick="Custombox.modal.close();">
                     </button>
                 </div>
-                <span class="d-block font-size-1">{item["name"]}</span>
-                <span class="d-block text-primary font-weight-semi-bold">{item["price"]*document.getElementById("qtty"+item["name"].replace(/\s/g, '')).value}</span>
-                <small class="d-block text-muted">{document.getElementById("qtty"+item["name"].replace(/\s/g, '')).value}</small>
+                <span class="d-block font-size-1" id={this.state.cart.length}>{item["name"]}</span>
+                <span class="d-block text-primary font-weight-semi-bold" id={this.state.cart.length+"price"}>{item["price"]*document.getElementById("qtty"+item["name"].replace(/\s/g, '')).value}</span>
+                <small class="d-block text-muted"  id={this.state.cart.length+"qtty"}>{document.getElementById("qtty"+item["name"].replace(/\s/g, '')).value}</small>
             </div>
         )
     }
@@ -106,7 +108,14 @@ class App extends Component {
         )
     }
 
+    logout() {
+        localStorage.setItem('user', null);
+        console.log("LOG OUT")
+    }
+
     render() {
+
+        const {navigation} = this.props;
 
         const RequestMapping = () => {
         
@@ -157,6 +166,73 @@ class App extends Component {
             }
         }
 
+        const order = () => {
+
+            console.log("order")
+
+            if (this.state.total_products === 0) {
+                this.setState({error_message: "Please add items to your cart"})
+                return false
+            }
+
+            let dic = []
+            let count = 0
+
+            this.state.cart.forEach((item) => {
+                dic.push({  name: document.getElementById(count).textContent, 
+                            price: document.getElementById(count+'price').textContent,
+                            qtty: document.getElementById(count+'qtty').textContent});
+                count++;
+            })
+
+            let street = document.getElementById("street").value;
+            let city = document.getElementById("city").value;
+            let country = document.getElementById("country").value;
+            let postal = document.getElementById("postal").value;
+
+            if (street === "") {
+                this.setState({error_message: "Please insert street"})
+                return false
+            } else if (city === "") {
+                this.setState({error_message: "Please insert city"})
+                return false
+            } else if (country === "") {
+                this.setState({error_message: "Please insert country"})
+                return false
+            } else if (postal === "") {
+                this.setState({error_message: "Please insert postal code"})
+                return false
+            }
+
+            // create address
+            let resp = fetch('http://localhost:8080/lego/address', {
+                method: 'POST',
+                body: dic
+            }).then((data) => {
+                if (data.status === 200) {
+                    console.log("Success address")
+                }
+            })
+
+            // create order
+            resp = fetch('http://localhost:8080/lego/order', {
+                method: 'POST',
+                body: dic
+            }).then((data) => {
+                if (data.status === 200) {
+                    console.log("Success")
+                    // close modal
+                    document.getElementById("btn-close").click();
+                }
+            })
+
+            this.setState({error_message: ""})
+
+            console.log("here")
+
+            // error message
+        }
+
         if (this.state.count === 1) {
             RequestMapping();
             this.state.count += 1;
@@ -194,14 +270,7 @@ class App extends Component {
 
                                 <div class="col-xl-4 col-lg-4 col-md-6">
                                     <div class="widgets-wrap float-md-right">
-                                    <div class="widget-header mr-3">
-                                            <div class="icon-area">
-                                                <i class="fa fa-user"></i>
-                                            </div>
-                                            <Link to="/login">Login</Link>
-                                        </div>
                                         <div class="widget-header mr-3">
-                                            <a  class="widget-view">
                                             <button data-toggle="modal" data-target="#cart" style={{outline: 'none', backgroundColor: 'transparent', border: 'none'}}>
                                                 <div class="icon-area">
                                                     <i class="fa fa-shopping-cart"></i>
@@ -209,10 +278,12 @@ class App extends Component {
                                                 </div>
                                                 <small class="text"> Cart </small>
                                             </button>
-                                            </a>
                                         </div>
+
+                                        {localStorage.getItem('user') != 'null' && localStorage.getItem('user') != null ? 
+                                        <>
                                         <div class="widget-header mr-3">
-                                            <a  class="widget-view">
+                                            <a class="widget-view">
                                                 <div class="icon-area">
                                                     <i class="fa fa-store"></i> 
                                                 </div>
@@ -220,13 +291,34 @@ class App extends Component {
                                             </a>
                                         </div>
                                         <div class="widget-header mr-3">
-                                            <a  class="widget-view">
+                                            <a class="widget-view">
                                                 <div class="icon-area">
                                                     <i class="fa fa-user"></i>
                                                 </div>
                                                 <small class="text"> My profile </small>
                                             </a>
                                         </div>
+                                        <div class="widget-header mr-3">
+                                            <Link to="/login">
+                                                <button style={{outline: 'none', backgroundColor: 'transparent', border: 'none'}} onClick={this.logout}>
+                                                    <a class="widget-view">
+                                                        <div class="icon-area">
+                                                            <i class="fa fa-user"></i>
+                                                        </div>
+                                                        <small class="text"> Log Out </small>
+                                                    </a>
+                                                </button>
+                                            </Link>
+                                        </div>
+                                        </>: 
+                                        <>
+                                        <div class="widget-header mr-3">
+                                            <div class="icon-area">
+                                                <i class="fa fa-user"></i>
+                                            </div>
+                                            <Link to="/login">Login</Link>
+                                        </div>
+                                        </>}
                                     </div> 
                                 </div>
                             </div>
@@ -241,35 +333,67 @@ class App extends Component {
                     <div class="modal fade" id="cart">
                         <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
-                        
                             <div class="modal-header">
-                            <h4 class="modal-title">Cart</h4>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            </div>
-                            
-                            <div class="modal-body">
-                                {this.state.cart}
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        <ul type="none">
-                                            <li class="left">Total:</li>
-                                            <li class="left">Products:</li>
-                                        </ul>
+                                <h4 class="modal-title">Cart</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                
+                                <div class="page-one">
+                                    <div class="modal-body">
+                                        {this.state.cart}
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <ul type="none">
+                                                    <li class="left">Total:</li>
+                                                    <li class="left">Products:</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <ul class="right" type="none">
+                                                    <li class="right">{this.state.total_price}</li>
+                                                    <li class="right">{this.state.total_products}</li>
+                                                </ul>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-xs-6">
-                                        <ul class="right" type="none">
-                                            <li class="right">{this.state.total_price}</li>
-                                            <li class="right">{this.state.total_products}</li>
-                                        </ul>
+
+                                    <div className="form-group">
+                                        <b><label htmlFor="street" >Street</label></b>
+                                        <input className="form-control input-filled-valid" id="street" name="street" required
+                                            type="text"/>
+                                    </div>
+                                    <div class="row">
+                                        <div className="form-group">
+                                            <b><label htmlFor="city">City</label></b>
+                                            <input className="form-control input-filled-valid" id="city" name="city"
+                                                required type="text"/>
+                                        </div>
+                                        <div className="form-group">
+                                            <b><label htmlFor="country">Country</label></b>
+                                            <input className="form-control input-filled-valid" id="country" name="country"
+                                                required type="text"/>
+                                        </div>
+                                        <div className="form-group">
+                                            <b><label htmlFor="postal">Postal-Code</label></b>
+                                            <input className="form-control input-filled-valid" id="postal" name="postal"
+                                                required type="text"/>
+                                        </div>
+                                    </div>
+
+                                    {this.state.error_message !== "" ? <>
+                                    <div>
+                                        <label class="form-check-label mb-0 ms-2" style={{color: 'red'}}>{this.state.error_message}</label>
+                                    </div>
+                                    </> : null}
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn" onClick={order}>Order</button>
+                                    </div>
+                                    <div class="modal-footer" hidden>
+                                        <button type="button" data-toggle="modal" data-target="#cart" id="btn-close" class="btn"></button>
                                     </div>
                                 </div>
-                            </div>
-                                
-                            <div class="modal-footer">
-                                <button type="button" class="btn" data-toggle="modal" data-target="#cart" onClick={() => console.log(this.state)}>Order</button>
-                            </div>
-                                
-                            </div>
+                            </div>    
                         </div>
                     </div>
                 
@@ -436,3 +560,4 @@ class App extends Component {
 }
 
 export default App;
+  

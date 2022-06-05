@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from 'react-router-dom';
 import Footer from "./Footer";
 import Navbar from './Navbar';
+import axios from 'axios';
 
 
 {/*async function loginUser(credentials) {
@@ -16,7 +17,7 @@ import Navbar from './Navbar';
 }*/}
 
 
-const Login = ({setToken}) => {
+const Login = () => {
     const navigate = useNavigate();
     const [username, setUserName] = useState();
     const [password, setPassword] = useState();
@@ -26,15 +27,32 @@ const Login = ({setToken}) => {
 
         const infouser = { username, password }
         console.log(infouser);
-        {/*const token = await loginUser({
-            username,
-            password
+        
+        axios.get('http://localhost:8080/lego/login/'+username)
+        .then((response) => {
+            console.log(response);
+            if (response.status === 200 || response.status === 201) {
+
+            if (response.data["password"] != password) {
+                this.setState({error_message: "Wrong Credentials"})
+                return
+            }
+
+            this.setState({error_message: ""})
+            localStorage.setItem('username', username)
+            localStorage.setItem('password', password)
+            console.log("HERE")
+            localStorage.setItem('user', infouser);
+            navigate("/")
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+            this.setState({error_message: "ERROR during sign in"})
         });
-        setToken(token);
 
-        navigate('/log/User?=' + id)*/}
-
-        navigate('/');
+        localStorage.setItem('user', infouser);
+        navigate("/")
     }
 
     return (
@@ -46,7 +64,7 @@ const Login = ({setToken}) => {
         <section class="section-main padding-y">
             <main class="card">
                     <div class="card-body">
-                        <form accept-charset="utf-8" onSubmit={handleSubmit}> {/*method="post"*/}
+                        <form accept-charset="utf-8" onSubmit={handleSubmit}>
                             <div className="form-group">
                                 <b><label htmlFor="name" >User Name or Email</label></b>
                                 <input className="form-control input-filled-valid" id="name" name="name" required
@@ -58,18 +76,11 @@ const Login = ({setToken}) => {
                                        required type="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
                             </div>
                             <div className="row pt-3">
-                                {/*   <div className="col-md-6">
-                                    <a className="float-left align-text-to-button" href="/reset_password">
-                                        Forgot your password?
-                                    </a>
-                                </div> */}
                                 <div className="col-md-6">
                                     <input className="btn btn-md btn-primary btn-outlined float-right" id="_submit"
                                            name="_submit" type="submit" value="Submit" />
                                 </div>
                             </div>
-                            {/*  <input id="nonce" name="nonce" type="hidden"
-                                   value="4de40d521855b547366a912e4e1bc559f4d858b92ab4e1779ecaa67e1efcfaf8"/> */}
                         </form>
                         <p class="mb-2 text-sm mx-auto">
                             Don't have an account ?
