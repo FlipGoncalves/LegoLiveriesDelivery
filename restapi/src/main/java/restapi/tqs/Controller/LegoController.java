@@ -22,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/lego")
 public class LegoController {
     private static final Logger log = LoggerFactory.getLogger(LegoController.class);
@@ -29,10 +30,6 @@ public class LegoController {
     @Autowired
     private LegoService legoService;
 
-    // @Autowired
-    // private CovidDataRepository repositoryData;
-    
-    @CrossOrigin
     @GetMapping("/all_legos")
     public ResponseEntity<List<Lego>> getAllData() {
         log.info("GET Request -> All Lego Data");
@@ -53,7 +50,6 @@ public class LegoController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
-    @CrossOrigin
     @GetMapping("/get_lego/price")
     public ResponseEntity<List<Lego>> getLegoByPrice(@RequestParam(value = "price", required = true) String price){
         log.info("GET Request -> Lego Data by price: {}", price);

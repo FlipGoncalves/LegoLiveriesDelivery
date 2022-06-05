@@ -20,6 +20,12 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Table(name = "lego")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "legoId")
 public class Lego {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "lego_id")
+    private long legoId;
+    @Column(name = "name")
     private String name;
     @Column(name = "price")
     private double price;
@@ -38,9 +44,6 @@ public class Lego {
 
     public Lego() {
 
-    public Lego(String name, Double price) {
-        this.name = name;
-        this.price = price;
     }
 
     public long getLegoId() {
@@ -52,23 +55,54 @@ public class Lego {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public Double getPrice() {
-        return price;
+    public double getPrice() {
+        return this.price;
     }
-    
-    public void setPrice(Double price) {
+
+    public void setPrice(double price) {
         this.price = price;
     }
 
+    public String getImageUrl() {
+        return this.imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public Set<Favorites> getFavorites() {
+        return this.favorites;
+    }
+
+    public void setFavorites(Set<Favorites> favorites) {
+        this.favorites = favorites;
+    }
+
+    public Set<OrderLego> getOrderLego() {
+        return this.orderLego;
+    }
+
+    public void setOrderLego(Set<OrderLego> orderLego) {
+        this.orderLego = orderLego;
+    }
+
+
     @Override
     public String toString() {
-        return "Lego [name=" + name + ", price=" + price + "]";
+        return "{" +
+            " legoId='" + getLegoId() + "'" +
+            ", name='" + getName() + "'" +
+            ", price='" + getPrice() + "'" +
+            ", imageUrl='" + getImageUrl() + "'" +
+            "}";
     }
+
 }
