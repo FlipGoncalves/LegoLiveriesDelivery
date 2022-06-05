@@ -75,6 +75,6 @@ public class LegoController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(lego2, HttpStatus.OK);
+        return new ResponseEntity<>(lego2, HttpStatus.CREATED);
     }
 }

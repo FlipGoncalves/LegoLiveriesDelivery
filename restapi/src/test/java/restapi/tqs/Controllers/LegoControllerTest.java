@@ -125,7 +125,7 @@ public class LegoControllerTest {
     }
 
     @Test
-    void test_GetLegoByName_InvalidName_ReturnsBadRequestStatusAndNullBody() throws Exception{
+    void test_GetLegoByName_InvalidName_ReturnsBadRequestStatus() throws Exception{
 
         Mockito.when(service.getData("Not a valid name")).thenReturn(new ArrayList<>());
         
@@ -154,7 +154,7 @@ public class LegoControllerTest {
     }
 
     @Test
-    void test_GetLegoByPrice_InvalidPrice_ReturnsBadRequestStatusAndNullBody() throws Exception{
+    void test_GetLegoByPrice_InvalidPrice_ReturnsBadRequestStatus() throws Exception{
 
         Mockito.when(service.getData(30)).thenReturn(new ArrayList<>());
         
@@ -175,7 +175,7 @@ public class LegoControllerTest {
         mvc.perform(post("/lego/insert_lego")
         .content(objectMapper.writeValueAsString(legoDTO))
         .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk())
+        .andExpect(status().isCreated())
         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.name", is(LEGO_NAME1)))
         .andExpect(jsonPath("$.price", is(LEGO_PRICE1)))
@@ -183,7 +183,7 @@ public class LegoControllerTest {
     }
 
     @Test
-    void test_InsertLego_InvalidLegoDTO_ReturnsBadRequestStatusAndNullBody() throws Exception{
+    void test_InsertLego_InvalidLegoDTO_ReturnsBadRequestStatus() throws Exception{
 
         LegoDTO legoDTO = new LegoDTO(null, LEGO_PRICE1, LEGO_IMAGEURL1); 
 
