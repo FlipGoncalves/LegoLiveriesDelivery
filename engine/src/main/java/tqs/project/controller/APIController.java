@@ -1,6 +1,8 @@
 package tqs.project.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -45,16 +47,31 @@ public class APIController {
     private OrderService orderservice;
     
     @GetMapping("/riders")
-    public ResponseEntity<List<Rider>> getData() {
+    public ResponseEntity<Map<String, Object>> getData() {
         log.info("GET Request -> All Riders Data");
 
         List<Rider> riders = riderservice.getAllData();
 
-        return new ResponseEntity<>(riders, HttpStatus.OK);
+        Map<String, Object> mapper = new HashMap<>();
+        mapper.put("riders", riders);
+
+        return new ResponseEntity<>(mapper, HttpStatus.OK);
+    }
+
+    @GetMapping("/orders")
+    public ResponseEntity<Map<String, Object>> getAllOrders() {
+        log.info("GET Request -> All Orders Data");
+
+        List<Order> orders = orderservice.getAllOrders();
+
+        Map<String, Object> mapper = new HashMap<>();
+        mapper.put("orders", orders);
+
+        return new ResponseEntity<>(mapper, HttpStatus.OK);
     }
 
     @GetMapping("/login/{email}")
-    public ResponseEntity<User> getUserinLogin(@PathVariable String email) throws BadRequestException {
+    public ResponseEntity<Object> getUserinLogin(@PathVariable String email) throws BadRequestException {
         log.info("GET Request -> User Data for login email: {}", email);
 
         User userLog = userservice.getUser(email);
@@ -69,10 +86,12 @@ public class APIController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> insertUserinRegister(@RequestBody RegisterDTO user) throws BadRequestException {
+    public ResponseEntity<Object> insertUserinRegister(@RequestBody Map<String, Object> user) throws BadRequestException {
         log.info("POST Request -> User Data for register: {}", user);
 
-        User userReg = userservice.register(user);
+        RegisterDTO reg = new RegisterDTO((String) user.get("username"), (String) user.get("email"), (String) user.get("password"));
+
+        User userReg = userservice.register(reg);
 
         if (userReg == null) {
             log.info("Register -> User already exists");
@@ -83,17 +102,8 @@ public class APIController {
         return new ResponseEntity<>(userReg, HttpStatus.OK);
     }
 
-    @GetMapping("/orders")
-    public ResponseEntity<List<Order>> getAllOrders() {
-        log.info("GET Request -> All Orders Data");
-
-        List<Order> orders = orderservice.getAllOrders();
-
-        return new ResponseEntity<>(orders, HttpStatus.OK);
-    }
-
     @GetMapping("/statistics")
-    public ResponseEntity<StatisticDTO> getStatistics() {
+    public ResponseEntity<Object> getStatistics() {
         log.info("GET Request -> Statistic data");
 
         StatisticDTO stats = new StatisticDTO();
@@ -104,5 +114,19 @@ public class APIController {
         stats.setSales(50);
 
         return new ResponseEntity<>(stats, HttpStatus.OK);
+    }
+
+    @PostMapping("/addrider")
+    public ResponseEntity<Object> addRider(@RequestBody Map<String, Object> rider) {
+        log.info("POST Request -> Rider data");
+
+        // do this in service
+
+        User rider1 = new User((String) rider.get("name"), (String) rider.get("email"), (String) rider.get("password"));
+        Rider rider2 = new Rider((int) rider.get("reviewSum"), (int) rider.get("totalRev"));
+        rider2.setUser(rider1);
+        // rep.save(rider2)
+
+        return new ResponseEntity<>(rider2, HttpStatus.OK);
     }
 }

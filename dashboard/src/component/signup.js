@@ -63,8 +63,6 @@ class SignUp extends Component {
         this.setState({error_message: "ERROR during sign up"})
       });
 
-      this.setState({error_message: "ERROR during sign up"})
-
     }
 
     return (
