@@ -1,11 +1,6 @@
 import React, {Component} from 'react';
 import logo from './assets//img/favicon.png';
 import './App.css';
-import './assets/css/material-dashboard.css';
-import './assets/css/material-dashboard.css.map';
-import './assets/css/material-dashboard.min.css';
-import './assets/css/nucleo-svg.css';
-import './assets/css/nucleo-icons.css';
 import Aside from './component/aside'
 import { Link } from 'react-router-dom';
 import {
@@ -72,13 +67,7 @@ class App extends Component {
 
     return (
       <div className="App">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"></meta>
-        <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"></link>
-        <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
-        <script async defer src="https://buttons.github.io/buttons.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
       <Aside></Aside>
 
       <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
@@ -265,38 +254,6 @@ class App extends Component {
           </div>
         </div>
       </div>
-      <footer class="footer py-1">
-        <div class="container-fluid">
-          <div class="row align-items-center justify-content-lg-between">
-            <div class="col-lg-6 mb-lg-0 mb-4">
-              <div class="copyright text-center text-sm text-muted text-lg-start">
-                © <script>
-                  document.write(new Date().getFullYear())
-                </script>,
-                made with <i class="fa fa-heart"></i> by
-                <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Creative Tim</a>
-                for a better web.
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <ul class="nav nav-footer justify-content-center justify-content-lg-end">
-                <li class="nav-item">
-                  <a href="https://www.creative-tim.com" class="nav-link text-muted" target="_blank">Creative Tim</a>
-                </li>
-                <li class="nav-item">
-                  <a href="https://www.creative-tim.com/presentation" class="nav-link text-muted" target="_blank">About Us</a>
-                </li>
-                <li class="nav-item">
-                  <a href="https://www.creative-tim.com/blog" class="nav-link text-muted" target="_blank">Blog</a>
-                </li>
-                <li class="nav-item">
-                  <a href="https://www.creative-tim.com/license" class="nav-link pe-0 text-muted" target="_blank">License</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </footer>
 
       </div>
         </main>
