@@ -107,13 +107,17 @@ class Management extends Component {
       // post to api
       let name = document.getElementById("name").value;
       let password = document.getElementById("password").value;
+      let email = document.getElementById("email").value;
 
       if (name === "") {
           this.setState({error_message: "Please insert Name"})
           return false
-      } else if (password === "") {
-          this.setState({error_message: "Please insert Password"})
+      } else if (email === "") {
+          this.setState({error_message: "Please insert Email"})
           return false
+      } else if (password === "") {
+        this.setState({error_message: "Please insert Password"})
+        return false
       }
 
       let add_rider = fetch('http://localhost:8080/api/addrider', {  
@@ -207,6 +211,9 @@ class Management extends Component {
                         <form role="form" class="text-start">
                         <div class="input-group input-group-outline my-3">
                             <input type="name" class="form-control" id="name" placeholder="Name"/>
+                        </div>
+                        <div class="input-group input-group-outline mb-3">
+                            <input type="text" class="form-control" id="email" placeholder="Email"/>
                         </div>
                         <div class="input-group input-group-outline mb-3">
                             <input type="password" class="form-control" id="password" placeholder="Password"/>

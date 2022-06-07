@@ -118,15 +118,10 @@ public class APIController {
 
     @PostMapping("/addrider")
     public ResponseEntity<Object> addRider(@RequestBody Map<String, Object> rider) {
-        log.info("POST Request -> Rider data");
+        log.info("POST Request -> Rider data: {}", rider);
 
-        // do this in service
+        Rider riderSaved = riderservice.insertRider(rider);
 
-        User rider1 = new User((String) rider.get("name"), (String) rider.get("email"), (String) rider.get("password"));
-        Rider rider2 = new Rider((int) rider.get("reviewSum"), (int) rider.get("totalRev"));
-        rider2.setUser(rider1);
-        // rep.save(rider2)
-
-        return new ResponseEntity<>(rider2, HttpStatus.OK);
+        return new ResponseEntity<>(riderSaved, HttpStatus.OK);
     }
 }

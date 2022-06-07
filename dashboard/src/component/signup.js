@@ -87,13 +87,13 @@ class SignUp extends Component {
                     <div class="card-body">
                     <form role="form" onSubmit={signup} method="POST">
                         <div class="input-group input-group-outline mb-3">
-                        <input type="text" class="form-control" id="name" placeholder="Name"/>
+                          <input type="text" class="form-control" id="name" placeholder="Name"/>
                         </div>
                         <div class="input-group input-group-outline mb-3">
-                        <input type="email" class="form-control" id="email" placeholder="Email"/>
+                          <input type="email" class="form-control" id="email" placeholder="Email"/>
                         </div>
                         <div class="input-group input-group-outline mb-3">
-                        <input type="password" class="form-control" id="pass" placeholder="Password"/>
+                          <input type="password" class="form-control" id="pass" placeholder="Password"/>
                         </div>
 
                         {this.state.error_message !== "" ? <>
