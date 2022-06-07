@@ -3,6 +3,7 @@ import logo from '../assets//img/favicon.png';
 import '../App.css';
 import Aside from './aside'
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 
 class Management extends Component {
@@ -12,18 +13,27 @@ class Management extends Component {
     this.state = {
       orders: [],
       count: 1,
-      riders: []
+      riders: [],
+      ridersId: {}
     };
   }
 
   addRiderToArray(item) {
+    let user = item["user"]
+    let id = item["riderId"]
+
+    let riders = this.state.ridersId
+    riders[id] = [0, 0]
+    this.setState({ridersId: riders})
+
     return (
         <tr>
           <td class="align-middle text-center">
             <div>
               <div class="d-flex flex-column justify-content-center">
-                <h6 class="mb-0 text-sm">John Michael</h6>
-                <p class="text-xs text-secondary mb-0">john@creative-tim.com</p>
+                <h6 class="mb-0 text-sm">{user["username"]}</h6>
+                <p class="text-xs text-secondary mb-0">{user["email"]}</p>
+                <p class="text-xs text-secondary mb-0">{item["riderId"]}</p>
               </div>
             </div>
           </td>
@@ -35,7 +45,7 @@ class Management extends Component {
             <span class="badge badge-sm bg-gradient-secondary">Offline</span>
           </td>
           <td class="align-middle text-center">
-            <span class="text-secondary text-xs font-weight-bold">4.5</span>
+            <span class="text-secondary text-xs font-weight-bold">{item["totalReviews"] === 0 ? 0 : item["reviewSum"] / item["totalReviews"]}</span>
           </td>
         </tr>
     )
@@ -76,6 +86,7 @@ class Management extends Component {
             this.setState({riders: []})
             data.json().then((list) => {
                 let newArray = []
+                list = list["riders"]
                 list.forEach((item) => {
                     newArray.push(
                         this.addRiderToArray(item)
@@ -91,6 +102,7 @@ class Management extends Component {
             this.setState({orders: []})
             data.json().then((list) => {
                 let newArray = []
+                list = list["orders"]
                 list.forEach((item) => {
                     newArray.push(
                         this.addOrderToArray(item)
@@ -100,6 +112,24 @@ class Management extends Component {
             });
         })
 
+    }
+
+    const addReview = () => {
+
+      // post to api
+      let id = document.getElementById("riderId").value;
+      let rev = document.getElementById("review").value;
+
+      if (id === "") {
+        return
+      }
+
+      let riders = this.state.ridersId;
+
+      riders[id] = [riders[id][0] + rev * 1, riders[id][1] + 1]
+
+      this.setState({ ridersId: riders})
+      
     }
 
     const addrider = () => {
@@ -116,17 +146,33 @@ class Management extends Component {
           this.setState({error_message: "Please insert Email"})
           return false
       } else if (password === "") {
-        this.setState({error_message: "Please insert Password"})
-        return false
+          this.setState({error_message: "Please insert Password"})
+          return false
       }
 
-      let add_rider = fetch('http://localhost:8080/api/addrider', {  
-            method: 'POST'
-        }).then((data) => {
-          if (data.status === 200) {
-            console.log("added rider")
-          }
-        })
+      axios.post('http://localhost:8080/api/addrider', {
+        "email": email,
+        "name": name,
+        "password": password
+      })
+      .then((response) => {
+        console.log(response);
+        if (response.status === 200 || response.status === 201) {
+          this.setState({error_message: ""})
+          this.setState({items: []})
+          console.log("HERE")
+          RequestMapping()
+          document.getElementById("name").value = "";
+          document.getElementById("password").value = "";
+          document.getElementById("email").value = "";
+          // info notification of success
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        this.setState({error_message: "ERROR during rider add"})
+        return false;
+      });
     }
 
     if (this.state.count === 1) {
@@ -204,29 +250,29 @@ class Management extends Component {
           </div>
         </div>
 
+        <form role="form" class="text-start">
             <div class="container my-auto" style={{paddingTop: 10}}>
                 <div class="row">
-                <div class="col-lg-5">
+                <div class="col-md-5">
                     <div class="card-body">
-                        <form role="form" class="text-start">
-                        <div class="input-group input-group-outline my-3">
-                            <input type="name" class="form-control" id="name" placeholder="Name"/>
-                        </div>
-                        <div class="input-group input-group-outline mb-3">
-                            <input type="text" class="form-control" id="email" placeholder="Email"/>
-                        </div>
-                        <div class="input-group input-group-outline mb-3">
-                            <input type="password" class="form-control" id="password" placeholder="Password"/>
-                        </div>
+                          <div class="input-group input-group-outline my-3">
+                              <input type="name" class="form-control" id="name" placeholder="Name"/>
+                          </div>
+                          <div class="input-group input-group-outline mb-3">
+                              <input type="text" class="form-control" id="email" placeholder="Email"/>
+                          </div>
+                          <div class="input-group input-group-outline mb-3">
+                              <input type="password" class="form-control" id="password" placeholder="Password"/>
+                          </div>
 
-                        <div class="text-center">
-                            <button type="button" class="btn bg-gradient-secondary w-100 my-4 mb-2" onClick={{addrider}}>Add a Rider</button>
-                        </div>
-                        </form>
-                    </div>
+                          <div class="text-center">
+                              <button type="button" class="btn bg-gradient-secondary w-100 my-4 mb-2" onClick={addrider}>Add a Rider</button>
+                          </div>
                     </div>
                 </div>
+                </div>
             </div>
+            </form>
             </div>
           </div>
         </main>
