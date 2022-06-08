@@ -39,6 +39,7 @@ public class LegoController {
 
     @GetMapping("/get_lego/name")
     public ResponseEntity<List<Lego>> getLegoByName(@RequestParam(value = "name", required = true) String name){
+        name = name.replaceAll("[\n\r\t]", "_");
         log.info("GET Request -> Lego Data by name: {}", name);
 
         List<Lego> data = legoService.getData(name);
@@ -52,6 +53,7 @@ public class LegoController {
 
     @GetMapping("/get_lego/price")
     public ResponseEntity<List<Lego>> getLegoByPrice(@RequestParam(value = "price", required = true) String price){
+        price = price.replaceAll("[\n\r\t]", "_");
         log.info("GET Request -> Lego Data by price: {}", price);
 
         List<Lego> data = legoService.getData(Double.parseDouble(price));

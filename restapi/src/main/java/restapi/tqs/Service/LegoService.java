@@ -29,6 +29,8 @@ public class LegoService {
     }
 
     public List<Lego> getData(String name) {
+        
+        name = name.replaceAll("[\n\r\t]", "_");
         log.info("Getting Lego By Name {}", name);
 
         List<Lego> legos = legorep.findAllByNameContainingIgnoreCase(name);
