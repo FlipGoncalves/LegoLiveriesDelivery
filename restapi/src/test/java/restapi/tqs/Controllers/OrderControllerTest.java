@@ -11,9 +11,6 @@ import java.util.Set;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.restassured.http.ContentType;
-import io.restassured.module.mockmvc.RestAssuredMockMvc;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -51,7 +48,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
-import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 
 
 @WebMvcTest(OrderController.class)
@@ -79,8 +75,6 @@ public class OrderControllerTest {
 
     @BeforeEach
     void setUp(){
-        
-        RestAssuredMockMvc.mockMvc( mvc );
 
         List<Object> array1 = buildUserAndClientObject(1);
         user1 = (User) array1.get(0);

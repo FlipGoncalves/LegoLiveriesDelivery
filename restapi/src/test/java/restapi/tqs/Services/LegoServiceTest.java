@@ -124,7 +124,7 @@ public class LegoServiceTest {
 
         LegoDTO legoDTO = new LegoDTO(null, 30, "A Lego imgUrl");
         
-        assertThrows(NullPointerException.class, () -> {service.insertData(legoDTO);});
+        assertThrows(BadLegoDTOException.class, () -> {service.insertData(legoDTO);});
 
     }
 

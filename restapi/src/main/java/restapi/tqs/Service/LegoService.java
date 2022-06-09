@@ -48,17 +48,14 @@ public class LegoService {
     public Lego insertData(LegoDTO legoDTO) throws BadLegoDTOException {
         log.info("Inserting Lego");
         
-        try {
-            legoDTO.getImgUrl();
-            legoDTO.getName();
-            legoDTO.getPrice();
-        } catch (NullPointerException e) {
+        if (legoDTO.hasNullFields()){
             throw new BadLegoDTOException("The LegoDTO has a null attribute: " + legoDTO.toString());
         }
 
         if (legoDTO.getImgUrl().isBlank()|| legoDTO.getName().isBlank()|| legoDTO.getPrice() <= 0){
             throw new BadLegoDTOException("The LegoDTO is invalid: " + legoDTO.toString());
         }
+
         Lego lego = new Lego();
         lego.setName(legoDTO.getName());
         lego.setImageUrl(legoDTO.getImgUrl());
