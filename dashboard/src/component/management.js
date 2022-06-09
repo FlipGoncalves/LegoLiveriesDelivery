@@ -13,18 +13,14 @@ class Management extends Component {
     this.state = {
       orders: [],
       count: 1,
-      riders: [],
-      ridersId: {}
+      riders: []
     };
   }
 
   addRiderToArray(item) {
     let user = item["user"]
-    let id = item["riderId"]
 
-    let riders = this.state.ridersId
-    riders[id] = [0, 0]
-    this.setState({ridersId: riders})
+    console.log(item)
 
     return (
         <tr>
@@ -45,33 +41,37 @@ class Management extends Component {
             <span class="badge badge-sm bg-gradient-secondary">Offline</span>
           </td>
           <td class="align-middle text-center">
-            <span class="text-secondary text-xs font-weight-bold">{item["totalReviews"] === 0 ? 0 : item["reviewSum"] / item["totalReviews"]}</span>
+            <span class="text-secondary text-xs font-weight-bold">{item["totalReviews"] === 0 ? 0 : Math.round(item["reviewSum"] / item["totalReviews"] * 100) / 100}</span>
           </td>
         </tr>
     )
   }
 
   addOrderToArray(item) {
+    console.log(item)
+    let store = item["store"]
+    let addr = item["address"]
+    let addr_total = addr["city"] + ", " + addr["country"] + ", " + addr["postalCode"] + ", " + addr["street"]
+
     return (
       <tr>
         <td class="align-middle text-center">
           <div>
             <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">Address</h6>
+              <h6 class="mb-0 text-sm">{addr_total}</h6>
             </div>
           </div>
         </td>
         <td>
-          <p class="text-xs font-weight-bold mb-0">Store 1</p>
+          <p class="text-xs font-weight-bold mb-0">{store["name"]}</p>
         </td>
         <td class="align-middle text-center">
-          <span class="text-secondary text-xs font-weight-bold">Client 1</span>
+          <span class="text-secondary text-xs font-weight-bold">{item["clientName"]}</span>
         </td>
         <td class="align-middle text-center text-sm">
           <span class="badge badge-sm bg-gradient-success">Done</span>
           <span class="badge badge-sm bg-gradient-secondary">In Progress</span>
         </td>
-        <button> Add Rider</button>
       </tr>
     )
   }
@@ -112,24 +112,6 @@ class Management extends Component {
             });
         })
 
-    }
-
-    const addReview = () => {
-
-      // post to api
-      let id = document.getElementById("riderId").value;
-      let rev = document.getElementById("review").value;
-
-      if (id === "") {
-        return
-      }
-
-      let riders = this.state.ridersId;
-
-      riders[id] = [riders[id][0] + rev * 1, riders[id][1] + 1]
-
-      this.setState({ ridersId: riders})
-      
     }
 
     const addrider = () => {

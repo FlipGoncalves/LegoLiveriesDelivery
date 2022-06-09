@@ -3,8 +3,8 @@ package tqs.project.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import tqs.project.datamodels.RegisterDTO;
 import tqs.project.model.User;
-import tqs.project.model.RegisterDTO;
 import tqs.project.repositories.UserRepository;
 
 import org.slf4j.Logger;

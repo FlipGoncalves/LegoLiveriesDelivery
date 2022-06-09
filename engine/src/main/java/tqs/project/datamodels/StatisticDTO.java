@@ -1,4 +1,4 @@
-package tqs.project.model;
+package tqs.project.datamodels;
 
 import lombok.Data;
 import lombok.Getter;
@@ -13,14 +13,16 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class RegisterDTO {
+public class StatisticDTO {
+    @NonNull
+    private int numorders;
 
     @NonNull
-    private String username;
+    private int numriders;
 
     @NonNull
-    private String email;
+    private int completedorders;
 
     @NonNull
-    private String password;
+    private int sales;
 }

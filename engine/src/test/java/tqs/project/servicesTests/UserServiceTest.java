@@ -13,8 +13,8 @@ import static org.mockito.internal.verification.VerificationModeFactory.times;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
+import tqs.project.datamodels.RegisterDTO;
 import tqs.project.model.User;
-import tqs.project.model.RegisterDTO;
 import tqs.project.repositories.UserRepository;
 import tqs.project.service.UserService;
 
