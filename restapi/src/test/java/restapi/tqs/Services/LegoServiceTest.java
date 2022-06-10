@@ -150,7 +150,7 @@ public class LegoServiceTest {
 
         LegoDTO legoDTO = new LegoDTO("A Lego Name", 30, null);
         
-        assertThrows(NullPointerException.class, () -> {service.insertData(legoDTO);});
+        assertThrows(BadLegoDTOException.class, () -> {service.insertData(legoDTO);});
 
     }
 

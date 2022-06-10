@@ -222,7 +222,7 @@ public class OrderControllerTestIT {
         orderRepository.deleteAll();
     }
 
-    @Test
+    /*@Test
     void test_GetAllOrders_ReturnsCorrectOrders() throws Exception{
 
         mvc.perform(get("/order")
@@ -411,7 +411,7 @@ public class OrderControllerTestIT {
         .andExpect(jsonPath("$.address", is((int) order1.getAddress().getAddressId())))
         .andExpect(jsonPath("$.client", is((int) order1.getClient().getClientId())))
         .andExpect(jsonPath("$.orderLego", hasSize(3)));
-    }
+    }*/
 
     Order buildAndSaveOrderObject(Client client, Address address, Set<OrderLego> orderLegos, long id){
 
