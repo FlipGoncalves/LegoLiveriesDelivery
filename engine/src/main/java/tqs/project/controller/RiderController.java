@@ -23,7 +23,7 @@ import tqs.project.model.Rider;
 import tqs.project.service.RiderService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/riders")
 @Validated
 @CrossOrigin
 public class RiderController {
@@ -33,8 +33,8 @@ public class RiderController {
     private RiderService riderservice;
 
         
-    @GetMapping("/riders")
-    public ResponseEntity<List<Rider>> getData() {
+    @GetMapping()
+    public ResponseEntity<List<Rider>> getAllRiders() {
         log.info("GET Request -> All Riders Data");
 
         List<Rider> riders = riderservice.getAllData();
@@ -42,7 +42,7 @@ public class RiderController {
         return new ResponseEntity<>(riders, HttpStatus.OK);
     }
 
-    @PostMapping("/addrider")
+    @PostMapping("/add_rider")
     public ResponseEntity<Object> addRider(@RequestBody RiderDTO rider) {
         log.info("POST Request -> Rider data");
 
