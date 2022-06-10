@@ -11,6 +11,10 @@ import java.util.Set;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.restassured.http.ContentType;
+import io.restassured.module.mockmvc.RestAssuredMockMvc;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -20,7 +24,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 
+import restapi.tqs.TqsApplication;
 import restapi.tqs.Controller.OrderController;
 import restapi.tqs.DataModels.OrderDTO;
 import restapi.tqs.DataModels.OrderLegoDTO;
@@ -36,7 +44,14 @@ import restapi.tqs.Models.Client;
 import restapi.tqs.Models.Lego;
 import restapi.tqs.Models.Order;
 import restapi.tqs.Models.OrderLego;
+import restapi.tqs.Models.OrderLegoId;
 import restapi.tqs.Models.User;
+import restapi.tqs.Repositories.AddressRepository;
+import restapi.tqs.Repositories.ClientRepository;
+import restapi.tqs.Repositories.LegoRepository;
+import restapi.tqs.Repositories.OrderLegoRepository;
+import restapi.tqs.Repositories.OrderRepository;
+import restapi.tqs.Repositories.UserRepository;
 import restapi.tqs.Service.OrderService;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -48,19 +63,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
+import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 
-
-@WebMvcTest(OrderController.class)
-public class OrderControllerTest {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = TqsApplication.class)
+@AutoConfigureMockMvc
+@AutoConfigureTestDatabase
+public class OrderControllerTestIT {
     
     @Autowired
     private MockMvc mvc;
 
     @Autowired
     private ObjectMapper objectMapper;
-
-    @MockBean
-    private OrderService service;
 
     Order order1, order2, order3;
     Client client1, client2;
@@ -72,7 +86,24 @@ public class OrderControllerTest {
     List<OrderLegoDTO> orderLegoDTO1, orderLegoDTO2, orderLegoDTO3;
     ArrayList<Order> all_Orders;
 
+    @Autowired
+    private LegoRepository legoRepository;
 
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private OrderLegoRepository orderLegoRepository;
+
+    @Autowired
+    private AddressRepository addressRepository;
+
+    @Autowired
+    private ClientRepository clientRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+    
     @BeforeEach
     void setUp(){
 
@@ -84,12 +115,28 @@ public class OrderControllerTest {
         user2 = (User) array2.get(0);
         client2 = (Client) array2.get(1);
 
+        client1 = clientRepository.saveAndFlush(client1);
+        client2 = clientRepository.saveAndFlush(client2);
+        user1 = userRepository.saveAndFlush(user1);
+        user2 = userRepository.saveAndFlush(user2);
+
         address1 = buildAddressObject(1);
         address2 = buildAddressObject(2);
+
+        address1 = addressRepository.save(address1);
+        address2 = addressRepository.save(address2);
 
         lego1 = buildLegoObject(1);
         lego2 = buildLegoObject(2);
         lego3 = buildLegoObject(3);
+
+        lego1 = legoRepository.saveAndFlush(lego1);
+        lego2 = legoRepository.saveAndFlush(lego2);
+        lego3 = legoRepository.saveAndFlush(lego3);
+
+        System.out.println("lego1: " + lego1.getLegoId());
+        System.out.println("lego2: " + lego2.getLegoId());
+        System.out.println("lego3: " + lego3.getLegoId());
 
         orderLegos1 = buildOrderLegoList(lego1, lego2, lego3,1);
         orderLegos2 = buildOrderLegoList(lego1, lego2, lego3,2);
@@ -98,11 +145,6 @@ public class OrderControllerTest {
         order1 = buildAndSaveOrderObject(client1, address1, orderLegos1, 1);
         order2 = buildAndSaveOrderObject(client1, address1, orderLegos2, 1);
         order3 = buildAndSaveOrderObject(client2, address2, orderLegos3, 2);
-
-        all_Orders = new ArrayList<>();
-        all_Orders.add(order1);
-        all_Orders.add(order2);
-        all_Orders.add(order3);        
 
         Set<Order> orders = client1.getOrders();
         orders.add(order1);
@@ -116,6 +158,51 @@ public class OrderControllerTest {
         orders.add(order3);
         client2.setOrders(orders);
 
+        order1 = orderRepository.save(order1);
+        order2 = orderRepository.save(order2);
+        order3 = orderRepository.save(order3);
+
+        System.out.println("user1: " + user1.getUserId());
+        System.out.println("client1: " + client1.getClientId());
+        System.out.println("user2: " + user2.getUserId());
+        System.out.println("client2: " + client2.getClientId());
+        System.out.println("address1: " + address1.getAddressId());
+        System.out.println("address2: " + address2.getAddressId());
+        System.out.println("order1: " + order1.getOrderId());
+        System.out.println("order2: " + order2.getOrderId());
+        System.out.println("order3: " + order3.getOrderId());
+
+        for (OrderLego orderLego : orderLegos1) {
+            orderLego.setOrder(order1);
+            orderLego.setId(new OrderLegoId(order1.getOrderId(), orderLego.getLego().getLegoId()));
+            System.out.println("TESTE1: " + order1.getOrderId());
+            System.out.println("Teste2: " + orderLego.getLego().getLegoId());
+            System.out.println("ORDELEGO1: " + orderLego.getId());
+            orderLego = orderLegoRepository.saveAndFlush(orderLego);
+        }
+
+        for (OrderLego orderLego : orderLegos2) {
+            orderLego.setOrder(order2);
+            orderLego.setId(new OrderLegoId(order2.getOrderId(), orderLego.getLego().getLegoId()));
+            System.out.println("ORDELEGO1: " + orderLego.getId());
+            orderLego = orderLegoRepository.saveAndFlush(orderLego);
+        }
+
+        for (OrderLego orderLego : orderLegos3) {
+            orderLego.setOrder(order3);
+            orderLego.setId(new OrderLegoId(order3.getOrderId(), orderLego.getLego().getLegoId()));
+            System.out.println("ORDELEGO1: " + orderLego.getId());
+            orderLego = orderLegoRepository.saveAndFlush(orderLego);
+        }
+
+        orderRepository.flush();
+        addressRepository.flush();
+
+        all_Orders = new ArrayList<>();
+        all_Orders.add(order1);
+        all_Orders.add(order2);
+        all_Orders.add(order3);        
+
         orderLegoDTO1 = buildOrderLegoDTO(1l,2l,3l,1);
         orderLegoDTO2 = buildOrderLegoDTO(1l,2l,3l,2);
         orderLegoDTO3 = buildOrderLegoDTO(1l,2l,3l,3);
@@ -125,10 +212,18 @@ public class OrderControllerTest {
         orderDTO3 = new OrderDTO(2l, 2l, 2000, orderLegoDTO3);
     }
 
+    @AfterEach
+    void cleanUp(){
+        userRepository.deleteAll();
+        legoRepository.deleteAll();
+        orderLegoRepository.deleteAll();
+        System.out.println(addressRepository.findAll());
+        addressRepository.deleteAll();
+        orderRepository.deleteAll();
+    }
+
     @Test
     void test_GetAllOrders_ReturnsCorrectOrders() throws Exception{
-
-        Mockito.when(service.getAllOrders()).thenReturn(all_Orders);
 
         mvc.perform(get("/order")
         .contentType(MediaType.APPLICATION_JSON))
@@ -166,8 +261,6 @@ public class OrderControllerTest {
     @Test
     void test_GetOrderById_ValidId_ReturnsCorrectOrder() throws Exception{
 
-        Mockito.when(service.getOrderById(1)).thenReturn(order1);
-
         mvc.perform(get("/order/{orderId}",1)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
@@ -186,8 +279,6 @@ public class OrderControllerTest {
     @Test
     void test_GetOrderById_InvalidId_ReturnsBadRequestStatus() throws Exception{
         
-        Mockito.when(service.getOrderById(200)).thenThrow(OrderNotFoundException.class);
-
         mvc.perform(get("/order/{orderId}",200)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
@@ -196,8 +287,6 @@ public class OrderControllerTest {
 
     @Test
     void test_GetClientOrders_ValidId_ReturnsCorrectOrders() throws Exception{
-
-        Mockito.when(service.getClientOrders(1)).thenReturn(new ArrayList<Order>(Arrays.asList(order1,order2)));
 
         mvc.perform(get("/order/client/{clientId}", 1)
         .contentType(MediaType.APPLICATION_JSON))
@@ -226,8 +315,6 @@ public class OrderControllerTest {
     @Test
     void test_GetClientOrders_InvalidId_ReturnsBadRequestStatus() throws Exception{
         
-        Mockito.when(service.getClientOrders(200)).thenThrow(ClientNotFoundException.class);
-
         mvc.perform(get("/order/client/{clientId}",200)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
@@ -237,8 +324,6 @@ public class OrderControllerTest {
     void test_MakeOrder_InvalidOrderDTO_BadScheduledTimeOfDelivery_ReturnsBadRequestStatus() throws Exception{
         List<OrderLegoDTO> orderLegoDTOTest = buildOrderLegoDTO(1l,2l,3l,1);
         OrderDTO orderDTOTest = new OrderDTO(1l, 1l, 2700, orderLegoDTOTest);
-
-        Mockito.when(service.makeOrder(any(OrderDTO.class))).thenThrow(new BadScheduledTimeOfDeliveryException(""));
 
         mvc.perform(post("/order")
         .content(objectMapper.writeValueAsString(orderDTOTest))
@@ -252,8 +337,6 @@ public class OrderControllerTest {
         List<OrderLegoDTO> orderLegoDTOTest = buildOrderLegoDTO(1l,2l,3l,1);
         OrderDTO orderDTOTest = new OrderDTO(50l, 1l, 2100, orderLegoDTOTest);
 
-        Mockito.when(service.makeOrder(any(OrderDTO.class))).thenThrow(new ClientNotFoundException(""));
-
         mvc.perform(post("/order")
         .content(objectMapper.writeValueAsString(orderDTOTest))
         .contentType(MediaType.APPLICATION_JSON))
@@ -266,8 +349,6 @@ public class OrderControllerTest {
         List<OrderLegoDTO> orderLegoDTOTest = buildOrderLegoDTO(1l,2l,3l,1);
         OrderDTO orderDTOTest = new OrderDTO(1l, 50l, 2100, orderLegoDTOTest);
 
-        Mockito.when(service.makeOrder(any(OrderDTO.class))).thenThrow(new AddressNotFoundException(""));
-
         mvc.perform(post("/order")
         .content(objectMapper.writeValueAsString(orderDTOTest))
         .contentType(MediaType.APPLICATION_JSON))
@@ -279,8 +360,6 @@ public class OrderControllerTest {
     void test_MakeOrder_InvalidOrderDTO_BadLegoId_ReturnsBadRequestStatus() throws JsonProcessingException, Exception{
         List<OrderLegoDTO> orderLegoDTOTest = buildOrderLegoDTO(50l,2l,3l,1);
         OrderDTO orderDTOTest = new OrderDTO(1l, 1l, 2100, orderLegoDTOTest);
-
-        Mockito.when(service.makeOrder(any(OrderDTO.class))).thenThrow(new LegoNotFoundException(""));
 
         mvc.perform(post("/order")
         .content(objectMapper.writeValueAsString(orderDTOTest))
@@ -295,8 +374,6 @@ public class OrderControllerTest {
         orderLegoDTOTest.get(0).setQuantity(-5);
         OrderDTO orderDTOTest = new OrderDTO(1l, 1l, 2100, orderLegoDTOTest);
 
-        Mockito.when(service.makeOrder(any(OrderDTO.class))).thenThrow(new BadOrderLegoDTOException(""));
-
         mvc.perform(post("/order")
         .content(objectMapper.writeValueAsString(orderDTOTest))
         .contentType(MediaType.APPLICATION_JSON))
@@ -307,8 +384,6 @@ public class OrderControllerTest {
     @Test
     void test_MakeOrder_InvalidOrderDTO_BadOrderLegoList_ReturnsBadRequestStatus() throws JsonProcessingException, Exception{
         OrderDTO orderDTOTest = new OrderDTO(1l, 1l, 2100, new ArrayList<OrderLegoDTO>());
-
-        Mockito.when(service.makeOrder(any(OrderDTO.class))).thenThrow(new ClientNotFoundException(""));
 
         mvc.perform(post("/order")
         .content(objectMapper.writeValueAsString(orderDTOTest))
@@ -321,8 +396,6 @@ public class OrderControllerTest {
     void test_MakeOrder_ValidOrderDTO_ReturnsCorrectOrder() throws JsonProcessingException, Exception{
         List<OrderLegoDTO> orderLegoDTOTest = buildOrderLegoDTO(1l,2l,3l,1);
         OrderDTO orderDTOTest = new OrderDTO(1l, 1l, 2100, orderLegoDTOTest);
-
-        Mockito.when(service.makeOrder(any(OrderDTO.class))).thenReturn(order1);
 
         mvc.perform(post("/order")
         .content(objectMapper.writeValueAsString(orderDTOTest))
@@ -354,7 +427,6 @@ public class OrderControllerTest {
             totalPrice += orderLego.getPrice() * orderLego.getQuantity();
         }
 
-        order.setOrderId(id);
         order.setClient(client);
         order.setAddress(address);
         order.setDate(date);
@@ -363,17 +435,11 @@ public class OrderControllerTest {
         order.setRiderName("Paulo " + id);
         order.setTotalPrice(totalPrice);
 
-        for (OrderLego orderLego : orderLegos) {
-            orderLego.setOrder(order);
-        }
-        order.setOrderLego(orderLegos);
-
         return order;
     }
 
     Lego buildLegoObject(long id){
         Lego lego =  new Lego();
-        lego.setLegoId(id);
         lego.setName("Lego " + id);
         lego.setImageUrl("URL " + id);
         lego.setPrice(10 + id);
@@ -433,5 +499,4 @@ public class OrderControllerTest {
 
         return orderLegos;
     }
-    
 }

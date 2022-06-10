@@ -41,6 +41,10 @@ public class LegoDTO {
         this.imgUrl = imgUrl;
     }
 
+    public boolean hasNullFields(){
+        return this.imgUrl == null || this.name == null;
+    }
+
     @Override
     public String toString() {
         return "{" +
