@@ -4,21 +4,25 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
-
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class StatisticDTO {
+public class RiderDTO {
+    @NonNull
+    private String username;
 
-    private int numorders;
+    @NonNull
+    private String email;
 
-    private int numriders;
+    @NonNull
+    private String password;
 
-    private int completedorders;
+    private int numRev;
 
-    private int sales;
+    private int sumRev;
 }

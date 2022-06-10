@@ -4,6 +4,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import tqs.project.datamodels.RiderDTO;
 import tqs.project.exceptions.UserAlreadyExistsException;
 import tqs.project.model.Rider;
 import tqs.project.model.User;
@@ -36,19 +37,19 @@ public class RiderService {
         return riders;
     }
 
-    public Rider insertRider(Map<String, Object> rider) throws UserAlreadyExistsException {
+    public Rider insertRider(RiderDTO rider) throws UserAlreadyExistsException {
         log.info("Getting All Rider Data");
 
-        User usr = userrep.findByEmail((String) rider.get("email"));
+        User usr = userrep.findByEmail((String) rider.getEmail());
 
         if (usr != null) {
-            throw new UserAlreadyExistsException("User with email " + rider.get("email") + " already exists");
+            throw new UserAlreadyExistsException("User with email " + rider.getEmail() + " already exists");
         } 
 
         Rider rider2;
 
-        if (rider.keySet().contains("numRev")) {
-            rider2 = new Rider(Integer.parseInt(rider.get("sumRev").toString()), Integer.parseInt(rider.get("numRev").toString()));
+        if (rider.getNumRev() < 0) {
+            rider2 = new Rider(rider.getSumRev(), rider.getNumRev());
         } else {
             int numRev = rand.nextInt(16);
             int sum = 0;
@@ -59,7 +60,7 @@ public class RiderService {
             rider2 = new Rider(sum, numRev);
         }
 
-        usr = new User((String) rider.get("name"), (String) rider.get("email"), (String) rider.get("password"));
+        usr = new User(rider.getUsername(), rider.getEmail(),rider.getPassword());
             rider2.setUser(usr);
 
         return rep.save(rider2);

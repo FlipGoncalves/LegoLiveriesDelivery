@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import tqs.project.datamodels.RiderDTO;
 import tqs.project.exceptions.UserAlreadyExistsException;
 import tqs.project.model.Rider;
 import tqs.project.service.RiderService;
@@ -33,28 +34,25 @@ public class RiderController {
 
         
     @GetMapping("/riders")
-    public ResponseEntity<Map<String, Object>> getData() {
+    public ResponseEntity<List<Rider>> getData() {
         log.info("GET Request -> All Riders Data");
 
         List<Rider> riders = riderservice.getAllData();
 
-        Map<String, Object> mapper = new HashMap<>();
-        mapper.put("riders", riders);
-
-        return new ResponseEntity<>(mapper, HttpStatus.OK);
+        return new ResponseEntity<>(riders, HttpStatus.OK);
     }
 
     @PostMapping("/addrider")
-    public ResponseEntity<Object> addRider(@RequestBody Map<String, Object> rider) {
+    public ResponseEntity<Object> addRider(@RequestBody RiderDTO rider) {
         log.info("POST Request -> Rider data");
 
         Rider riderSaved;
         try {
             riderSaved = riderservice.insertRider(rider);
         } catch (UserAlreadyExistsException e) {
-            return new ResponseEntity<>(null, HttpStatus.OK);
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(riderSaved, HttpStatus.OK);
+        return new ResponseEntity<>(riderSaved, HttpStatus.CREATED);
     }
 }

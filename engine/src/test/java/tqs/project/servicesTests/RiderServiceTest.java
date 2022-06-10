@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import tqs.project.datamodels.RiderDTO;
 import tqs.project.exceptions.UserAlreadyExistsException;
 import tqs.project.model.Rider;
 import tqs.project.model.User;
@@ -57,13 +58,8 @@ class RiderServiceTest {
 
     @Test
     void insertRider_ValidRider_WithNumRev_ReturnsCorrectRider() throws UserAlreadyExistsException{
-        Map<String, Object> request = new HashMap<>();
 
-        request.put("name", "New User");
-        request.put("email", "user@gmail.com");
-        request.put("password", "password");
-        request.put("numRev", "10");
-        request.put("sumRev", "30");
+        RiderDTO request = new RiderDTO("New User", "user@gmail.com", "password", 10, 30);
         
         User user = new User();
         user.setEmail("user@gmail.com");
@@ -83,21 +79,20 @@ class RiderServiceTest {
 
         assertEquals(user.getUsername(), response.getUser().getUsername());
         assertEquals(user.getEmail(), response.getUser().getEmail());
-        assertEquals(Integer.parseInt((String)request.get("numRev")), response.getTotalReviews());
-        assertEquals(Integer.parseInt((String)request.get("sumRev")), response.getReviewSum());
+        assertEquals(request.getNumRev(), response.getTotalReviews());
+        assertEquals(request.getSumRev(), response.getReviewSum());
 
     }
 
     @Test
     void insertRider_ValidRider_WithoutNumRev_ReturnsCorrectRider() throws UserAlreadyExistsException{
-        Map<String, Object> request = new HashMap<>();
-
         int numRev = 25;
         int totalRev = 5;
 
-        request.put("name", "New User");
-        request.put("email", "user@gmail.com");
-        request.put("password", "password");
+        RiderDTO request = new RiderDTO();
+        request.setEmail("user@gmail.com");
+        request.setUsername("New User");
+        request.setPassword("password");
         
         User user = new User();
         user.setEmail("user@gmail.com");
@@ -123,14 +118,14 @@ class RiderServiceTest {
 
     @Test
     void insertRider_UserAlreadyExists_ThrowsUserAlreadyExistsException(){
-        Map<String, Object> request = new HashMap<>();
 
         int numRev = 25;
         int totalRev = 5;
 
-        request.put("name", "New User");
-        request.put("email", "user@gmail.com");
-        request.put("password", "password");
+        RiderDTO request = new RiderDTO();
+        request.setEmail("user@gmail.com");
+        request.setUsername("New User");
+        request.setPassword("password");
         
         User user = new User();
         user.setEmail("user@gmail.com");
