@@ -40,7 +40,7 @@ public class UserService {
         registerUser.setPassword(user.getPassword());
         registerUser.setUsername(user.getUsername());
 
-        rep.save(registerUser);
+        registerUser = rep.save(registerUser);
         log.info("User Registered: {}", registerUser);
 
         return registerUser;

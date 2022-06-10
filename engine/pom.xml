@@ -161,6 +161,13 @@
 			<version>20220320</version>
 		</dependency>
 
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>spring-mock-mvc</artifactId>
+            <version>5.0.1</version>
+            <scope>test</scope>
+        </dependency>
+
 		<dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-java</artifactId>
