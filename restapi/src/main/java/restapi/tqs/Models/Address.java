@@ -1,4 +1,4 @@
-package tqs.project.model;
+package restapi.tqs.Models;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -35,8 +35,14 @@ public class Address {
     private String city;
     @Column(name = "country")
     private String country;
+
     @OneToOne(mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Store store;
+    @JsonIdentityReference(alwaysAsId = true)
+    private Client client;
+
+    @OneToOne(mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIdentityReference(alwaysAsId = true)
+    private Order order;
 
     @OneToMany(mappedBy = "address")
     @JsonIdentityReference(alwaysAsId = true)
@@ -45,21 +51,8 @@ public class Address {
     public Address() {
     }
 
-    public Address(long addressId, String street, String postalCode, String city, String country) {
-        this.addressId = addressId;
-        this.street = street;
-        this.postalCode = postalCode;
-        this.city = city;
-        this.country = country;
-    }
-    
-
     public long getAddressId() {
         return this.addressId;
-    }
-
-    public void setAddressId(long addressId) {
-        this.addressId = addressId;
     }
 
     public String getStreet() {
@@ -94,6 +87,30 @@ public class Address {
         this.country = country;
     }
 
+    public Client getClient() {
+        return this.client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public Order getOrder() {
+        return this.order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public Set<Order> getOrders() {
+        return this.orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
+    }
+    
 
     @Override
     public String toString() {
@@ -105,5 +122,5 @@ public class Address {
             ", country='" + getCountry() + "'" +
             "}";
     }
-    
+
 }

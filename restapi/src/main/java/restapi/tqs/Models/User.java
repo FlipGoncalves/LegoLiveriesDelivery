@@ -1,4 +1,4 @@
-package tqs.project.model;
+package restapi.tqs.Models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,7 +14,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 
 @Entity
-@Table(name = "user")
+@Table(name = "`user`")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "userId")
 public class User {
     
     @Id
@@ -25,32 +26,19 @@ public class User {
     private String username;
     @Column(name = "email")
     private String email;
-    @Column(name = "password")
+    @Column(name = "`password`")
     private String password;
 
     @OneToOne(mappedBy = "user")
-    private Rider rider;
-
-    @OneToOne(mappedBy = "user")
-    private Manager manager;
+    @JsonIdentityReference(alwaysAsId = true)
+    private Client client;
 
     public User(){
 
     }
 
-    public User(String username, String email, String password){
-        this.username = username;
-        this.email = email;
-        this.password = password;
-    }
-
-
     public long getUserId() {
         return this.userId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
     }
 
     public String getUsername() {
@@ -77,13 +65,24 @@ public class User {
         this.password = password;
     }
 
+    public Client getClient() {
+        return this.client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+
     @Override
     public String toString() {
         return "{" +
-            " id='" + getUserId() + "'" +
+            " userId='" + getUserId() + "'" +
             ", username='" + getUsername() + "'" +
             ", email='" + getEmail() + "'" +
             ", password='" + getPassword() + "'" +
+            ", client='" + getClient() + "'" +
             "}";
     }
+
 }

@@ -3,9 +3,11 @@ package restapi.tqs.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import restapi.tqs.DataModels.LegoDTO;
+import restapi.tqs.Exceptions.BadLegoDTOException;
 import restapi.tqs.Models.Lego;
+import restapi.tqs.Repositories.LegoRepository;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -15,32 +17,50 @@ import org.slf4j.LoggerFactory;
 public class LegoService {    
     private static final Logger log = LoggerFactory.getLogger(LegoService.class);
 
-    // @Autowired
-    // private LegoSetsRepository legorep;
+    @Autowired
+    private LegoRepository legorep;
+
+
+    public List<Lego> getData() {
+        log.info("Getting All Lego");
+
+        List<Lego> legos = legorep.findAll();
+        return legos;
+    }
 
     public List<Lego> getData(String name) {
-        log.info("Getting Cached Data");
+        
+        name = name.replaceAll("[\n\r\t]", "_");
+        log.info("Getting Lego By Name {}", name);
 
-        // List<Lego> legos = legorep.findAllByName();
-        // return legos;
-
-        return Arrays.asList(new Lego("Lego Service by Name", 2.0), new Lego("Lego Serice By Name", 4.0));
+        List<Lego> legos = legorep.findAllByNameContainingIgnoreCase(name);
+        return legos;
     }
 
-    public List<Lego> getData(Double price) {
-        log.info("Getting Cached Data");
+    public List<Lego> getData(double price) {
+        log.info("Getting Lego By Price {}", price);
         
-        // List<Lego> legos = legorep.findAllByPrice();
-        // return legos;
+        List<Lego> legos = legorep.findAllByPrice(price);
+        return legos;
 
-        return Arrays.asList(new Lego("Lego Service by Price", 2.0));
     }
 
-    public Lego insertData(String name, Double price) {
-        log.info("Getting Cached Data");
+    public Lego insertData(LegoDTO legoDTO) throws BadLegoDTOException {
+        log.info("Inserting Lego");
         
-        // return legorep.save(new Lego(name, price));
+        if (legoDTO.hasNullFields()){
+            throw new BadLegoDTOException("The LegoDTO has a null attribute: " + legoDTO.toString());
+        }
 
-        return new Lego("Lego Service by Insert", 2.0);
+        if (legoDTO.getImgUrl().isBlank()|| legoDTO.getName().isBlank()|| legoDTO.getPrice() <= 0){
+            throw new BadLegoDTOException("The LegoDTO is invalid: " + legoDTO.toString());
+        }
+
+        Lego lego = new Lego();
+        lego.setName(legoDTO.getName());
+        lego.setImageUrl(legoDTO.getImgUrl());
+        lego.setPrice(legoDTO.getPrice());
+
+        return legorep.save(lego);
     }
 }

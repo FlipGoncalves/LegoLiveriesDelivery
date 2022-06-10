@@ -1,32 +1,108 @@
 package restapi.tqs.Models;
 
-public class Lego {
-    private String name;
-    private Double price;
+import java.util.HashSet;
+import java.util.Set;
 
-    public Lego(String name, Double price) {
-        this.name = name;
-        this.price = price;
-    }
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+@Entity
+@Table(name = "lego")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "legoId")
+public class Lego {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "lego_id")
+    private long legoId;
+    @Column(name = "name")
+    private String name;
+    @Column(name = "price")
+    private double price;
+    @Column(name = "imageUrl")
+    private String imageUrl;
+
     
+    @OneToMany(mappedBy = "lego")
+    @JsonIdentityReference(alwaysAsId = true)
+    private Set<Favorites> favorites = new HashSet<>();
+
+    
+    @OneToMany(mappedBy = "lego")
+    @JsonIdentityReference(alwaysAsId = true)
+    private Set<OrderLego> orderLego = new HashSet<>();
+
+    public Lego() {
+
+    }
+
+    public long getLegoId() {
+        return this.legoId;
+    }
+
+    public void setLegoId(long legoId) {
+        this.legoId = legoId;
+    }
+
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public Double getPrice() {
-        return price;
+    public double getPrice() {
+        return this.price;
     }
-    
-    public void setPrice(Double price) {
+
+    public void setPrice(double price) {
         this.price = price;
     }
 
+    public String getImageUrl() {
+        return this.imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public Set<Favorites> getFavorites() {
+        return this.favorites;
+    }
+
+    public void setFavorites(Set<Favorites> favorites) {
+        this.favorites = favorites;
+    }
+
+    public Set<OrderLego> getOrderLego() {
+        return this.orderLego;
+    }
+
+    public void setOrderLego(Set<OrderLego> orderLego) {
+        this.orderLego = orderLego;
+    }
+
+
     @Override
     public String toString() {
-        return "Lego [name=" + name + ", price=" + price + "]";
+        return "{" +
+            " legoId='" + getLegoId() + "'" +
+            ", name='" + getName() + "'" +
+            ", price='" + getPrice() + "'" +
+            ", imageUrl='" + getImageUrl() + "'" +
+            "}";
     }
+
 }

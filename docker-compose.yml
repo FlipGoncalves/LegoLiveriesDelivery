@@ -1,0 +1,114 @@
+version: '3.3'
+
+services:
+  legoliveries:
+    container_name: legoliveriesBackend
+    hostname: legoliveriesBackend
+    build:
+      context: restapi
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+        window: 120s
+    networks:
+      legoliveries-backend:
+        ipv4_address: 172.20.202.10
+      all-backend:
+    depends_on:
+      - mysql-legoliveries
+      
+  mysql-legoliveries:
+    image: mysql:5.7
+    container_name: mysqldblegoliveries
+    hostname: mysqldblegoliveries
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=legoliveriesdb
+      - MYSQL_USER=sa
+      - MYSQL_PASSWORD=1234
+    networks:
+      legoliveries-backend:
+        ipv4_address: 172.20.202.2
+
+  legoliveries-app:
+    #image: legoliveries-web-app
+    build:
+      context: legoliveries
+      dockerfile: Dockerfile
+    container_name: legoliveriesApp
+    hostname: legoliveriesApp
+    restart: unless-stopped
+    ports:
+      - 3000:80
+    networks:
+      legoliveries-backend:
+        ipv4_address: 172.20.202.3 
+
+  engine:
+    container_name: engineBackend
+    hostname: engineBackend
+    build:
+      context: engine
+      dockerfile: Dockerfile
+    ports:
+      - "9001:9001"
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+        window: 120s
+    depends_on:
+      - mysql-engine
+    networks:
+      engine-backend:
+        ipv4_address: 172.20.200.10
+      all-backend:
+
+  mysql-engine:
+    image: mysql:5.7
+    container_name: mysqldbengine
+    hostname: mysqldbengine
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=enginedb
+      - MYSQL_USER=sa
+      - MYSQL_PASSWORD=1234
+    networks:
+      engine-backend:
+        ipv4_address: 172.20.200.2
+  
+  engine-app:
+    #image: engine-web-app
+    build:
+      context: dashboard
+      dockerfile: Dockerfile
+    container_name: engineApp
+    hostname: engineApp
+    restart: unless-stopped
+    ports: 
+      - 3001:80
+    networks:
+      engine-backend:
+        ipv4_address: 172.20.200.3
+
+networks:
+  engine-backend:
+    ipam:
+      config:
+        - subnet: "172.20.200.0/24"
+  legoliveries-backend:
+    ipam:
+      config:
+        - subnet: "172.20.202.0/24"
+  all-backend:
+    name: external-network
+
+    
