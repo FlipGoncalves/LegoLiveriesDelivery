@@ -26,6 +26,7 @@ import org.springframework.validation.annotation.Validated;
 import tqs.project.datamodels.RegisterDTO;
 import tqs.project.datamodels.StatisticDTO;
 import tqs.project.exceptions.BadRequestException;
+import tqs.project.exceptions.UserAlreadyExistsException;
 import tqs.project.model.User;
 import tqs.project.service.OrderService;
 import tqs.project.service.RiderService;
@@ -86,7 +87,7 @@ public class APIController {
 
     @GetMapping("/login/{email}")
     public ResponseEntity<Object> getUserinLogin(@PathVariable String email) throws BadRequestException {
-        log.info("GET Request -> User Data for login email: {}", email);
+        log.info("GET Request -> User Data for login email");
 
         User userLog = userservice.getUser(email);
 
@@ -101,7 +102,8 @@ public class APIController {
 
     @PostMapping("/register")
     public ResponseEntity<Object> insertUserinRegister(@RequestBody Map<String, Object> user) throws BadRequestException {
-        log.info("POST Request -> User Data for register: {}", user);
+
+        log.info("POST Request -> User Data for register");
 
         RegisterDTO reg = new RegisterDTO((String) user.get("username"), (String) user.get("email"), (String) user.get("password"));
 
@@ -132,9 +134,14 @@ public class APIController {
 
     @PostMapping("/addrider")
     public ResponseEntity<Object> addRider(@RequestBody Map<String, Object> rider) {
-        log.info("POST Request -> Rider data: {}", rider);
+        log.info("POST Request -> Rider data");
 
-        Rider riderSaved = riderservice.insertRider(rider);
+        Rider riderSaved;
+        try {
+            riderSaved = riderservice.insertRider(rider);
+        } catch (UserAlreadyExistsException e) {
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        }
 
         return new ResponseEntity<>(riderSaved, HttpStatus.OK);
     }
