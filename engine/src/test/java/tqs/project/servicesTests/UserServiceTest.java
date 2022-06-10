@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
 import tqs.project.datamodels.RegisterDTO;
+import tqs.project.exceptions.UserAlreadyExistsException;
 import tqs.project.model.User;
 import tqs.project.repositories.UserRepository;
 import tqs.project.service.UserService;
@@ -53,7 +54,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testRegisterValid() {
+    void testRegisterValid() throws UserAlreadyExistsException {
         when(rep.findByEmail("filipeg@ua.pt")).thenReturn(null);
 
         RegisterDTO user = new RegisterDTO("Filipe", "filipeg@ua.pt", "filipe");
@@ -70,7 +71,7 @@ class UserServiceTest {
 
         RegisterDTO user = new RegisterDTO("Filipe", "filipeg@ua.pt", "filipe");
 
-        service.register(user);    
+        assertThrows(UserAlreadyExistsException.class, () -> {service.register(user);});
 
         verify(rep, times(1)).findByEmail(anyString());
         verify(rep, times(0)).save(any());

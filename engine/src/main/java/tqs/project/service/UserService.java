@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tqs.project.datamodels.RegisterDTO;
+import tqs.project.exceptions.UserAlreadyExistsException;
 import tqs.project.model.User;
 import tqs.project.repositories.UserRepository;
 
@@ -26,14 +27,13 @@ public class UserService {
         return user;
     }
 
-    public User register(RegisterDTO user) {
+    public User register(RegisterDTO user) throws UserAlreadyExistsException {
         log.info("Registering User: {}", user);
 
         User registerUser = new User();
 
         if (rep.findByEmail(user.getEmail()) != null) {
-            log.info("User already exists: {}", user);
-            return null;
+            throw new UserAlreadyExistsException("User already exists: " + user.toString());
         }
 
         registerUser.setEmail(user.getEmail());

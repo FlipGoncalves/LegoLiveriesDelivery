@@ -93,7 +93,7 @@ public class APIController {
 
         if (userLog == null) {
             log.info("Login -> User does not exist");
-            throw new BadRequestException("User does not exist");
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
         log.info("Login -> User logged in");
@@ -107,11 +107,12 @@ public class APIController {
 
         RegisterDTO reg = new RegisterDTO((String) user.get("username"), (String) user.get("email"), (String) user.get("password"));
 
-        User userReg = userservice.register(reg);
-
-        if (userReg == null) {
+        User userReg;
+        try {
+            userReg = userservice.register(reg);
+        } catch (UserAlreadyExistsException e) {
             log.info("Register -> User already exists");
-            throw new BadRequestException("User already exists");
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
         log.info("Register -> User registered");
