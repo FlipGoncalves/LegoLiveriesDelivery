@@ -41,7 +41,6 @@ public class Store {
         this.name = name;
     }
 
-
     public long getStoreId() {
         return this.storeId;
     }
@@ -64,4 +63,23 @@ public class Store {
     public void setAddress(Address address) {
         this.address = address;
     }
+
+    public Set<Order> getOrders() {
+        return this.orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+            " storeId='" + getStoreId() + "'" +
+            ", name='" + getName() + "'" +
+            ", address='" + getAddress() + "'" +
+            ", orders='" + getOrders() + "'" +
+            "}";
+    }
+
 }
