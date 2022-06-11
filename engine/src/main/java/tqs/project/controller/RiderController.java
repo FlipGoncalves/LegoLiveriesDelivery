@@ -42,7 +42,7 @@ public class RiderController {
         return new ResponseEntity<>(riders, HttpStatus.OK);
     }
 
-    @PostMapping("/add_rider")
+    @PostMapping()
     public ResponseEntity<Object> addRider(@RequestBody RiderDTO rider) {
         log.info("POST Request -> Rider data");
 
