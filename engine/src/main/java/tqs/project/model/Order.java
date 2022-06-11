@@ -32,6 +32,8 @@ public class Order {
     private int timeOfDelivery;
     @Column(name = "review")
     private int review;
+    @Column(name = "status")
+    private int status; //0 = Not done 1 = In Transit 2 = Done
 
     @ManyToOne
     @JoinColumn(name = "store_id", referencedColumnName = "store_id")
@@ -48,13 +50,13 @@ public class Order {
     public Order() {
     }
 
-    public Order(long orderId, long externalOrderId, String clientName, Date date, int timeOfDelivery, int review) {
-        this.orderId = orderId;
+    public Order(long externalOrderId, String clientName, Date date, int timeOfDelivery, int review) {
         this.externalOrderId = externalOrderId;
         this.clientName = clientName;
         this.date = date;
         this.timeOfDelivery = timeOfDelivery;
         this.review = review;
+        this.status = 0;
     }
 
     public long getOrderId() {
@@ -127,6 +129,14 @@ public class Order {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public int getStatus() {
+        return this.status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     @Override

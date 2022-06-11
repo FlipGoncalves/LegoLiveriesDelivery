@@ -1,6 +1,5 @@
 package tqs.project.model;
 
-import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,10 +24,6 @@ public class Store {
     private long storeId;
     @Column(name = "name")
     private String name;
-    @Column(name = "latitude", precision = 8, scale = 6)
-    private BigDecimal latitude;
-    @Column(name = "longitude", precision = 9, scale = 6)
-    private BigDecimal longitude;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id", referencedColumnName = "address_id")
     private Address address;
@@ -40,13 +35,10 @@ public class Store {
 
     }
 
-    public Store(long storeId, String name, BigDecimal latitude, BigDecimal longitude) {
+    public Store(long storeId, String name) {
         this.storeId = storeId;
         this.name = name;
-        this.latitude = latitude;
-        this.longitude = longitude;
     }
-
 
     public long getStoreId() {
         return this.storeId;
@@ -63,23 +55,6 @@ public class Store {
     public void setName(String name) {
         this.name = name;
     }
-
-    public BigDecimal getLatitude() {
-        return this.latitude;
-    }
-
-    public void setLatitude(BigDecimal latitude) {
-        this.latitude = latitude;
-    }
-
-    public BigDecimal getLongitude() {
-        return this.longitude;
-    }
-
-    public void setLongitude(BigDecimal longitude) {
-        this.longitude = longitude;
-    }
-
     public Address getAddress() {
         return this.address;
     }
@@ -88,7 +63,22 @@ public class Store {
         this.address = address;
     }
 
+    public Set<Order> getOrders() {
+        return this.orders;
+    }
 
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
+    }
 
-    
+    @Override
+    public String toString() {
+        return "{" +
+            " storeId='" + getStoreId() + "'" +
+            ", name='" + getName() + "'" +
+            ", address='" + getAddress() + "'" +
+            ", orders='" + getOrders() + "'" +
+            "}";
+    }
+
 }

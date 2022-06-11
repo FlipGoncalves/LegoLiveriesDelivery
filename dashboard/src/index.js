@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Profile from './component/profile'
 import SignIn from './component/signin'
 import SignUp from './component/signup'
+import Management from './component/management';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -19,7 +20,7 @@ root.render(
         <Route exact path='/profile' element={< Profile />}></Route>
         <Route exact path='/sign-up' element={< SignUp />}></Route>
         <Route exact path='/sign-in' element={< SignIn />}></Route>
-        <Route exact path='/management' element={< App />}></Route>
+        <Route exact path='/management' element={< Management />}></Route>
       </Routes>
     </Router>
   </React.StrictMode>,

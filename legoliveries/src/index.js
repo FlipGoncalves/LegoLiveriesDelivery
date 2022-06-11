@@ -6,6 +6,7 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './component/login'
+import Register from './component/Register'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -14,6 +15,7 @@ root.render(
       <Routes>
         <Route path="/" element={ < App /> }></Route>
         <Route exact path='/login' element={< Login />}></Route>
+        <Route exact path='/register' element={< Register />}></Route>
       </Routes>
     </Router>
   </React.StrictMode>,

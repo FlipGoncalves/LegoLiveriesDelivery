@@ -8,6 +8,7 @@ import '../assets/css/nucleo-svg.css';
 import '../assets/css/nucleo-icons.css';
 import { Link, useNavigate } from 'react-router-dom';
 import Aside from './aside';
+import axios from 'axios';
 
 
 class SignUp extends Component {
@@ -23,7 +24,9 @@ class SignUp extends Component {
 
     const {navigation} = this.props;
 
-    const signup = () => {
+    const signup = (event) => {
+      event.preventDefault();
+
       let email = document.getElementById('email').value;
       let pass = document.getElementById('pass').value;
       let name = document.getElementById('name').value;
@@ -39,26 +42,32 @@ class SignUp extends Component {
         return
       }
 
-      this.setState({error_message: ""})
+      console.log("Register")
       
-      // do sign up magic here
-      navigation("/")
+      axios.post('http://localhost:8080/api/register', {
+        "email": email,
+        "username": name,
+        "password": pass
+      })
+      .then((response) => {
+        console.log(response);
+        if (response.status === 200 || response.status === 201) {
+          this.setState({error_message: ""})
+          this.setState({items: []})
+          console.log("HERE")
+          navigation("/")
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        this.setState({error_message: "ERROR during sign up"})
+      });
 
     }
 
     return (
       <div className="App">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"></meta>
-        <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"></link>
-        <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
-        <script async defer src="https://buttons.github.io/buttons.js"></script>
-
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"></meta>
-        <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"></link>
-        <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
-        <script async defer src="https://buttons.github.io/buttons.js"></script>
 
         <Aside></Aside>
 
@@ -76,15 +85,15 @@ class SignUp extends Component {
                     <p class="mb-0">Enter your email and password to register</p>
                     </div>
                     <div class="card-body">
-                    <form role="form">
+                    <form role="form" onSubmit={signup} method="POST">
                         <div class="input-group input-group-outline mb-3">
-                        <input type="text" class="form-control" id="name" placeholder="Name"/>
+                          <input type="text" class="form-control" id="name" placeholder="Name"/>
                         </div>
                         <div class="input-group input-group-outline mb-3">
-                        <input type="email" class="form-control" id="email" placeholder="Email"/>
+                          <input type="email" class="form-control" id="email" placeholder="Email"/>
                         </div>
                         <div class="input-group input-group-outline mb-3">
-                        <input type="password" class="form-control" id="pass" placeholder="Password"/>
+                          <input type="password" class="form-control" id="pass" placeholder="Password"/>
                         </div>
 
                         {this.state.error_message !== "" ? <>
@@ -94,7 +103,7 @@ class SignUp extends Component {
                         </> : null}
 
                         <div class="text-center">
-                        <button type="button" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0" onClick={signup}>Sign Up</button>
+                        <button type="submit" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Sign Up</button>
                         </div>
                     </form>
                     </div>
