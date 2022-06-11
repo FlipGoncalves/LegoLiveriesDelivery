@@ -14,11 +14,9 @@ import lombok.Setter;
 @Setter
 public class StatisticDTO {
 
-    private int numorders;
+    private int numOrders;
 
-    private int numriders;
+    private int numRiders;
 
-    private int completedorders;
-
-    private int sales;
+    private int completedOrders;
 }
