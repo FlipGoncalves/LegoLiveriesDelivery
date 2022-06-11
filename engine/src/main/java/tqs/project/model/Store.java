@@ -25,10 +25,6 @@ public class Store {
     private long storeId;
     @Column(name = "name")
     private String name;
-    @Column(name = "latitude", precision = 8, scale = 6)
-    private BigDecimal latitude;
-    @Column(name = "longitude", precision = 9, scale = 6)
-    private BigDecimal longitude;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id", referencedColumnName = "address_id")
     private Address address;
@@ -40,11 +36,9 @@ public class Store {
 
     }
 
-    public Store(long storeId, String name, BigDecimal latitude, BigDecimal longitude) {
+    public Store(long storeId, String name) {
         this.storeId = storeId;
         this.name = name;
-        this.latitude = latitude;
-        this.longitude = longitude;
     }
 
 
@@ -63,23 +57,6 @@ public class Store {
     public void setName(String name) {
         this.name = name;
     }
-
-    public BigDecimal getLatitude() {
-        return this.latitude;
-    }
-
-    public void setLatitude(BigDecimal latitude) {
-        this.latitude = latitude;
-    }
-
-    public BigDecimal getLongitude() {
-        return this.longitude;
-    }
-
-    public void setLongitude(BigDecimal longitude) {
-        this.longitude = longitude;
-    }
-
     public Address getAddress() {
         return this.address;
     }
@@ -87,8 +64,4 @@ public class Store {
     public void setAddress(Address address) {
         this.address = address;
     }
-
-
-
-    
 }
