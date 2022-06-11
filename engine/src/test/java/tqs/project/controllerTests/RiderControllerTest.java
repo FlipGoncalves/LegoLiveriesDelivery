@@ -98,7 +98,7 @@ public class RiderControllerTest {
         when(riderService.insertRider(riderDTO)).thenThrow(UserAlreadyExistsException.class);
         
         given().contentType(ContentType.JSON).body(riderDTO)
-               .post("/api/riders/add_rider")
+               .post("/api/riders")
                .then().log().body().assertThat()
                .status(HttpStatus.BAD_REQUEST);
     }
@@ -121,7 +121,7 @@ public class RiderControllerTest {
         when(riderService.insertRider(riderDTO)).thenReturn(rider);
         
         given().contentType(ContentType.JSON).body(riderDTO)
-               .post("/api/riders/add_rider")
+               .post("/api/riders")
                .then().log().body().assertThat()
                .contentType(ContentType.JSON).and()
                .status(HttpStatus.CREATED).and()
