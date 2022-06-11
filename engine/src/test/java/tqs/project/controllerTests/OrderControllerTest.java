@@ -1,45 +1,27 @@
 package tqs.project.controllerTests;
 
+import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import io.restassured.http.ContentType;
-import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import tqs.project.controller.OrderController;
-import tqs.project.controller.StatisticController;
-import tqs.project.controller.UserController;
-import tqs.project.datamodels.RegisterDTO;
-import tqs.project.exceptions.UserAlreadyExistsException;
-import tqs.project.model.Order;
-import tqs.project.model.User;
-import tqs.project.service.OrderService;
-import tqs.project.service.RiderService;
-import tqs.project.service.UserService;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
-
-import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.when;
+import io.restassured.http.ContentType;
+import io.restassured.module.mockmvc.RestAssuredMockMvc;
+import tqs.project.controller.OrderController;
+import tqs.project.model.Order;
+import tqs.project.service.OrderService;
 
 @WebMvcTest(OrderController.class)
 public class OrderControllerTest {

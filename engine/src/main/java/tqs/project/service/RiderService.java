@@ -1,6 +1,10 @@
 package tqs.project.service;
 
-import java.util.Map;
+import java.security.SecureRandom;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,12 +13,6 @@ import tqs.project.exceptions.UserAlreadyExistsException;
 import tqs.project.model.Rider;
 import tqs.project.model.User;
 import tqs.project.repositories.RiderRepository;
-
-import java.security.SecureRandom;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import tqs.project.repositories.UserRepository;
 
 @Service

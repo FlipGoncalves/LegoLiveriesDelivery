@@ -19,17 +19,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import tqs.project.controller.RiderController;
 import tqs.project.controller.StatisticController;
-import tqs.project.datamodels.RiderDTO;
-import tqs.project.exceptions.UserAlreadyExistsException;
 import tqs.project.model.Order;
 import tqs.project.model.Rider;
 import tqs.project.model.Store;
-import tqs.project.model.User;
-import tqs.project.service.RiderService;
 import tqs.project.service.OrderService;
-import tqs.project.service.UserService;
+import tqs.project.service.RiderService;
 
 @WebMvcTest(StatisticController.class)
 public class StatisticControllerTest {
