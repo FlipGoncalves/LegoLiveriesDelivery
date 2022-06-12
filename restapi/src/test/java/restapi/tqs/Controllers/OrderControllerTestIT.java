@@ -173,11 +173,11 @@ public class OrderControllerTestIT {
         System.out.println("TESTE3 " + orderRepository.findById(2l));
         System.out.println("TESTE3 " + orderRepository.findById(3l));*/
 
-        System.out.println("TESTESTESTE");
+        /*System.out.println("TESTESTESTE");
         System.out.println(order1.getOrderId());
         System.out.println(order2.getOrderId());
         System.out.println(order3.getOrderId());
-        System.out.println("TESTESTESTE");
+        System.out.println("TESTESTESTE");*/
 
         for (OrderLego orderLego : orderLegos1) {
             orderLego.setOrder(order1);
@@ -211,24 +211,30 @@ public class OrderControllerTestIT {
 
     @AfterEach
     void cleanUp(){
-        System.out.println("Count user before " + userRepository.count());
+        /*System.out.println("Count user before " + userRepository.count());
         System.out.println("Count client before " + clientRepository.count());
         System.out.println("Count lego before " + legoRepository.count());
         System.out.println("Count orderLego before " + orderLegoRepository.count());
         System.out.println("Count address before " + addressRepository.count());
-        System.out.println("Count order before " + orderRepository.count());
+        System.out.println("Count order before " + orderRepository.count());*/
         userRepository.deleteAll();
         clientRepository.deleteAll();
         legoRepository.deleteAll();
         orderLegoRepository.deleteAll();
         addressRepository.deleteAll();
         orderRepository.deleteAll();
-        System.out.println("Count user after " + userRepository.count());
+        /*System.out.println("Count user after " + userRepository.count());
         System.out.println("Count client after " + clientRepository.count());
         System.out.println("Count lego after " + legoRepository.count());
         System.out.println("Count orderLego after " + orderLegoRepository.count());
         System.out.println("Count address after " + addressRepository.count());
-        System.out.println("Count order after " + orderRepository.count());
+        System.out.println("Count order after " + orderRepository.count());*/
+        userRepository.flush();
+        clientRepository.flush();
+        legoRepository.flush();
+        orderLegoRepository.flush();
+        addressRepository.flush();
+        orderRepository.flush();
     }
 
     @Test
@@ -270,8 +276,7 @@ public class OrderControllerTestIT {
     @Test
     void test_GetOrderById_ValidId_ReturnsCorrectOrder() throws Exception{
 
-        //System.out.println("Object: " + orderRepository.findById(1l));
-        //System.out.println("Order1: " + order1);
+        System.out.println("COMEÇOU--------------");
 
         mvc.perform(get("/order/{orderId}",1)
         .contentType(MediaType.APPLICATION_JSON))
@@ -286,6 +291,8 @@ public class OrderControllerTestIT {
         .andExpect(jsonPath("$.address", is((int) order1.getAddress().getAddressId())))
         .andExpect(jsonPath("$.client", is((int) order1.getClient().getClientId())))
         .andExpect(jsonPath("$.orderLego", hasSize(3)));
+
+        System.out.println("Acabou--------------");
     }
 
     @Test

@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -43,11 +44,11 @@ public class Order {
     @Column(name = "total_price")
     private double totalPrice;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)
     private Address address;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)
     private Client client;
 

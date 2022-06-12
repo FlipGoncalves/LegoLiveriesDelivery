@@ -40,9 +40,9 @@ public class Address {
     @JsonIdentityReference(alwaysAsId = true)
     private Client client;
 
-    @OneToOne(mappedBy = "address", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    /*@OneToOne(mappedBy = "address", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIdentityReference(alwaysAsId = true)
-    private Order order;
+    private Order order;*/
 
     @OneToMany(mappedBy = "address", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIdentityReference(alwaysAsId = true)
@@ -95,13 +95,13 @@ public class Address {
         this.client = client;
     }
 
-    public Order getOrder() {
+    /*public Order getOrder() {
         return this.order;
     }
 
     public void setOrder(Order order) {
         this.order = order;
-    }
+    }*/
 
     public Set<Order> getOrders() {
         return this.orders;

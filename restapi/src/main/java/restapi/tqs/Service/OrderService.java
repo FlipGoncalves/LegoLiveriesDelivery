@@ -68,6 +68,9 @@ public class OrderService {
         Optional<Order> order = orderRepository.findById(orderId);
 
         if (order.isEmpty()){
+            System.out.println("EMPTYYYY");
+            System.out.println("ORDERID: " + orderId);
+            System.out.println("SHIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIT");
             throw new OrderNotFoundException("The order was not found. ID: " + orderId);
         }
 
