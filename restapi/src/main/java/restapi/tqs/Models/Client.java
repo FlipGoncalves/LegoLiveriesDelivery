@@ -28,17 +28,15 @@ public class Client {
     private long clientId;
 
     @OneToOne
-    @JoinColumn(referencedColumnName = "user_id")
     @MapsId
     private User user;
 
     @JsonIdentityReference(alwaysAsId = true)
-    @OneToOne
-    @JoinColumn(name = "address_id", referencedColumnName = "address_id")
+    @OneToOne(fetch = FetchType.LAZY)
     private Address address;
 
     @JsonIdentityReference(alwaysAsId = true)
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "client", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<Order> orders = new HashSet<>();
 
     public Client() {

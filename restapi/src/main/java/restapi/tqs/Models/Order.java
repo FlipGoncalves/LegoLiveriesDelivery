@@ -43,17 +43,15 @@ public class Order {
     @Column(name = "total_price")
     private double totalPrice;
 
-    @OneToOne
-    @JoinColumn(name = "address_id", referencedColumnName = "address_id")
+    @OneToOne(fetch = FetchType.LAZY)
     @JsonIdentityReference(alwaysAsId = true)
     private Address address;
 
-    @OneToOne
-    @JoinColumn(name = "client_id")
+    @OneToOne(fetch = FetchType.LAZY)
     @JsonIdentityReference(alwaysAsId = true)
     private Client client;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<OrderLego> orderLego = new HashSet<>();
 
     public Order() {

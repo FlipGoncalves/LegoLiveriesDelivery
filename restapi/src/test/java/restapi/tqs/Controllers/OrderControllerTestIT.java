@@ -123,8 +123,8 @@ public class OrderControllerTestIT {
         address1 = buildAddressObject(1);
         address2 = buildAddressObject(2);
 
-        address1 = addressRepository.save(address1);
-        address2 = addressRepository.save(address2);
+        address1 = addressRepository.saveAndFlush(address1);
+        address2 = addressRepository.saveAndFlush(address2);
 
         lego1 = buildLegoObject(1);
         lego2 = buildLegoObject(2);
@@ -139,24 +139,45 @@ public class OrderControllerTestIT {
         orderLegos3 = buildOrderLegoList(lego1, lego2, lego3,3);
 
         order1 = buildAndSaveOrderObject(client1, address1, orderLegos1, 1);
-        order2 = buildAndSaveOrderObject(client1, address1, orderLegos2, 1);
-        order3 = buildAndSaveOrderObject(client2, address2, orderLegos3, 2);
+        order2 = buildAndSaveOrderObject(client1, address1, orderLegos2, 2);
+        order3 = buildAndSaveOrderObject(client2, address2, orderLegos3, 3);
+
+        order1 = orderRepository.saveAndFlush(order1);
+        order2 = orderRepository.saveAndFlush(order2);
+        order3 = orderRepository.saveAndFlush(order3);
 
         Set<Order> orders = client1.getOrders();
         orders.add(order1);
         client1.setOrders(orders);
+        
+        /*System.out.println("TESTE1 " + orderRepository.count());
+        System.out.println("TESTE1 " + orderRepository.findById(1l));
+        System.out.println("TESTE1 " + orderRepository.findById(2l));
+        System.out.println("TESTE1 " + orderRepository.findById(3l));*/
 
         orders = client1.getOrders();
         orders.add(order2);
         client1.setOrders(orders);
+        
+        /*System.out.println("TESTE2 " + orderRepository.count());
+        System.out.println("TESTE2 " + orderRepository.findById(1l));
+        System.out.println("TESTE2 " + orderRepository.findById(2l));
+        System.out.println("TESTE2 " + orderRepository.findById(3l));*/
 
         orders = client2.getOrders();
         orders.add(order3);
         client2.setOrders(orders);
+        
+        /*System.out.println("TESTE3 " + orderRepository.count());
+        System.out.println("TESTE3 " + orderRepository.findById(1l));
+        System.out.println("TESTE3 " + orderRepository.findById(2l));
+        System.out.println("TESTE3 " + orderRepository.findById(3l));*/
 
-        order1 = orderRepository.save(order1);
-        order2 = orderRepository.save(order2);
-        order3 = orderRepository.save(order3);
+        System.out.println("TESTESTESTE");
+        System.out.println(order1.getOrderId());
+        System.out.println(order2.getOrderId());
+        System.out.println(order3.getOrderId());
+        System.out.println("TESTESTESTE");
 
         for (OrderLego orderLego : orderLegos1) {
             orderLego.setOrder(order1);
@@ -177,14 +198,6 @@ public class OrderControllerTestIT {
             orderLego = orderLegoRepository.saveAndFlush(orderLego);
         }
 
-        orderRepository.flush();
-        addressRepository.flush();
-
-        all_Orders = new ArrayList<>();
-        all_Orders.add(order1);
-        all_Orders.add(order2);
-        all_Orders.add(order3);        
-
         orderLegoDTO1 = buildOrderLegoDTO(1l,2l,3l,1);
         orderLegoDTO2 = buildOrderLegoDTO(1l,2l,3l,2);
         orderLegoDTO3 = buildOrderLegoDTO(1l,2l,3l,3);
@@ -192,16 +205,30 @@ public class OrderControllerTestIT {
         orderDTO1 = new OrderDTO(1l, 1l, 2100, orderLegoDTO1);
         orderDTO2 = new OrderDTO(1l, 1l, 1500, orderLegoDTO2);
         orderDTO3 = new OrderDTO(2l, 2l, 2000, orderLegoDTO3);
+
+        System.out.println("TESTE " + orderRepository.count());
     }
 
     @AfterEach
     void cleanUp(){
+        System.out.println("Count user before " + userRepository.count());
+        System.out.println("Count client before " + clientRepository.count());
+        System.out.println("Count lego before " + legoRepository.count());
+        System.out.println("Count orderLego before " + orderLegoRepository.count());
+        System.out.println("Count address before " + addressRepository.count());
+        System.out.println("Count order before " + orderRepository.count());
         userRepository.deleteAll();
         clientRepository.deleteAll();
         legoRepository.deleteAll();
         orderLegoRepository.deleteAll();
         addressRepository.deleteAll();
         orderRepository.deleteAll();
+        System.out.println("Count user after " + userRepository.count());
+        System.out.println("Count client after " + clientRepository.count());
+        System.out.println("Count lego after " + legoRepository.count());
+        System.out.println("Count orderLego after " + orderLegoRepository.count());
+        System.out.println("Count address after " + addressRepository.count());
+        System.out.println("Count order after " + orderRepository.count());
     }
 
     @Test

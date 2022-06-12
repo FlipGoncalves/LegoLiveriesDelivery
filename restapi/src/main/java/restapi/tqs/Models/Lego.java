@@ -32,7 +32,7 @@ public class Lego {
     @Column(name = "imageUrl")
     private String imageUrl;
     
-    @OneToMany(mappedBy = "lego", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "lego", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIdentityReference(alwaysAsId = true)
     private Set<OrderLego> orderLego = new HashSet<>();
 

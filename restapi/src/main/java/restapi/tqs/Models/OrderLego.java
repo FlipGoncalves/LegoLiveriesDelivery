@@ -23,13 +23,11 @@ public class OrderLego {
 
     @ManyToOne
     @MapsId("orderId")
-    @JoinColumn(name = "order_id", referencedColumnName = "order_id")
     @JsonIdentityReference(alwaysAsId = true)
     private Order order;
 
     @ManyToOne
     @MapsId("legoId")
-    @JoinColumn(name = "lego_id",referencedColumnName = "lego_id")
     @JsonIdentityReference(alwaysAsId = true)
     private Lego lego;
 
