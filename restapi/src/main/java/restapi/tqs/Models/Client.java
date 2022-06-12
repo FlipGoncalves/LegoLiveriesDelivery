@@ -3,6 +3,7 @@ package restapi.tqs.Models;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -32,16 +33,12 @@ public class Client {
     private User user;
 
     @JsonIdentityReference(alwaysAsId = true)
-    @OneToMany(mappedBy = "client")
-    private Set<Favorites> favorites = new HashSet<>();
-
-    @JsonIdentityReference(alwaysAsId = true)
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "address_id", referencedColumnName = "address_id")
     private Address address;
 
     @JsonIdentityReference(alwaysAsId = true)
-    @OneToMany(mappedBy = "client")
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Order> orders = new HashSet<>();
 
     public Client() {
@@ -57,14 +54,6 @@ public class Client {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public Set<Favorites> getFavorites() {
-        return this.favorites;
-    }
-
-    public void setFavorites(Set<Favorites> favorites) {
-        this.favorites = favorites;
     }
 
     public Address getAddress() {
@@ -89,7 +78,6 @@ public class Client {
         return "{" +
             " clientId='" + getClientId() + "'" +
             ", user='" + getUser() + "'" +
-            ", favorites='" + getFavorites() + "'" +
             ", address='" + getAddress() + "'" +
             "}";
     }

@@ -1,5 +1,6 @@
 package restapi.tqs.Models;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,7 +30,7 @@ public class User {
     @Column(name = "`password`")
     private String password;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIdentityReference(alwaysAsId = true)
     private Client client;
 
@@ -81,7 +82,6 @@ public class User {
             ", username='" + getUsername() + "'" +
             ", email='" + getEmail() + "'" +
             ", password='" + getPassword() + "'" +
-            ", client='" + getClient() + "'" +
             "}";
     }
 

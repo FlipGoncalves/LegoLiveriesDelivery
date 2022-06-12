@@ -134,10 +134,6 @@ public class OrderControllerTestIT {
         lego2 = legoRepository.saveAndFlush(lego2);
         lego3 = legoRepository.saveAndFlush(lego3);
 
-        System.out.println("lego1: " + lego1.getLegoId());
-        System.out.println("lego2: " + lego2.getLegoId());
-        System.out.println("lego3: " + lego3.getLegoId());
-
         orderLegos1 = buildOrderLegoList(lego1, lego2, lego3,1);
         orderLegos2 = buildOrderLegoList(lego1, lego2, lego3,2);
         orderLegos3 = buildOrderLegoList(lego1, lego2, lego3,3);
@@ -162,36 +158,22 @@ public class OrderControllerTestIT {
         order2 = orderRepository.save(order2);
         order3 = orderRepository.save(order3);
 
-        System.out.println("user1: " + user1.getUserId());
-        System.out.println("client1: " + client1.getClientId());
-        System.out.println("user2: " + user2.getUserId());
-        System.out.println("client2: " + client2.getClientId());
-        System.out.println("address1: " + address1.getAddressId());
-        System.out.println("address2: " + address2.getAddressId());
-        System.out.println("order1: " + order1.getOrderId());
-        System.out.println("order2: " + order2.getOrderId());
-        System.out.println("order3: " + order3.getOrderId());
-
         for (OrderLego orderLego : orderLegos1) {
             orderLego.setOrder(order1);
             orderLego.setId(new OrderLegoId(order1.getOrderId(), orderLego.getLego().getLegoId()));
-            System.out.println("TESTE1: " + order1.getOrderId());
-            System.out.println("Teste2: " + orderLego.getLego().getLegoId());
-            System.out.println("ORDELEGO1: " + orderLego.getId());
+
             orderLego = orderLegoRepository.saveAndFlush(orderLego);
         }
 
         for (OrderLego orderLego : orderLegos2) {
             orderLego.setOrder(order2);
             orderLego.setId(new OrderLegoId(order2.getOrderId(), orderLego.getLego().getLegoId()));
-            System.out.println("ORDELEGO1: " + orderLego.getId());
             orderLego = orderLegoRepository.saveAndFlush(orderLego);
         }
 
         for (OrderLego orderLego : orderLegos3) {
             orderLego.setOrder(order3);
             orderLego.setId(new OrderLegoId(order3.getOrderId(), orderLego.getLego().getLegoId()));
-            System.out.println("ORDELEGO1: " + orderLego.getId());
             orderLego = orderLegoRepository.saveAndFlush(orderLego);
         }
 
@@ -215,14 +197,14 @@ public class OrderControllerTestIT {
     @AfterEach
     void cleanUp(){
         userRepository.deleteAll();
+        clientRepository.deleteAll();
         legoRepository.deleteAll();
         orderLegoRepository.deleteAll();
-        System.out.println(addressRepository.findAll());
         addressRepository.deleteAll();
         orderRepository.deleteAll();
     }
 
-    /*@Test
+    @Test
     void test_GetAllOrders_ReturnsCorrectOrders() throws Exception{
 
         mvc.perform(get("/order")
@@ -260,6 +242,9 @@ public class OrderControllerTestIT {
 
     @Test
     void test_GetOrderById_ValidId_ReturnsCorrectOrder() throws Exception{
+
+        //System.out.println("Object: " + orderRepository.findById(1l));
+        //System.out.println("Order1: " + order1);
 
         mvc.perform(get("/order/{orderId}",1)
         .contentType(MediaType.APPLICATION_JSON))
@@ -411,7 +396,7 @@ public class OrderControllerTestIT {
         .andExpect(jsonPath("$.address", is((int) order1.getAddress().getAddressId())))
         .andExpect(jsonPath("$.client", is((int) order1.getClient().getClientId())))
         .andExpect(jsonPath("$.orderLego", hasSize(3)));
-    }*/
+    }
 
     Order buildAndSaveOrderObject(Client client, Address address, Set<OrderLego> orderLegos, long id){
 

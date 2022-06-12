@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -42,17 +43,17 @@ public class Order {
     @Column(name = "total_price")
     private double totalPrice;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "address_id", referencedColumnName = "address_id")
     @JsonIdentityReference(alwaysAsId = true)
     private Address address;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "client_id")
     @JsonIdentityReference(alwaysAsId = true)
     private Client client;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderLego> orderLego = new HashSet<>();
 
     public Order() {

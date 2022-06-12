@@ -6,7 +6,6 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,15 +35,15 @@ public class Address {
     @Column(name = "country")
     private String country;
 
-    @OneToOne(mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "address", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIdentityReference(alwaysAsId = true)
     private Client client;
 
-    @OneToOne(mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "address", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIdentityReference(alwaysAsId = true)
     private Order order;
 
-    @OneToMany(mappedBy = "address")
+    @OneToMany(mappedBy = "address", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIdentityReference(alwaysAsId = true)
     private Set<Order> orders = new HashSet<>();
 
