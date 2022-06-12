@@ -68,9 +68,6 @@ public class OrderService {
         Optional<Order> order = orderRepository.findById(orderId);
 
         if (order.isEmpty()){
-            System.out.println("EMPTYYYY");
-            System.out.println("ORDERID: " + orderId);
-            System.out.println("SHIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIT");
             throw new OrderNotFoundException("The order was not found. ID: " + orderId);
         }
 
@@ -95,10 +92,10 @@ public class OrderService {
 
         Order order = new Order();
 
-        if (orderDTO.getScheduledtimeOfDelivery() >= 2400 || orderDTO.getScheduledtimeOfDelivery() < 0){
-            throw new BadScheduledTimeOfDeliveryException("The ScheduledTimeOfDelivery " + orderDTO.getScheduledtimeOfDelivery() + ". It needs to be between 0000 and 2400");
+        if (orderDTO.getScheduledTimeOfDelivery() >= 2400 || orderDTO.getScheduledTimeOfDelivery() < 0){
+            throw new BadScheduledTimeOfDeliveryException("The ScheduledTimeOfDelivery " + orderDTO.getScheduledTimeOfDelivery() + ". It needs to be between 0000 and 2400");
         }
-        order.setScheduledTimeOfDelivery(orderDTO.getScheduledtimeOfDelivery());
+        order.setScheduledTimeOfDelivery(orderDTO.getScheduledTimeOfDelivery());
 
         Optional<Client> client = clientRepository.findById(orderDTO.getClientId());
         

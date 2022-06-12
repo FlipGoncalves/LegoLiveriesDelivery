@@ -32,7 +32,7 @@ public class Client {
     private User user;
 
     @JsonIdentityReference(alwaysAsId = true)
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     private Address address;
 
     @JsonIdentityReference(alwaysAsId = true)

@@ -62,6 +62,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 
@@ -149,35 +150,14 @@ public class OrderControllerTestIT {
         Set<Order> orders = client1.getOrders();
         orders.add(order1);
         client1.setOrders(orders);
-        
-        /*System.out.println("TESTE1 " + orderRepository.count());
-        System.out.println("TESTE1 " + orderRepository.findById(1l));
-        System.out.println("TESTE1 " + orderRepository.findById(2l));
-        System.out.println("TESTE1 " + orderRepository.findById(3l));*/
 
         orders = client1.getOrders();
         orders.add(order2);
         client1.setOrders(orders);
-        
-        /*System.out.println("TESTE2 " + orderRepository.count());
-        System.out.println("TESTE2 " + orderRepository.findById(1l));
-        System.out.println("TESTE2 " + orderRepository.findById(2l));
-        System.out.println("TESTE2 " + orderRepository.findById(3l));*/
 
         orders = client2.getOrders();
         orders.add(order3);
         client2.setOrders(orders);
-        
-        /*System.out.println("TESTE3 " + orderRepository.count());
-        System.out.println("TESTE3 " + orderRepository.findById(1l));
-        System.out.println("TESTE3 " + orderRepository.findById(2l));
-        System.out.println("TESTE3 " + orderRepository.findById(3l));*/
-
-        /*System.out.println("TESTESTESTE");
-        System.out.println(order1.getOrderId());
-        System.out.println(order2.getOrderId());
-        System.out.println(order3.getOrderId());
-        System.out.println("TESTESTESTE");*/
 
         for (OrderLego orderLego : orderLegos1) {
             orderLego.setOrder(order1);
@@ -206,35 +186,16 @@ public class OrderControllerTestIT {
         orderDTO2 = new OrderDTO(1l, 1l, 1500, orderLegoDTO2);
         orderDTO3 = new OrderDTO(2l, 2l, 2000, orderLegoDTO3);
 
-        System.out.println("TESTE " + orderRepository.count());
     }
 
     @AfterEach
     void cleanUp(){
-        /*System.out.println("Count user before " + userRepository.count());
-        System.out.println("Count client before " + clientRepository.count());
-        System.out.println("Count lego before " + legoRepository.count());
-        System.out.println("Count orderLego before " + orderLegoRepository.count());
-        System.out.println("Count address before " + addressRepository.count());
-        System.out.println("Count order before " + orderRepository.count());*/
         userRepository.deleteAll();
         clientRepository.deleteAll();
         legoRepository.deleteAll();
         orderLegoRepository.deleteAll();
         addressRepository.deleteAll();
         orderRepository.deleteAll();
-        /*System.out.println("Count user after " + userRepository.count());
-        System.out.println("Count client after " + clientRepository.count());
-        System.out.println("Count lego after " + legoRepository.count());
-        System.out.println("Count orderLego after " + orderLegoRepository.count());
-        System.out.println("Count address after " + addressRepository.count());
-        System.out.println("Count order after " + orderRepository.count());*/
-        userRepository.flush();
-        clientRepository.flush();
-        legoRepository.flush();
-        orderLegoRepository.flush();
-        addressRepository.flush();
-        orderRepository.flush();
     }
 
     @Test
@@ -247,7 +208,6 @@ public class OrderControllerTestIT {
         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$", hasSize(3)))
         .andExpect(jsonPath("$[0].orderId", is((int) order1.getOrderId())))
-        .andExpect(jsonPath("$[0].timeOfDelivery", is(order1.getTimeOfDelivery())))
         .andExpect(jsonPath("$[0].scheduledTimeOfDelivery", is(order1.getScheduledTimeOfDelivery())))
         .andExpect(jsonPath("$[0].riderName", is(order1.getRiderName())))
         .andExpect(jsonPath("$[0].totalPrice", is(order1.getTotalPrice())))
@@ -255,7 +215,6 @@ public class OrderControllerTestIT {
         .andExpect(jsonPath("$[0].client", is((int) order1.getClient().getClientId())))
         .andExpect(jsonPath("$[0].orderLego", hasSize(3)))
         .andExpect(jsonPath("$[1].orderId", is((int) order2.getOrderId())))
-        .andExpect(jsonPath("$[1].timeOfDelivery", is(order2.getTimeOfDelivery())))
         .andExpect(jsonPath("$[1].scheduledTimeOfDelivery", is(order2.getScheduledTimeOfDelivery())))
         .andExpect(jsonPath("$[1].riderName", is(order2.getRiderName())))
         .andExpect(jsonPath("$[1].totalPrice", is(order2.getTotalPrice())))
@@ -263,7 +222,6 @@ public class OrderControllerTestIT {
         .andExpect(jsonPath("$[1].client", is((int) order2.getClient().getClientId())))
         .andExpect(jsonPath("$[1].orderLego", hasSize(3)))
         .andExpect(jsonPath("$[2].orderId", is((int) order3.getOrderId())))
-        .andExpect(jsonPath("$[2].timeOfDelivery", is(order3.getTimeOfDelivery())))
         .andExpect(jsonPath("$[2].scheduledTimeOfDelivery", is(order3.getScheduledTimeOfDelivery())))
         .andExpect(jsonPath("$[2].riderName", is(order3.getRiderName())))
         .andExpect(jsonPath("$[2].totalPrice", is(order3.getTotalPrice())))
@@ -276,23 +234,18 @@ public class OrderControllerTestIT {
     @Test
     void test_GetOrderById_ValidId_ReturnsCorrectOrder() throws Exception{
 
-        System.out.println("COMEÇOU--------------");
-
-        mvc.perform(get("/order/{orderId}",1)
+        mvc.perform(get("/order/{orderId}",order1.getOrderId())
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andDo(print())
         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.orderId", is((int) order1.getOrderId())))
-        .andExpect(jsonPath("$.timeOfDelivery", is(order1.getTimeOfDelivery())))
         .andExpect(jsonPath("$.scheduledTimeOfDelivery", is(order1.getScheduledTimeOfDelivery())))
         .andExpect(jsonPath("$.riderName", is(order1.getRiderName())))
         .andExpect(jsonPath("$.totalPrice", is(order1.getTotalPrice())))
         .andExpect(jsonPath("$.address", is((int) order1.getAddress().getAddressId())))
         .andExpect(jsonPath("$.client", is((int) order1.getClient().getClientId())))
         .andExpect(jsonPath("$.orderLego", hasSize(3)));
-
-        System.out.println("Acabou--------------");
     }
 
     @Test
@@ -307,14 +260,13 @@ public class OrderControllerTestIT {
     @Test
     void test_GetClientOrders_ValidId_ReturnsCorrectOrders() throws Exception{
 
-        mvc.perform(get("/order/client/{clientId}", 1)
+        mvc.perform(get("/order/client/{clientId}", order1.getClient().getClientId())
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andDo(print())
         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$", hasSize(2)))
         .andExpect(jsonPath("$[0].orderId", is((int) order1.getOrderId())))
-        .andExpect(jsonPath("$[0].timeOfDelivery", is(order1.getTimeOfDelivery())))
         .andExpect(jsonPath("$[0].scheduledTimeOfDelivery", is(order1.getScheduledTimeOfDelivery())))
         .andExpect(jsonPath("$[0].riderName", is(order1.getRiderName())))
         .andExpect(jsonPath("$[0].totalPrice", is(order1.getTotalPrice())))
@@ -322,7 +274,6 @@ public class OrderControllerTestIT {
         .andExpect(jsonPath("$[0].client", is((int) order1.getClient().getClientId())))
         .andExpect(jsonPath("$[0].orderLego", hasSize(3)))
         .andExpect(jsonPath("$[1].orderId", is((int) order2.getOrderId())))
-        .andExpect(jsonPath("$[1].timeOfDelivery", is(order2.getTimeOfDelivery())))
         .andExpect(jsonPath("$[1].scheduledTimeOfDelivery", is(order2.getScheduledTimeOfDelivery())))
         .andExpect(jsonPath("$[1].riderName", is(order2.getRiderName())))
         .andExpect(jsonPath("$[1].totalPrice", is(order2.getTotalPrice())))
@@ -413,8 +364,8 @@ public class OrderControllerTestIT {
 
     @Test
     void test_MakeOrder_ValidOrderDTO_ReturnsCorrectOrder() throws JsonProcessingException, Exception{
-        List<OrderLegoDTO> orderLegoDTOTest = buildOrderLegoDTO(1l,2l,3l,1);
-        OrderDTO orderDTOTest = new OrderDTO(1l, 1l, 2100, orderLegoDTOTest);
+        List<OrderLegoDTO> orderLegoDTOTest = buildOrderLegoDTO(lego1.getLegoId(),lego1.getLegoId(),lego1.getLegoId(),1);
+        OrderDTO orderDTOTest = new OrderDTO(order1.getClient().getClientId(), order1.getAddress().getAddressId(), 2100, orderLegoDTOTest);
 
         mvc.perform(post("/order")
         .content(objectMapper.writeValueAsString(orderDTOTest))
@@ -422,13 +373,9 @@ public class OrderControllerTestIT {
         .andDo(print())
         .andExpect(status().isCreated())
         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.orderId", is((int) order1.getOrderId())))
-        .andExpect(jsonPath("$.timeOfDelivery", is(order1.getTimeOfDelivery())))
-        .andExpect(jsonPath("$.scheduledTimeOfDelivery", is(order1.getScheduledTimeOfDelivery())))
-        .andExpect(jsonPath("$.riderName", is(order1.getRiderName())))
-        .andExpect(jsonPath("$.totalPrice", is(order1.getTotalPrice())))
-        .andExpect(jsonPath("$.address", is((int) order1.getAddress().getAddressId())))
-        .andExpect(jsonPath("$.client", is((int) order1.getClient().getClientId())))
+        .andExpect(jsonPath("$.scheduledTimeOfDelivery", is(orderDTOTest.getScheduledTimeOfDelivery())))
+        .andExpect(jsonPath("$.address", is((int) orderDTOTest.getAddressId())))
+        .andExpect(jsonPath("$.client", is((int) orderDTOTest.getClientId())))
         .andExpect(jsonPath("$.orderLego", hasSize(3)));
     }
 
@@ -450,7 +397,6 @@ public class OrderControllerTestIT {
         order.setAddress(address);
         order.setDate(date);
         order.setScheduledTimeOfDelivery(2100);
-        order.setTimeOfDelivery(2110);
         order.setRiderName("Paulo " + id);
         order.setTotalPrice(totalPrice);
 

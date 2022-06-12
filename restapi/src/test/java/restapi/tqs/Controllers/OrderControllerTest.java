@@ -137,7 +137,6 @@ public class OrderControllerTest {
         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$", hasSize(3)))
         .andExpect(jsonPath("$[0].orderId", is((int) order1.getOrderId())))
-        .andExpect(jsonPath("$[0].timeOfDelivery", is(order1.getTimeOfDelivery())))
         .andExpect(jsonPath("$[0].scheduledTimeOfDelivery", is(order1.getScheduledTimeOfDelivery())))
         .andExpect(jsonPath("$[0].riderName", is(order1.getRiderName())))
         .andExpect(jsonPath("$[0].totalPrice", is(order1.getTotalPrice())))
@@ -145,7 +144,6 @@ public class OrderControllerTest {
         .andExpect(jsonPath("$[0].client", is((int) order1.getClient().getClientId())))
         .andExpect(jsonPath("$[0].orderLego", hasSize(3)))
         .andExpect(jsonPath("$[1].orderId", is((int) order2.getOrderId())))
-        .andExpect(jsonPath("$[1].timeOfDelivery", is(order2.getTimeOfDelivery())))
         .andExpect(jsonPath("$[1].scheduledTimeOfDelivery", is(order2.getScheduledTimeOfDelivery())))
         .andExpect(jsonPath("$[1].riderName", is(order2.getRiderName())))
         .andExpect(jsonPath("$[1].totalPrice", is(order2.getTotalPrice())))
@@ -153,7 +151,6 @@ public class OrderControllerTest {
         .andExpect(jsonPath("$[1].client", is((int) order2.getClient().getClientId())))
         .andExpect(jsonPath("$[1].orderLego", hasSize(3)))
         .andExpect(jsonPath("$[2].orderId", is((int) order3.getOrderId())))
-        .andExpect(jsonPath("$[2].timeOfDelivery", is(order3.getTimeOfDelivery())))
         .andExpect(jsonPath("$[2].scheduledTimeOfDelivery", is(order3.getScheduledTimeOfDelivery())))
         .andExpect(jsonPath("$[2].riderName", is(order3.getRiderName())))
         .andExpect(jsonPath("$[2].totalPrice", is(order3.getTotalPrice())))
@@ -174,7 +171,6 @@ public class OrderControllerTest {
         .andDo(print())
         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.orderId", is((int) order1.getOrderId())))
-        .andExpect(jsonPath("$.timeOfDelivery", is(order1.getTimeOfDelivery())))
         .andExpect(jsonPath("$.scheduledTimeOfDelivery", is(order1.getScheduledTimeOfDelivery())))
         .andExpect(jsonPath("$.riderName", is(order1.getRiderName())))
         .andExpect(jsonPath("$.totalPrice", is(order1.getTotalPrice())))
@@ -206,7 +202,6 @@ public class OrderControllerTest {
         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$", hasSize(2)))
         .andExpect(jsonPath("$[0].orderId", is((int) order1.getOrderId())))
-        .andExpect(jsonPath("$[0].timeOfDelivery", is(order1.getTimeOfDelivery())))
         .andExpect(jsonPath("$[0].scheduledTimeOfDelivery", is(order1.getScheduledTimeOfDelivery())))
         .andExpect(jsonPath("$[0].riderName", is(order1.getRiderName())))
         .andExpect(jsonPath("$[0].totalPrice", is(order1.getTotalPrice())))
@@ -214,7 +209,6 @@ public class OrderControllerTest {
         .andExpect(jsonPath("$[0].client", is((int) order1.getClient().getClientId())))
         .andExpect(jsonPath("$[0].orderLego", hasSize(3)))
         .andExpect(jsonPath("$[1].orderId", is((int) order2.getOrderId())))
-        .andExpect(jsonPath("$[1].timeOfDelivery", is(order2.getTimeOfDelivery())))
         .andExpect(jsonPath("$[1].scheduledTimeOfDelivery", is(order2.getScheduledTimeOfDelivery())))
         .andExpect(jsonPath("$[1].riderName", is(order2.getRiderName())))
         .andExpect(jsonPath("$[1].totalPrice", is(order2.getTotalPrice())))
@@ -331,7 +325,6 @@ public class OrderControllerTest {
         .andExpect(status().isCreated())
         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.orderId", is((int) order1.getOrderId())))
-        .andExpect(jsonPath("$.timeOfDelivery", is(order1.getTimeOfDelivery())))
         .andExpect(jsonPath("$.scheduledTimeOfDelivery", is(order1.getScheduledTimeOfDelivery())))
         .andExpect(jsonPath("$.riderName", is(order1.getRiderName())))
         .andExpect(jsonPath("$.totalPrice", is(order1.getTotalPrice())))
@@ -359,7 +352,6 @@ public class OrderControllerTest {
         order.setAddress(address);
         order.setDate(date);
         order.setScheduledTimeOfDelivery(2100);
-        order.setTimeOfDelivery(2110);
         order.setRiderName("Paulo " + id);
         order.setTotalPrice(totalPrice);
 

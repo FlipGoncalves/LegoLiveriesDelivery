@@ -6,7 +6,7 @@ public class OrderDTO {
     
     private long clientId;
     private long addressId;
-    private int scheduledtimeOfDelivery;
+    private int scheduledTimeOfDelivery;
     private List<OrderLegoDTO> legos;
 
 
@@ -14,10 +14,10 @@ public class OrderDTO {
 
     }
 
-    public OrderDTO(long clientId, long addressId, int scheduledtimeOfDelivery, List<OrderLegoDTO> legos) {
+    public OrderDTO(long clientId, long addressId, int scheduledTimeOfDelivery, List<OrderLegoDTO> legos) {
         this.clientId = clientId;
         this.addressId = addressId;
-        this.scheduledtimeOfDelivery = scheduledtimeOfDelivery;
+        this.scheduledTimeOfDelivery = scheduledTimeOfDelivery;
         this.legos = legos;
     }
 
@@ -38,12 +38,12 @@ public class OrderDTO {
         this.addressId = addressId;
     }
 
-    public int getScheduledtimeOfDelivery() {
-        return this.scheduledtimeOfDelivery;
+    public int getScheduledTimeOfDelivery() {
+        return this.scheduledTimeOfDelivery;
     }
 
-    public void setScheduledtimeOfDelivery(int scheduledtimeOfDelivery) {
-        this.scheduledtimeOfDelivery = scheduledtimeOfDelivery;
+    public void setScheduledTimeOfDelivery(int scheduledTimeOfDelivery) {
+        this.scheduledTimeOfDelivery = scheduledTimeOfDelivery;
     }
 
     public List<OrderLegoDTO> getLegos() {
@@ -60,7 +60,7 @@ public class OrderDTO {
         return "{" +
             " clientId='" + getClientId() + "'" +
             ", addressId='" + getAddressId() + "'" +
-            ", scheduledtimeOfDelivery='" + getScheduledtimeOfDelivery() + "'" +
+            ", scheduledtimeOfDelivery='" + getScheduledTimeOfDelivery() + "'" +
             ", legos='" + getLegos() + "'" +
             "}";
     }

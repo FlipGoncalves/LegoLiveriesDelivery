@@ -35,8 +35,6 @@ public class Order {
     @Column(name = "date")
     @Temporal(TemporalType.DATE)
     private Date date;
-    @Column(name = "time_of_delivery")
-    private int timeOfDelivery;
     @Column(name = "scheduled_time_of_delivery")
     private int scheduledTimeOfDelivery;
     @Column(name = "rider_name")
@@ -73,14 +71,6 @@ public class Order {
 
     public void setDate(Date date) {
         this.date = date;
-    }
-
-    public int getTimeOfDelivery() {
-        return this.timeOfDelivery;
-    }
-
-    public void setTimeOfDelivery(int timeOfDelivery) {
-        this.timeOfDelivery = timeOfDelivery;
     }
 
     public int getScheduledTimeOfDelivery() {

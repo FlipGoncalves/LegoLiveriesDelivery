@@ -257,7 +257,7 @@ public class OrderServiceTest {
         
         Order order = service.makeOrder(orderDTO1);
         assertTrue(order != null);
-        assertEquals(orderDTO1.getScheduledtimeOfDelivery(), order.getScheduledTimeOfDelivery());
+        assertEquals(orderDTO1.getScheduledTimeOfDelivery(), order.getScheduledTimeOfDelivery());
         assertEquals(address1, order.getAddress());
         assertEquals(client1, order.getClient());
         assertEquals(orderLegos1, order.getOrderLego());
@@ -281,7 +281,6 @@ public class OrderServiceTest {
         order.setAddress(address);
         order.setDate(date);
         order.setScheduledTimeOfDelivery(2100);
-        order.setTimeOfDelivery(2110);
         order.setRiderName("Paulo " + id);
         order.setOrderLego(orderLegos);
         order.setTotalPrice(totalPrice);

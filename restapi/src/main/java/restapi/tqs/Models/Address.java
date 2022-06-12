@@ -36,7 +36,7 @@ public class Address {
     @Column(name = "country")
     private String country;
 
-    @OneToOne(mappedBy = "address", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "address", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIdentityReference(alwaysAsId = true)
     private Client client;
 
