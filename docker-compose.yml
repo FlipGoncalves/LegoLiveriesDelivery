@@ -45,7 +45,7 @@ services:
     hostname: legoliveriesApp
     restart: unless-stopped
     ports:
-      - 3000:80
+      - 3000:3000
     networks:
       legoliveries-backend:
         ipv4_address: 172.20.202.3 
@@ -95,7 +95,7 @@ services:
     hostname: engineApp
     restart: unless-stopped
     ports: 
-      - 3001:80
+      - 3001:3000
     networks:
       engine-backend:
         ipv4_address: 172.20.200.3
