@@ -1,0 +1,24 @@
+name: Deploy to VM
+
+on:
+  workflow_run:
+    workflows: ["Push to DockerHub"]
+    types:
+      - completed
+
+jobs:
+  build:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v2
+    - name: docker login
+      env:
+        DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        echo $DOCKER_PASSWORD | docker login ghcr.io -u FlipGoncalves --password-stdin     
+    - name: Run deployment
+      run: |
+        docker-compose down
+        docker-compose pull
+        docker-compose up -d --build
