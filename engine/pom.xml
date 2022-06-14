@@ -37,6 +37,9 @@
 		<project.build.sourceEncoding>${project.encondig}</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>${project.encondig}</project.reporting.outputEncoding>
 
+        <sonar.organization>flipgoncalves</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        
         <jacoco.version>0.8.6</jacoco.version>
 	</properties>
 
@@ -60,6 +63,7 @@
     </dependencyManagement>
 
 	<dependencies>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -89,6 +93,12 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.29</version>
+        </dependency>
 		<!--    apache http tools -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -150,6 +160,13 @@
 			<artifactId>json</artifactId>
 			<version>20220320</version>
 		</dependency>
+
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>spring-mock-mvc</artifactId>
+            <version>5.0.1</version>
+            <scope>test</scope>
+        </dependency>
 
 		<dependency>
             <groupId>io.cucumber</groupId>
