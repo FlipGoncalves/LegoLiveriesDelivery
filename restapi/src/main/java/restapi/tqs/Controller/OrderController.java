@@ -18,6 +18,7 @@ import restapi.tqs.Exceptions.BadOrderLegoDTOException;
 import restapi.tqs.Exceptions.BadScheduledTimeOfDeliveryException;
 import restapi.tqs.Exceptions.ClientNotFoundException;
 import restapi.tqs.Exceptions.LegoNotFoundException;
+import restapi.tqs.Exceptions.OrderNotCreatedException;
 import restapi.tqs.Exceptions.OrderNotFoundException;
 import restapi.tqs.Models.Order;
 import restapi.tqs.Service.OrderService;
@@ -40,12 +41,15 @@ public class OrderController {
 
     @GetMapping()
     public ResponseEntity<List<Order>> getAllOrders(){
+        log.info("Getting all orders");
+
         List<Order> orders = service.getAllOrders();
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
     @GetMapping("/{orderId}")
     public ResponseEntity<Order> getOrderById(@PathVariable long orderId){
+        log.info("Getting order by id " + orderId);
 
         Order order;
         try {
@@ -59,6 +63,7 @@ public class OrderController {
 
     @GetMapping("/client/{clientId}")
     public ResponseEntity<List<Order>> getClientOrders(@PathVariable long clientId){
+        log.info("Getting orders of client with clientId " + clientId);
 
         List<Order> order;
         try {
@@ -72,12 +77,13 @@ public class OrderController {
 
     @PostMapping()
     public ResponseEntity<Order> makeOrder(@RequestBody OrderDTO orderDTO){
-        
-        Order order;
+        log.info("Making new order");
+
+        Order order = null;
         try {
             order = service.makeOrder(orderDTO);
         } catch (BadScheduledTimeOfDeliveryException | ClientNotFoundException | AddressNotFoundException
-                | LegoNotFoundException | BadOrderLegoDTOException | BadOrderLegoListException e) {
+                | LegoNotFoundException | BadOrderLegoDTOException | BadOrderLegoListException | OrderNotCreatedException e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 

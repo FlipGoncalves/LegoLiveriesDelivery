@@ -1,4 +1,4 @@
-package tqs.project.datamodels;
+package restapi.tqs.DataModels;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class OrderDTO {
+public class MakeOrderDTO {
 
     @NonNull
     private String clientName;

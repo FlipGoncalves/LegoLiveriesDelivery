@@ -1,12 +1,12 @@
 package restapi.tqs.Models;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,14 +35,14 @@ public class Address {
     private String city;
     @Column(name = "country")
     private String country;
+    @Column(name = "latitude", precision = 8, scale = 6)
+    private BigDecimal latitude;
+    @Column(name = "longitude", precision = 9, scale = 6)
+    private BigDecimal longitude;
 
     @OneToOne(mappedBy = "address", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIdentityReference(alwaysAsId = true)
     private Client client;
-
-    /*@OneToOne(mappedBy = "address", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JsonIdentityReference(alwaysAsId = true)
-    private Order order;*/
 
     @OneToMany(mappedBy = "address", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIdentityReference(alwaysAsId = true)
@@ -53,6 +53,10 @@ public class Address {
 
     public long getAddressId() {
         return this.addressId;
+    }
+
+    public void setAddressId(long addressId) {
+        this.addressId = addressId;
     }
 
     public String getStreet() {
@@ -95,13 +99,22 @@ public class Address {
         this.client = client;
     }
 
-    /*public Order getOrder() {
-        return this.order;
+    public BigDecimal getLatitude() {
+        return this.latitude;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
-    }*/
+    public void setLatitude(BigDecimal latitude) {
+        this.latitude = latitude;
+    }
+
+    public BigDecimal getLongitude() {
+        return this.longitude;
+    }
+
+    public void setLongitude(BigDecimal longitude) {
+        this.longitude = longitude;
+    }
+
 
     public Set<Order> getOrders() {
         return this.orders;

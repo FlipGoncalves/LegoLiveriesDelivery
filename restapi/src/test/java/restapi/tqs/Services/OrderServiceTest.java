@@ -31,6 +31,7 @@ import restapi.tqs.Exceptions.BadOrderLegoDTOException;
 import restapi.tqs.Exceptions.BadScheduledTimeOfDeliveryException;
 import restapi.tqs.Exceptions.ClientNotFoundException;
 import restapi.tqs.Exceptions.LegoNotFoundException;
+import restapi.tqs.Exceptions.OrderNotCreatedException;
 import restapi.tqs.Exceptions.OrderNotFoundException;
 import restapi.tqs.Models.Address;
 import restapi.tqs.Models.Client;
@@ -252,7 +253,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    void test_MakeOrder_AllValid_ReturnsCorrectOrder() throws BadScheduledTimeOfDeliveryException, ClientNotFoundException, AddressNotFoundException, LegoNotFoundException, BadOrderLegoDTOException, BadOrderLegoListException{
+    void test_MakeOrder_AllValid_ReturnsCorrectOrder() throws BadScheduledTimeOfDeliveryException, ClientNotFoundException, AddressNotFoundException, LegoNotFoundException, BadOrderLegoDTOException, BadOrderLegoListException, OrderNotCreatedException{
         Mockito.when(orderRepository.save(any(Order.class))).thenReturn(order1);
         
         Order order = service.makeOrder(orderDTO1);

@@ -38,11 +38,11 @@ public class OrderControllerTest {
     @BeforeEach
     void setUp(){
         RestAssuredMockMvc.mockMvc( mvc );
-        order1 = new Order(1, "Client 1", new Date(), 1, 5);
+        order1 = new Order("Client 1", new Date(), 1, 5);
         order1.setStatus(0);
-        order2 = new Order(2, "Client 2", new Date(), 2, 3);
+        order2 = new Order("Client 2", new Date(), 2, 3);
         order2.setStatus(2);
-        order3 = new Order(3, "Client 3", new Date(), 3, 4);
+        order3 = new Order("Client 3", new Date(), 3, 4);
         order3.setStatus(2);
 
         orders = new ArrayList<>(Arrays.asList(order1, order2, order3));
@@ -57,11 +57,8 @@ public class OrderControllerTest {
                .contentType(ContentType.JSON).and()
                .status(HttpStatus.OK).and()
                .body("size()", is(3))
-               .body("[0].externalOrderId", is( (int) order1.getExternalOrderId())).and()
                .body("[0].clientName", is(order1.getClientName())).and()
-               .body("[1].externalOrderId", is( (int) order2.getExternalOrderId())).and()
                .body("[1].clientName", is(order2.getClientName())).and()
-               .body("[2].externalOrderId", is( (int) order3.getExternalOrderId())).and()
                .body("[2].clientName", is(order3.getClientName()));
     }
 }

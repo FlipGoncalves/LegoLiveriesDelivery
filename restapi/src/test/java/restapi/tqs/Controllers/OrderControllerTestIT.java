@@ -1,44 +1,37 @@
 package restapi.tqs.Controllers;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import io.restassured.http.ContentType;
-import io.restassured.module.mockmvc.RestAssuredMockMvc;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import restapi.tqs.TqsApplication;
-import restapi.tqs.Controller.OrderController;
 import restapi.tqs.DataModels.OrderDTO;
 import restapi.tqs.DataModels.OrderLegoDTO;
-import restapi.tqs.Exceptions.AddressNotFoundException;
-import restapi.tqs.Exceptions.BadOrderLegoDTOException;
-import restapi.tqs.Exceptions.BadOrderLegoListException;
-import restapi.tqs.Exceptions.BadScheduledTimeOfDeliveryException;
-import restapi.tqs.Exceptions.ClientNotFoundException;
-import restapi.tqs.Exceptions.LegoNotFoundException;
-import restapi.tqs.Exceptions.OrderNotFoundException;
 import restapi.tqs.Models.Address;
 import restapi.tqs.Models.Client;
 import restapi.tqs.Models.Lego;
@@ -52,19 +45,6 @@ import restapi.tqs.Repositories.LegoRepository;
 import restapi.tqs.Repositories.OrderLegoRepository;
 import restapi.tqs.Repositories.OrderRepository;
 import restapi.tqs.Repositories.UserRepository;
-import restapi.tqs.Service.OrderService;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = TqsApplication.class)
 @AutoConfigureMockMvc

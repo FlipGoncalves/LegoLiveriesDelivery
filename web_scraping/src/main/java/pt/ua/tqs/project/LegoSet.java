@@ -2,7 +2,7 @@ package pt.ua.tqs.project;
 
 public class LegoSet {
 
-    private String imageUrl;
+    private String imgUrl;
     private String name;
     private String price;
 
@@ -10,18 +10,18 @@ public class LegoSet {
     public LegoSet() {
     }
 
-    public LegoSet(String imageUrl, String name, String price) {
-        this.imageUrl = imageUrl;
+    public LegoSet(String imgUrl, String name, String price) {
+        this.imgUrl = imgUrl;
         this.name = name;
         this.price = price;
     }
 
-    public String getImageUrl() {
-        return this.imageUrl;
+    public String getImgUrl() {
+        return this.imgUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 
     public String getName() {
@@ -43,7 +43,7 @@ public class LegoSet {
     @Override
     public String toString() {
         return "{" +
-            " imageUrl='" + getImageUrl() + "'" +
+            " imageUrl='" + getImgUrl() + "'" +
             ", name='" + getName() + "'" +
             ", price='" + getPrice() + "'" +
             "}";

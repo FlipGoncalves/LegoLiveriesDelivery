@@ -74,6 +74,7 @@ public class LegoController {
         try {
             lego2 = legoService.insertData(lego);
         } catch (BadLegoDTOException e) {
+            log.info("SHIIIIIIIIIIIIIIIIIIIIIIIIIIIT");
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 

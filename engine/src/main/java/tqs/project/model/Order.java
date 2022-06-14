@@ -21,8 +21,6 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
     private long orderId;
-    @Column(name = "external_order_id")
-    private long externalOrderId;
     @Column(name = "clientName")
     private String clientName;
     @Column(name = "`date`")
@@ -50,8 +48,7 @@ public class Order {
     public Order() {
     }
 
-    public Order(long externalOrderId, String clientName, Date date, int timeOfDelivery, int review) {
-        this.externalOrderId = externalOrderId;
+    public Order(String clientName, Date date, int timeOfDelivery, int review) {
         this.clientName = clientName;
         this.date = date;
         this.timeOfDelivery = timeOfDelivery;
@@ -65,14 +62,6 @@ public class Order {
 
     public void setOrderId(long orderId) {
         this.orderId = orderId;
-    }
-
-    public long getExternalOrderId() {
-        return this.externalOrderId;
-    }
-
-    public void setExternalOrderId(long externalOrderId) {
-        this.externalOrderId = externalOrderId;
     }
 
     public String getClientName() {
@@ -143,7 +132,6 @@ public class Order {
     public String toString() {
         return "{" +
             " orderId='" + getOrderId() + "'" +
-            ", externalOrderId='" + getExternalOrderId() + "'" +
             ", clientName='" + getClientName() + "'" +
             ", date='" + getDate() + "'" +
             ", timeOfDelivery='" + getTimeOfDelivery() + "'" +

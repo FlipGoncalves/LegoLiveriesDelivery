@@ -15,40 +15,39 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import tqs.project.datamodels.OrderDTO;
-import tqs.project.model.Order;
-import tqs.project.service.OrderService;
+import tqs.project.datamodels.StoreDTO;
+import tqs.project.model.Store;
+import tqs.project.service.StoreService;
 
 @RestController
-@RequestMapping("/api/order")
+@RequestMapping("/api/store")
 @Validated
 @CrossOrigin
-public class OrderController {
+public class StoreController {
     private static final Logger log = LoggerFactory.getLogger(StatisticController.class);
 
     @Autowired
-    private OrderService orderService;
+    private StoreService storeService;
 
     @GetMapping()
-    public ResponseEntity<List<Order>> getAllOrders() {
-        log.info("GET Request -> All Orders Data");
+    public ResponseEntity<List<Store>> getAllStores() {
+        log.info("GET Request -> All Stores Data");
 
-        List<Order> orders = orderService.getAllOrders();
+        List<Store> stores = storeService.getAllStores();
 
-        return new ResponseEntity<>(orders, HttpStatus.OK);
+        return new ResponseEntity<>(stores, HttpStatus.OK);
     }
 
     @PostMapping()
-    public ResponseEntity<String> makeOrder(@RequestBody OrderDTO orderDTO){
+    public ResponseEntity<Store> makeOrder(@RequestBody StoreDTO storeDTO){
 
-        long orderId = -1;
+        Store store = null;
         try {
-            orderId = orderService.makeOrder(orderDTO);
+            store = storeService.insertStore(storeDTO);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
-        String response = "{\"orderId\" : " + orderId + " }";
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return new ResponseEntity<>(store, HttpStatus.CREATED);
     }
 }

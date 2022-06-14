@@ -19,6 +19,8 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import tqs.project.datamodels.AddressDTO;
+
 @Entity
 @Table(name = "address")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "addressId")
@@ -130,6 +132,15 @@ public class Address {
 
     public void setOrders(Set<Order> orders) {
         this.orders = orders;
+    }
+
+    public void convertDTOtoObject(AddressDTO dto){
+        this.setCity(dto.getCity());
+        this.setCountry(dto.getCountry());
+        this.setPostalCode(dto.getPostalCode());
+        this.setStreet(dto.getStreet());
+        this.setLongitude(dto.getLongitude());
+        this.setLatitude(dto.getLongitude());
     }
 
 

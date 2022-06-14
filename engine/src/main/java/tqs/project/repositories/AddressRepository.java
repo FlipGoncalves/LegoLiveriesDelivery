@@ -1,11 +1,11 @@
-package restapi.tqs.Repositories;
+package tqs.project.repositories;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import restapi.tqs.Models.Address;
+import tqs.project.model.Address;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 
 @Repository
 public interface AddressRepository extends JpaRepository<Address, Long> {
-    
 }

@@ -47,11 +47,11 @@ public class StatisticControllerTest {
     @BeforeEach
     void setUp(){
         RestAssuredMockMvc.mockMvc( mvc );
-        order1 = new Order(1, "Client 1", new Date(), 1, 5);
+        order1 = new Order("Client 1", new Date(), 1, 5);
         order1.setStatus(0);
-        order2 = new Order(2, "Client 2", new Date(), 2, 3);
+        order2 = new Order("Client 2", new Date(), 2, 3);
         order2.setStatus(2);
-        order3 = new Order(3, "Client 3", new Date(), 3, 4);
+        order3 = new Order("Client 3", new Date(), 3, 4);
         order3.setStatus(2);
 
         store1 = new Store(1, "Store 1");

@@ -22,7 +22,7 @@ public class Store {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "store_id")
     private long storeId;
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id", referencedColumnName = "address_id")
