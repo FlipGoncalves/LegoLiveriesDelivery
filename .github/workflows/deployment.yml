@@ -16,7 +16,7 @@ jobs:
       env:
         DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        echo $DOCKER_PASSWORD | docker login ghcr.io -u FlipGoncalves --password-stdin     
+        echo $DOCKER_PASSWORD | sudo docker login ghcr.io -u FlipGoncalves --password-stdin     
     - name: Run deployment
       run: |
         docker-compose down

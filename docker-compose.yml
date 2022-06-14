@@ -4,7 +4,7 @@ services:
   legoliveries:
     container_name: legoliveriesBackend
     hostname: legoliveriesBackend
-    image: ghcr.io/flipgoncalves/legoliveries_backend:latest
+    image: ghcr.io/flipgoncalves/tqsproject/legoliveries_backend:latest
     build:
       context: restapi
       dockerfile: Dockerfile
@@ -19,7 +19,6 @@ services:
     networks:
       legoliveries-backend:
         ipv4_address: 172.20.202.10
-      all-backend:
     depends_on:
       - mysql-legoliveries
       
@@ -38,7 +37,7 @@ services:
         ipv4_address: 172.20.202.2
 
   legoliveries-app:
-    image: ghcr.io/flipgoncalves/legoliveries_frontend:latest
+    image: ghcr.io/flipgoncalves/tqsproject/legoliveries_frontend:latest
     build:
       context: legoliveries
       dockerfile: Dockerfile
@@ -54,7 +53,7 @@ services:
   engine:
     container_name: engineBackend
     hostname: engineBackend
-    image: ghcr.io/flipgoncalves/deliverio_backend:latest
+    image: ghcr.io/flipgoncalves/tqsproject/deliverio_backend:latest
     build:
       context: engine
       dockerfile: Dockerfile
@@ -71,7 +70,6 @@ services:
     networks:
       engine-backend:
         ipv4_address: 172.20.200.10
-      all-backend:
 
   mysql-engine:
     image: mysql:5.7
@@ -89,7 +87,7 @@ services:
   
   engine-app:
     #image: engine-web-app
-    image: ghcr.io/flipgoncalves/deliverio_frontend:latest
+    image: ghcr.io/flipgoncalves/tqsproject/deliverio_frontend:latest
     build:
       context: dashboard
       dockerfile: Dockerfile
@@ -110,8 +108,4 @@ networks:
   legoliveries-backend:
     ipam:
       config:
-        - subnet: "172.20.202.0/24"
-  all-backend:
-    name: external-network
-
-    
+        - subnet: "172.20.202.0/24" 
