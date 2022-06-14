@@ -45,7 +45,7 @@ services:
     hostname: legoliveriesApp
     restart: unless-stopped
     ports:
-      - 3000:80
+      - 3000:3000
     networks:
       legoliveries-backend:
         ipv4_address: 172.20.202.3 
@@ -109,5 +109,3 @@ networks:
     ipam:
       config:
         - subnet: "172.20.202.0/24"
-
-    
