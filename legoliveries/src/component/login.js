@@ -25,6 +25,8 @@ const Login = () => {
     const handleSubmit = async e => {
         e.preventDefault();
 
+        this.setState({error_message: null})
+
         const infouser = { username, password }
         console.log(infouser);
         
@@ -82,6 +84,7 @@ const Login = () => {
                                 </div>
                             </div>
                         </form>
+                        {this.state.error_message !== null ? <p id="error">{this.state.error_message}</p> : <></>}
                         <p class="mb-2 text-sm mx-auto">
                             Don't have an account ?
                             <Link to="/register">

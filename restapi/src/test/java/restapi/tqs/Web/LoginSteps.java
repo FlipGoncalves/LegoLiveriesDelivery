@@ -7,6 +7,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.mockito.ArgumentMatchers.anyString;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -23,9 +24,7 @@ public class LoginSteps {
 
     @When("I login with {string} and {string}")
     public void iTryToLoginWithAnd(String userName, String password) {
-        assertEquals(driver.findElement(By.id("name")));
         driver.findElement(By.id("name")).sendKeys(userName);
-        assertEquals(driver.findElement(By.id("password")));
         driver.findElement(By.id("password")).sendKeys(password);
     }
     @When("I click Sumbit")
@@ -33,12 +32,11 @@ public class LoginSteps {
         driver.findElement(By.id("_submit")).click();
     }
     @Then("I should {string}")
-    public void iVerifyInvalidLoginMessage() {
+    public void iVerify() {
         if (driver.getCurrentUrl().equals("http://localhost:3000")) {
-            assertNotEquals(driver.findElement(By.id("error")));
             System.out.println("logged in");
         } else if (driver.getCurrentUrl().equals("http://localhost:3000/login")) {
-            assertEquals(driver.findElement(By.id("error")));
+            assertEquals(driver.findElement(By.id("error")).getText(), anyString());
             System.out.println("not logged in");
         }
     }

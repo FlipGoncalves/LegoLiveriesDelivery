@@ -44,7 +44,7 @@ class App extends Component {
                         <button type="button" class="btn openmodal" data-toggle="modal" data-target={"#"+item["name"].replace(/\s/g, '')}>
                             <a class="img-wrap"> <img src="assets/images/items/1.jpg" width= '70%'/> </a>
                             <figcaption class="info-wrap">
-                                <a class="title">{item["name"]}</a>
+                                <a class="title" id={item["name"].replace(/\s/g, '')}>{item["name"]}</a>
                                 <div class="price mt-1">{item["price"]}</div>
                             </figcaption>
                         </button>
@@ -98,7 +98,7 @@ class App extends Component {
                                 </div>
                                 
                                 <div class="modal-footer">
-                                    <button type="button" class="btn" onClick={() => this.setState(prevState => ({cart: [...prevState.cart, this.additemtocart(item)]}))} data-toggle="modal" data-target={"#"+item["name"].replace(/\s/g, '')}>Add to cart</button>
+                                    <button type="button" id="_submit_cart" class="btn" onClick={() => this.setState(prevState => ({cart: [...prevState.cart, this.additemtocart(item)]}))} data-toggle="modal" data-target={"#"+item["name"].replace(/\s/g, '')}>Add to cart</button>
                                 </div>
                                 
                             </div>
@@ -276,7 +276,7 @@ class App extends Component {
                                             <button data-toggle="modal" data-target="#cart" style={{outline: 'none', backgroundColor: 'transparent', border: 'none'}}>
                                                 <div class="icon-area">
                                                     <i class="fa fa-shopping-cart"></i>
-                                                    <span class="notify">{this.state.cart.length}</span>
+                                                    <span class="notify" id="cart_length">{this.state.cart.length}</span>
                                                 </div>
                                                 <small class="text"> Cart </small>
                                             </button>

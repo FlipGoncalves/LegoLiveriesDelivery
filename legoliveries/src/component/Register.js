@@ -85,6 +85,7 @@ const Register = () => {
                         {/* <input id="nonce" name="nonce" type="hidden"
                            value="bdaa00bce142ab38fbe1761a767ab97df9db0e34e260defac78ee197fd818cbf"/> */}
 
+                        {this.state.error_message !== null ? <p id="error">{this.state.error_message}</p> : <></>}
 
                         <div className="row pt-3">
                             <div className="col-md-12">
