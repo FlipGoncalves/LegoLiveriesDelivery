@@ -20,7 +20,15 @@ jobs:
       - name: Set up JDK 11
         uses: actions/setup-java@v1
         with:
-          java-version: 11
+          java-version: 11  
+      - name: Build Legoliveries Backend
+        run: docker-compose build legoliveries
+      - name: Start Legoliveries Backend
+        run: docker-compose run -d legoliveries
+      - name: Build Legoliveries Frontend
+        run: docker-compose build legoliveries-app
+      - name: Start Legoliveries Frontend
+        run: docker-compose run -d -p 3000:80 -d legoliveries-app
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
         with:
@@ -52,6 +60,14 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: Build Deliverio Backend
+        run: docker-compose build engine
+      - name: Start Legoliveries Backend
+        run: docker-compose run -d engine
+      - name: Build Legoliveries Frontend
+        run: docker-compose build engine-app
+      - name: Start Legoliveries Frontend
+        run: docker-compose run -d -p 3001:80 -d engine-app
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
         with:
