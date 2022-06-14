@@ -19,7 +19,6 @@ services:
     networks:
       legoliveries-backend:
         ipv4_address: 172.20.202.10
-      all-backend:
     depends_on:
       - mysql-legoliveries
       
@@ -71,7 +70,6 @@ services:
     networks:
       engine-backend:
         ipv4_address: 172.20.200.10
-      all-backend:
 
   mysql-engine:
     image: mysql:5.7
@@ -110,8 +108,4 @@ networks:
   legoliveries-backend:
     ipam:
       config:
-        - subnet: "172.20.202.0/24"
-  all-backend:
-    name: external-network
-
-    
+        - subnet: "172.20.202.0/24" 
