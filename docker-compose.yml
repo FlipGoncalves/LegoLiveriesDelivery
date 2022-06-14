@@ -4,6 +4,7 @@ services:
   legoliveries:
     container_name: legoliveriesBackend
     hostname: legoliveriesBackend
+    image: ghcr.io/flipgoncalves/tqsproject/legoliveriesBackend:latest
     build:
       context: restapi
       dockerfile: Dockerfile
@@ -37,7 +38,7 @@ services:
         ipv4_address: 172.20.202.2
 
   legoliveries-app:
-    #image: legoliveries-web-app
+    image: ghcr.io/flipgoncalves/tqsproject/legoliveriesFrontend:latest
     build:
       context: legoliveries
       dockerfile: Dockerfile
@@ -53,6 +54,7 @@ services:
   engine:
     container_name: engineBackend
     hostname: engineBackend
+    image: ghcr.io/flipgoncalves/tqsproject/deliverioBackend:latest
     build:
       context: engine
       dockerfile: Dockerfile
@@ -87,6 +89,7 @@ services:
   
   engine-app:
     #image: engine-web-app
+    image: ghcr.io/flipgoncalves/tqsproject/deliverioFrontend:latest
     build:
       context: dashboard
       dockerfile: Dockerfile
