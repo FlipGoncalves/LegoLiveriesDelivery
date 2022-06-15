@@ -28,7 +28,7 @@ class Aside extends Component {
         <div class="collapse navbar-collapse  w-auto  max-height-vh-100" id="sidenav-collapse-main">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <Link to="/">
+              <Link to="/management">
                 <a class="nav-link text-white bg-gradient-primary">
                   <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                     <i class="material-icons opacity-10">dashboard</i>

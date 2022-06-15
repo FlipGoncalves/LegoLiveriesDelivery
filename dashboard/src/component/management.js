@@ -17,33 +17,32 @@ class Management extends Component {
     };
   }
 
-  addRiderToArray(item) {
-    let user = item["user"]
-
+  addOrderToArray(item) {
     console.log(item)
+    let store = item["store"]
+    let addr = item["address"]
+    let addr_total = addr["city"] + ", " + addr["country"] + ", " + addr["postalCode"] + ", " + addr["street"]
 
     return (
-        <tr>
-          <td class="align-middle text-center">
-            <div>
-              <div class="d-flex flex-column justify-content-center">
-                <h6 class="mb-0 text-sm">{user["username"]}</h6>
-                <p class="text-xs text-secondary mb-0">{user["email"]}</p>
-                <p class="text-xs text-secondary mb-0">{item["riderId"]}</p>
-              </div>
+      <tr>
+        <td class="align-middle text-center">
+          <div>
+            <div class="d-flex flex-column justify-content-center">
+              <h6 class="mb-0 text-sm">{addr_total}</h6>
             </div>
-          </td>
-          <td>
-            <p class="text-xs font-weight-bold mb-0">Aveiro</p>
-          </td>
-          <td class="align-middle text-center text-sm">
-            <span class="badge badge-sm bg-gradient-success">Online</span>
-            <span class="badge badge-sm bg-gradient-secondary">Offline</span>
-          </td>
-          <td class="align-middle text-center">
-            <span class="text-secondary text-xs font-weight-bold">{item["totalReviews"] === 0 ? 0 : Math.round(item["reviewSum"] / item["totalReviews"] * 100) / 100}</span>
-          </td>
-        </tr>
+          </div>
+        </td>
+        <td>
+          <p class="text-xs font-weight-bold mb-0">{store["name"]}</p>
+        </td>
+        <td class="align-middle text-center">
+          <span class="text-secondary text-xs font-weight-bold">{item["clientName"]}</span>
+        </td>
+        <td class="align-middle text-center text-sm">
+          <span class="badge badge-sm bg-gradient-success">Done</span>
+          <span class="badge badge-sm bg-gradient-secondary">In Progress</span>
+        </td>
+      </tr>
     )
   }
 
@@ -181,7 +180,7 @@ class Management extends Component {
               </div>
               <div class="card-body px-0 pb-2">
                 <div class="table-responsive p-0">
-                  <table class="table align-items-center mb-0">
+                  <table class="table align-items-center mb-0" id="orders">
                     <thead>
                       <tr>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Address</th>
@@ -212,7 +211,7 @@ class Management extends Component {
               </div>
               <div class="card-body px-0 pb-2">
                 <div class="table-responsive p-0">
-                  <table class="table align-items-center mb-0">
+                  <table class="table align-items-center mb-0" id="riders">
                     <thead>
                       <tr>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Rider</th>

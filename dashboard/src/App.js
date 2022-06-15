@@ -116,7 +116,7 @@ class App extends Component {
                 <i class="material-icons opacity-10">person</i>
               </div>
               <div class="text-end pt-1">
-                <p class="text-sm mb-0 text-capitalize">Today's Riders</p>
+                <p class="text-sm mb-0 text-capitalize">Total Riders</p>
                 <h4 class="mb-0">{this.state.riders}</h4>
               </div>
             </div>
