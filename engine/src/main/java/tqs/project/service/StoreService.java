@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.stereotype.Service;
 
 import tqs.project.datamodels.StoreDTO;
 import tqs.project.exceptions.StoreAlreadyExistsException;
@@ -15,6 +16,7 @@ import tqs.project.model.Store;
 import tqs.project.repositories.AddressRepository;
 import tqs.project.repositories.StoreRepository;
 
+@Service
 public class StoreService {
     
     private static final Logger log = LoggerFactory.getLogger(OrderService.class);
