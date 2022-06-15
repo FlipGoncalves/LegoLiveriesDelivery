@@ -40,6 +40,6 @@ public class AdditemSteps {
     }
     @Then("I should see the Cart with {int} items")
     public void iVerify(int items) {
-        assertEquals(driver.findElement(By.id("cart_length")), items);
+        assertEquals(driver.findElement(By.id("cart_length")).getText(), items);
     }
 }
