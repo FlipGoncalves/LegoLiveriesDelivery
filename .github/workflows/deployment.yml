@@ -22,3 +22,7 @@ jobs:
         docker-compose down
         docker-compose pull
         docker-compose up -d --build
+    - name: Curl in localhost3000 to assert that seb service is running
+        run: curl localhost:3000
+    - name: Curl in localhost3001 to assert that seb service is running
+        run: curl localhost:3001
