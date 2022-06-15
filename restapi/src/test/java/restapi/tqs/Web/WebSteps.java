@@ -12,18 +12,18 @@ import static org.mockito.ArgumentMatchers.anyString;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 
 public class WebSteps {
-    private final ChromeOptions options = new ChromeOptions();
+    private final FirefoxOptions options = new FirefoxOptions();
     private WebDriver driver;
 
     @Given("I am in {string}")
     public void iAmOnThePage(String baseUrl) {
         WebDriverManager.firefoxdriver().setup();
         options.setHeadless(true);
-        driver = new ChromeDriver(options);
+        driver = new FirefoxDriver(options);
         
         driver.get(baseUrl);
     }
@@ -156,5 +156,11 @@ public class WebSteps {
     @Then("I should see the item {string} in my screen")
     public void iVerify(String lego) {
         assertEquals(driver.findElement(By.id("cart_length")).getText(), lego);
+    }
+
+    @When("I choose {string} on the dropdown")
+    public void i_choose_on_the_dropdown(String string) {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
     }
 }

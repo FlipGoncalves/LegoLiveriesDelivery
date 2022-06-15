@@ -13,11 +13,11 @@ import static org.mockito.ArgumentMatchers.anyString;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 
 public class WebSteps {
-    private final ChromeOptions options = new ChromeOptions();
+    private final FirefoxOptions options = new FirefoxOptions();
     private WebDriver driver;
     private WebElement element;
 
@@ -25,7 +25,7 @@ public class WebSteps {
     public void iAmOnThePage(String baseUrl) {
         WebDriverManager.firefoxdriver().setup();
         options.setHeadless(true);
-        driver = new ChromeDriver(options);
+        driver = new FirefoxDriver(options);
         
         driver.get(baseUrl);
     }
@@ -36,8 +36,8 @@ public class WebSteps {
         element = driver.findElement(By.id(type));
     }
 
-    @Then("I can see there are more than {int}")
-    public void iCanSee(int num) {
+    @Then("I can see there are more than {string}")
+    public void iCanSee(String num) {
         System.out.println(element.getText());
         // assertTrue(Integer.parseInt(element.getText()) > num);
     }
@@ -118,14 +118,14 @@ public class WebSteps {
         driver.findElement(By.id("_submit")).click();
     }
 
-    @Then("I can see it is not {int}")
-    public void iVerifyNotNum(int num) {
-        assertNotEquals(element.getText(), num+"");
+    @Then("I can see it is not {string}")
+    public void iVerifyNotNum(String num) {
+        assertNotEquals(element.getText(), num);
     }
 
-    @Then("I can see it is {int}")
-    public void iVerifyNum(int num) {
-        assertEquals(element.getText(), num+"");
+    @Then("I can see it is {string}")
+    public void iVerifyNum(String num) {
+        assertEquals(element.getText(), num);
     }
 
 
