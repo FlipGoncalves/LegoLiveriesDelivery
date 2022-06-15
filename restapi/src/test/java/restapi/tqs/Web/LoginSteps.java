@@ -1,6 +1,7 @@
 package restapi.tqs.Web;
 
 import io.cucumber.java.en.When;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.Given;
 
@@ -10,12 +11,19 @@ import static org.mockito.ArgumentMatchers.anyString;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 
 public class LoginSteps {
+    private final FirefoxOptions options = new FirefoxOptions();
     private WebDriver driver;
 
     @Given("I am in {string}")
     public void iAmOnThePage(String baseUrl) {
+        WebDriverManager.firefoxdriver().setup();
+        options.setHeadless(true);
+        driver = new FirefoxDriver(options);
+        
         driver.get(baseUrl);
     }
 
@@ -30,9 +38,9 @@ public class LoginSteps {
     }
     @Then("I should {string}")
     public void iVerify(String type) {
-        if (type.equals("logged in")) {
+        if (type.equals("be logged in")) {
             assertTrue(driver.getCurrentUrl().equals("http://localhost:3000"));
-        } else if (type.equals("not logged in")) {
+        } else if (type.equals("not be logged in")) {
             assertTrue(driver.getCurrentUrl().equals("http://localhost:3000/login"));
             assertEquals(driver.findElement(By.id("error")).getText(), anyString());
         }
