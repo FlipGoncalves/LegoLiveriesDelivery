@@ -36,7 +36,7 @@ public class WebSteps {
         element = driver.findElement(By.id(type));
     }
 
-    @Then("I can see there are more than {num}")
+    @Then("I can see there are more than {int}")
     public void iCanSee(int num) {
         System.out.println(element.getText());
         // assertTrue(Integer.parseInt(element.getText()) > num);
@@ -72,11 +72,11 @@ public class WebSteps {
         driver.findElement(By.id("signin")).click();
     }
     @Then("I should be logged in")
-    public void iVerifyLogin(String type) {
+    public void iVerifyLogin() {
         assertTrue(driver.getCurrentUrl().equals("http://localhost:3000"));
     }
     @Then("I should not be logged in")
-    public void iVerifyNotLogin(String type) {
+    public void iVerifyNotLogin() {
         assertTrue(driver.getCurrentUrl().equals("http://localhost:3000/login"));
         assertEquals(driver.findElement(By.id("error")).getText(), anyString());
     }
@@ -95,12 +95,12 @@ public class WebSteps {
         driver.findElement(By.id("_submit")).click();
     }
     @Then("I should be registered")
-    public void iVerifyRegister(String type) {
+    public void iVerifyRegister() {
         assertTrue(driver.getCurrentUrl().equals("http://localhost:3000"));
     }
 
     @Then("I should not be registered")
-    public void iVerifyNotRegister(String type) {
+    public void iVerifyNotRegister() {
         assertTrue(driver.getCurrentUrl().equals("http://localhost:3000/sign-up"));
         assertEquals(driver.findElement(By.id("error")).getText(), anyString());
     }
