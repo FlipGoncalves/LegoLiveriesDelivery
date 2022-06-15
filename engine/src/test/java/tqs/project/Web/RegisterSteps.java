@@ -19,7 +19,7 @@ public class RegisterSteps {
     private WebDriver driver;
 
     @Given("I am in {string}")
-    public void iAmOnThePage(String baseUrl) {
+    public void iAmOnRegisterPage(String baseUrl) {
         WebDriverManager.firefoxdriver().setup();
         options.setHeadless(true);
         driver = new FirefoxDriver(options);
@@ -28,17 +28,17 @@ public class RegisterSteps {
     }
 
     @When("I register with {string}, {string} and {string}")
-    public void iTryToLoginWithAnd(String userName, String email, String password) {
+    public void iTryToRegisterWithAnd(String userName, String email, String password) {
         driver.findElement(By.id("name")).sendKeys(userName);
         driver.findElement(By.id("email")).sendKeys(email);
         driver.findElement(By.id("pass")).sendKeys(password);
     }
     @When("I click Sumbit")
-    public void iClickSubmit() {
+    public void iClickRegister() {
         driver.findElement(By.id("_submit")).click();
     }
     @Then("I should {string}")
-    public void iVerify(String type) {
+    public void iVerifyRegister(String type) {
         if (type.equals("be registered")) {
             assertTrue(driver.getCurrentUrl().equals("http://localhost:3000"));
         } else if (type.equals("not be registered")) {

@@ -21,7 +21,7 @@ public class ManagementSteps {
     private WebElement element;
 
     @Given("I am in {string}")
-    public void iAmOnThePage(String baseUrl) {
+    public void iAmOnManagementPage(String baseUrl) {
         WebDriverManager.firefoxdriver().setup();
         options.setHeadless(true);
         driver = new FirefoxDriver(options);
@@ -30,18 +30,18 @@ public class ManagementSteps {
     }
 
     @When("I look at the {string} table")
-    public void iTryToLoginWithAnd(String type) {
+    public void iLookAtTable(String type) {
         element = driver.findElement(By.id(type));
     }
 
     @Then("I can see there are more than {num}")
-    public void iClickSubmit(int num) {
+    public void iCanSee(int num) {
         System.out.println(element.getText());
         // assertTrue(Integer.parseInt(element.getText()) > num);
     }
 
     @When("I input my {string}, {string} and {string}")
-    public void iInputData(String name, String email, String pass) {
+    public void iInputDataInRider(String name, String email, String pass) {
         driver.findElement(By.id("name")).sendKeys(name);
         driver.findElement(By.id("password")).sendKeys(pass);
         driver.findElement(By.id("email")).sendKeys(email);

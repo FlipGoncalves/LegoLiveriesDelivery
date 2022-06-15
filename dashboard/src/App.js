@@ -83,7 +83,7 @@ class App extends Component {
               </div>
               <div class="text-end pt-1">
                 <p class="text-sm mb-0 text-capitalize">Sales</p>
-                <h4 class="mb-0">{this.state.sales}</h4>
+                <h4 class="mb-0" id="sales">{this.state.sales}</h4>
               </div>
             </div>
             <hr class="dark horizontal my-0" />
@@ -100,7 +100,7 @@ class App extends Component {
               </div>
               <div class="text-end pt-1">
                 <p class="text-sm mb-0 text-capitalize">Total Orders</p>
-                <h4 class="mb-0">{this.state.orders}</h4>
+                <h4 class="mb-0" id="orders">{this.state.orders}</h4>
               </div>
             </div>
             <hr class="dark horizontal my-0" />
@@ -117,7 +117,7 @@ class App extends Component {
               </div>
               <div class="text-end pt-1">
                 <p class="text-sm mb-0 text-capitalize">Total Riders</p>
-                <h4 class="mb-0">{this.state.riders}</h4>
+                <h4 class="mb-0" id="riders">{this.state.riders}</h4>
               </div>
             </div>
             <hr class="dark horizontal my-0" />
@@ -134,7 +134,7 @@ class App extends Component {
               </div>
               <div class="text-end pt-1">
                 <p class="text-sm mb-0 text-capitalize">Completed Orders</p>
-                <h4 class="mb-0">{this.state.comp_orders}</h4>
+                <h4 class="mb-0" id="compl">{this.state.comp_orders}</h4>
               </div>
             </div>
             <hr class="dark horizontal my-0" />

@@ -19,7 +19,7 @@ public class LoginSteps {
     private WebDriver driver;
 
     @Given("I am in {string}")
-    public void iAmOnThePage(String baseUrl) {
+    public void iAmOnLoginPage(String baseUrl) {
         WebDriverManager.firefoxdriver().setup();
         options.setHeadless(true);
         driver = new FirefoxDriver(options);
@@ -33,11 +33,11 @@ public class LoginSteps {
         driver.findElement(By.id("pass")).sendKeys(password);
     }
     @When("I click Sumbit")
-    public void iClickSubmit() {
+    public void iClickLogin() {
         driver.findElement(By.id("signin")).click();
     }
     @Then("I should {string}")
-    public void iVerify(String type) {
+    public void iVerifyLogin(String type) {
         if (type.equals("be logged in")) {
             assertTrue(driver.getCurrentUrl().equals("http://localhost:3000"));
         } else if (type.equals("not be logged in")) {
