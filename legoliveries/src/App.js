@@ -263,7 +263,7 @@ class App extends Component {
                                             </select>
                                             <input type="text" class="form-control" placeholder="Search" id="search"/>
                                             <div class="input-group-append">
-                                            <button class="btn btn-primary" onClick={searchRequest}>
+                                            <button class="btn btn-primary" onClick={searchRequest} id="_search">
                                                 <i class="fa fa-search"></i> Search
                                             </button>
                                             </div>
@@ -273,7 +273,7 @@ class App extends Component {
                                 <div class="col-xl-4 col-lg-4 col-md-6">
                                     <div class="widgets-wrap float-md-right">
                                         <div class="widget-header mr-3">
-                                            <button data-toggle="modal" data-target="#cart" style={{outline: 'none', backgroundColor: 'transparent', border: 'none'}}>
+                                            <button data-toggle="modal" data-target="#cart" style={{outline: 'none', backgroundColor: 'transparent', border: 'none'}} id="cart_open">
                                                 <div class="icon-area">
                                                     <i class="fa fa-shopping-cart"></i>
                                                     <span class="notify" id="cart_length">{this.state.cart.length}</span>
@@ -407,12 +407,12 @@ class App extends Component {
 
                                     {this.state.error_message !== "" ? <>
                                     <div>
-                                        <label class="form-check-label mb-0 ms-2" style={{color: 'red'}}>{this.state.error_message}</label>
+                                        <label class="form-check-label mb-0 ms-2" style={{color: 'red'}} id="error_message">{this.state.error_message}</label>
                                     </div>
                                     </> : null}
 
                                     <div class="modal-footer">
-                                        <button type="button" class="btn" onClick={order}>Order</button>
+                                        <button type="button" class="btn" onClick={order} id="_order">Order</button>
                                     </div>
                                     <div class="modal-footer" hidden>
                                         <button type="button" data-toggle="modal" data-target="#cart" id="btn-close" class="btn"></button>
