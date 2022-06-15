@@ -21,14 +21,14 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11  
-      - name: Build Legoliveries Backend
-        run: docker-compose build -f ../docker-compose.yml legoliveries
-      - name: Start Legoliveries Backend
-        run: docker-compose run -d -f ../docker-compose.yml legoliveries
-      - name: Build Legoliveries Frontend
-        run: docker-compose build -f ../docker-compose.yml legoliveries-app
-      - name: Start Legoliveries Frontend
-        run: docker-compose run -d -p 3000:80 -d -f ../docker-compose.yml legoliveries-app
+      - name: Build Engine Backend
+        run: docker-compose build -f ../docker-compose.yml engine
+      - name: Start Engine Backend
+        run: docker-compose run -d -f ../docker-compose.yml engine
+      - name: Build Engine Frontend
+        run: docker-compose build -f ../docker-compose.yml engine-app
+      - name: Start Engine Frontend
+        run: docker-compose run -d -p 3000:3000 -d -f ../docker-compose.yml engine-app
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
         with:
@@ -60,14 +60,14 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - name: Build Deliverio Backend
-        run: docker-compose build -f ../docker-compose.yml engine
+      - name: Build Legoliveries Backend
+        run: docker-compose build -f ../docker-compose.yml legoliveries
       - name: Start Legoliveries Backend
-        run: docker-compose run -d -f ../docker-compose.yml engine
+        run: docker-compose run -d -f ../docker-compose.yml legoliveries
       - name: Build Legoliveries Frontend
-        run: docker-compose build -f ../docker-compose.yml engine-app
+        run: docker-compose build -f ../docker-compose.yml legoliveries-app
       - name: Start Legoliveries Frontend
-        run: docker-compose run -d -p 3001:80 -d -f ../docker-compose.yml engine-app
+        run: docker-compose run -d -p 3001:3001 -d -f ../docker-compose.yml legoliveries-app
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
         with:
