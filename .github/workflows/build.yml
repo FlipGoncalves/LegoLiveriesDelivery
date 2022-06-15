@@ -22,13 +22,13 @@ jobs:
         with:
           java-version: 11  
       - name: Build Engine Backend
-        run: docker-compose build -f ../docker-compose.yml engine
+        run: docker-compose -f ../docker-compose.yml build engine
       - name: Start Engine Backend
-        run: docker-compose run -d -f ../docker-compose.yml engine
+        run: docker-compose -f ../docker-compose.yml run -d engine
       - name: Build Engine Frontend
-        run: docker-compose build -f ../docker-compose.yml engine-app
+        run: docker-compose -f ../docker-compose.yml build engine-app
       - name: Start Engine Frontend
-        run: docker-compose run -d -p 3000:3000 -d -f ../docker-compose.yml engine-app
+        run: docker-compose -f ../docker-compose.yml run -d -p 3000:3000 -d engine-app
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
         with:
@@ -61,13 +61,13 @@ jobs:
         with:
           java-version: 11
       - name: Build Legoliveries Backend
-        run: docker-compose build -f ../docker-compose.yml legoliveries
+        run: docker-compose -f ../docker-compose.yml build legoliveries
       - name: Start Legoliveries Backend
-        run: docker-compose run -d -f ../docker-compose.yml legoliveries
+        run: docker-compose -f ../docker-compose.yml run -d legoliveries
       - name: Build Legoliveries Frontend
-        run: docker-compose build -f ../docker-compose.yml legoliveries-app
+        run: docker-compose -f ../docker-compose.yml build legoliveries-app
       - name: Start Legoliveries Frontend
-        run: docker-compose run -d -p 3001:3001 -d -f ../docker-compose.yml legoliveries-app
+        run: docker-compose -f ../docker-compose.yml run -d -p 3001:3001 -d legoliveries-app
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
         with:
