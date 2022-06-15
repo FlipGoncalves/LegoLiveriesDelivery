@@ -2,7 +2,7 @@ Feature: Engine Dashboard
 
     @positive
     Scenario: Successful Normal Statistic
-        Given I am in "http://localhost:3000"
+        Given I am in "http://localhost:3001"
         When I look at the number of "<type>" 
         Then I can see it is not "<num>"
         Examples:
@@ -14,7 +14,7 @@ Feature: Engine Dashboard
 
     @negative
     Scenario: Error Normal Statistic
-        Given I am in "http://localhost:3000"
+        Given I am in "http://localhost:3001"
         When I look at the number of "<type>" 
         Then I can see it is "<num>"
         Examples:
