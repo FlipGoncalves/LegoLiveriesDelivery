@@ -83,12 +83,14 @@ public class WebSteps {
     // Add item to cart
     @When("I click on the Lego {string}")
     public void iSelectLego(String name) {
-        assertEquals(driver.findElement(By.id(name.replace("\\s+", ""))).getText(), name);
-        driver.findElement(By.id(name.replace("\\s+", ""))).click();
+        System.out.println(name);
+        System.out.println(name.replaceAll("\\s+", ""));
+        assertEquals(driver.findElement(By.id(name.replaceAll("\\s+", ""))).getText(), name);
+        driver.findElement(By.id(name.replaceAll("\\s+", ""))).click();
     }
     @When("I select the quantity {int} for the lego {string}")
     public void iSelectQtty(int qtty, String name) {
-        Select sel = new Select(driver.findElement(By.id("qtty"+name.replace("\\s+", ""))));
+        Select sel = new Select(driver.findElement(By.id("qtty"+name.replaceAll("\\s+", ""))));
         sel.selectByValue(qtty+"");
     }
     @When("I click Add item to cart")
