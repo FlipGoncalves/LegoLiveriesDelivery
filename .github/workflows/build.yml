@@ -28,7 +28,7 @@ jobs:
       - name: Build Engine Frontend
         run: docker-compose -f ../docker-compose.yml build engine-app
       - name: Start Engine Frontend
-        run: docker-compose -f ../docker-compose.yml run -d -p 3000:3000 -d engine-app
+        run: docker-compose -f ../docker-compose.yml run -d -p 3001:3001 -d engine-app
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
         with:
@@ -67,7 +67,7 @@ jobs:
       - name: Build Legoliveries Frontend
         run: docker-compose -f ../docker-compose.yml build legoliveries-app
       - name: Start Legoliveries Frontend
-        run: docker-compose -f ../docker-compose.yml run -d -p 3001:3001 -d legoliveries-app
+        run: docker-compose -f ../docker-compose.yml run -d -p 3000:3000 -d legoliveries-app
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
         with:
