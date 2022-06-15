@@ -2,7 +2,7 @@ Feature: Engine Login
 
     @positive
     Scenario: Successful
-        Given I am in "http://localhost:3001/sign-in"
+        Given I am in "http://172.20.200.3:3001/sign-in"
         When I login with "<email>" and "<password>"
         And I click Login
         Then I should be logged in
@@ -12,7 +12,7 @@ Feature: Engine Login
 
     @negative
     Scenario: Error
-        Given I am in "http://localhost:3001/sign-in"
+        Given I am in "http://172.20.200.3:3001/sign-in"
         When I login with "<email>" and "<password>"
         And I click Login
         Then I should not be logged in

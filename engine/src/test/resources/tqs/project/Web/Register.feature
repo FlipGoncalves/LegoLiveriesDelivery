@@ -2,7 +2,7 @@ Feature: Engine Register
 
     @positive
     Scenario: Successful
-        Given I am in "http://localhost:3001/sing-up"
+        Given I am in "http://172.20.200.3:3001/sing-up"
         When I register with "<username>", "<email>" and "<password>"
         And I click Register
         Then I should be registered
@@ -12,7 +12,7 @@ Feature: Engine Register
 
     @negative
     Scenario: Error
-        Given I am in "http://localhost:3001/sing-up"
+        Given I am in "http://172.20.200.3:3001/sing-up"
         When I register with "<username>", "<email>" and "<password>"
         And I click Register
         Then I should not be registered
