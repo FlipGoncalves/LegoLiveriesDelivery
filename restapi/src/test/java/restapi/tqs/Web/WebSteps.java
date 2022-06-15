@@ -28,6 +28,12 @@ public class WebSteps {
         driver.get(baseUrl);
     }
 
+    @Then("I should see the Cart with {int} items")
+    public void iVerify(int num) {
+        assertEquals(driver.findElement(By.id("cart_length")).getText(), num);
+    }
+
+
 
     // Login Steps
     @When("I login with {string} and {string}")
@@ -89,10 +95,6 @@ public class WebSteps {
     public void iClickAddToCart() {
         driver.findElement(By.id("_submit_cart")).click();
     }
-    @Then("I should see the Cart with {int} items")
-    public void iVerifyCart(int items) {
-        assertEquals(driver.findElement(By.id("cart_length")).getText(), items);
-    }
 
 
 
@@ -125,11 +127,6 @@ public class WebSteps {
     @When("I click Order")
     public void iClickOrder() {
         driver.findElement(By.id("_order")).click();
-    }
-
-    @Then("I should see the Cart with {int} items")
-    public void iVerify(int num) {
-        assertEquals(driver.findElement(By.id("cart_length")).getText(), num);
     }
 
     @Then("I should see an error message")
