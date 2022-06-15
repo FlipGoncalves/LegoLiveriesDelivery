@@ -9,7 +9,7 @@ services:
       context: restapi
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - 8080:8080
     deploy:
       restart_policy:
         condition: on-failure
@@ -58,7 +58,7 @@ services:
       context: engine
       dockerfile: Dockerfile
     ports:
-      - "9001:9001"
+      - 9001:9001
     deploy:
       restart_policy:
         condition: on-failure
@@ -95,7 +95,7 @@ services:
     hostname: engineApp
     restart: unless-stopped
     ports: 
-      - 3001:80
+      - 3001:3001
     networks:
       engine-backend:
         ipv4_address: 172.20.200.3
