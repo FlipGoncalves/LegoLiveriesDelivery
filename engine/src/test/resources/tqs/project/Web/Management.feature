@@ -2,7 +2,7 @@ Feature: Engine Management
 
     @positive
     Scenario: Successful View
-        Given I am in "http://172.20.200.3:3001/management"
+        Given I am in "http://localhost:3001/management"
         When I look at the "<table>" table
         Then I can see there are more than "<num>"
         Examples:
@@ -12,7 +12,7 @@ Feature: Engine Management
 
     @positive
     Scenario: Successful Add Rider
-        Given I am in "http://172.20.200.3:3001/management"
+        Given I am in "http://localhost:3001/management"
         When I input my "<name>", "<email>" and "<password>"
         And I click Add a Rider
         Then I can see the rider "<name>" was added

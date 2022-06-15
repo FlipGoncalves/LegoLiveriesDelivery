@@ -13,11 +13,11 @@ import static org.mockito.ArgumentMatchers.anyString;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 public class WebSteps {
-    private final FirefoxOptions options = new FirefoxOptions();
+    private final ChromeOptions options = new ChromeOptions();
     private WebDriver driver;
     private WebElement element;
 
@@ -25,7 +25,7 @@ public class WebSteps {
     public void iAmOnThePage(String baseUrl) {
         WebDriverManager.firefoxdriver().setup();
         options.setHeadless(true);
-        driver = new FirefoxDriver(options);
+        driver = new ChromeDriver(options);
         
         driver.get(baseUrl);
     }
