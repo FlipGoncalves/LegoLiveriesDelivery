@@ -1,5 +1,6 @@
 package tqs.project.model;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,6 +36,10 @@ public class Address {
     private String city;
     @Column(name = "country")
     private String country;
+    @Column(name = "latitude", precision = 8, scale = 6)
+    private BigDecimal latitude;
+    @Column(name = "longitude", precision = 9, scale = 6)
+    private BigDecimal longitude;
     @OneToOne(mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Store store;
 
@@ -45,11 +50,13 @@ public class Address {
     public Address() {
     }
 
-    public Address(String street, String postalCode, String city, String country) {
+    public Address(String street, String postalCode, String city, String country, BigDecimal latitude, BigDecimal longitude) {
         this.street = street;
         this.postalCode = postalCode;
         this.city = city;
         this.country = country;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
     
 
@@ -91,6 +98,38 @@ public class Address {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public BigDecimal getLatitude() {
+        return this.latitude;
+    }
+
+    public void setLatitude(BigDecimal latitude) {
+        this.latitude = latitude;
+    }
+
+    public BigDecimal getLongitude() {
+        return this.longitude;
+    }
+
+    public void setLongitude(BigDecimal longitude) {
+        this.longitude = longitude;
+    }
+
+    public Store getStore() {
+        return this.store;
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
+    }
+
+    public Set<Order> getOrders() {
+        return this.orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
     }
 
 

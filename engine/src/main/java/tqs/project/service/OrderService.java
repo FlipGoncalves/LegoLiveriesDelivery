@@ -25,4 +25,28 @@ public class OrderService {
 
         return orders;
     }
+
+    public List<Order> getAllOrdersByStatus(int status){
+        log.info("Getting All Orders By Status " + status);
+
+        List<Order> orders = rep.findByStatus(status);
+
+        return orders;
+    }
+
+    public List<Order> getAllOrdersByStoreIdAndStatus(long storeId, int status){
+        log.info("Getting All Orders By Status " + status + " and StoreId " + storeId);
+
+        List<Order> orders = rep.findByStoreStoreIdAndStatus(storeId, status);
+
+        return orders;
+    }
+
+    public List<Order> getAllOrdersByStoreId(long storeId){
+        log.info("Getting All Orders By StoreId " + storeId);
+
+        List<Order> orders = rep.findByStoreStoreId(storeId);
+
+        return orders;
+    }
 }

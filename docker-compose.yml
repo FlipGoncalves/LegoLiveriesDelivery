@@ -4,11 +4,12 @@ services:
   legoliveries:
     container_name: legoliveriesBackend
     hostname: legoliveriesBackend
+    image: ghcr.io/flipgoncalves/tqsproject/legoliveries_backend:latest
     build:
       context: restapi
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - 8080:8080
     deploy:
       restart_policy:
         condition: on-failure
@@ -18,7 +19,6 @@ services:
     networks:
       legoliveries-backend:
         ipv4_address: 172.20.202.10
-      all-backend:
     depends_on:
       - mysql-legoliveries
       
@@ -37,7 +37,7 @@ services:
         ipv4_address: 172.20.202.2
 
   legoliveries-app:
-    #image: legoliveries-web-app
+    image: ghcr.io/flipgoncalves/tqsproject/legoliveries_frontend:latest
     build:
       context: legoliveries
       dockerfile: Dockerfile
@@ -45,7 +45,7 @@ services:
     hostname: legoliveriesApp
     restart: unless-stopped
     ports:
-      - 3000:80
+      - 3000:3000
     networks:
       legoliveries-backend:
         ipv4_address: 172.20.202.3 
@@ -53,11 +53,12 @@ services:
   engine:
     container_name: engineBackend
     hostname: engineBackend
+    image: ghcr.io/flipgoncalves/tqsproject/deliverio_backend:latest
     build:
       context: engine
       dockerfile: Dockerfile
     ports:
-      - "9001:9001"
+      - 9001:9001
     deploy:
       restart_policy:
         condition: on-failure
@@ -69,7 +70,6 @@ services:
     networks:
       engine-backend:
         ipv4_address: 172.20.200.10
-      all-backend:
 
   mysql-engine:
     image: mysql:5.7
@@ -87,6 +87,7 @@ services:
   
   engine-app:
     #image: engine-web-app
+    image: ghcr.io/flipgoncalves/tqsproject/deliverio_frontend:latest
     build:
       context: dashboard
       dockerfile: Dockerfile
@@ -94,7 +95,7 @@ services:
     hostname: engineApp
     restart: unless-stopped
     ports: 
-      - 3001:80
+      - 3001:3001
     networks:
       engine-backend:
         ipv4_address: 172.20.200.3
@@ -108,7 +109,3 @@ networks:
     ipam:
       config:
         - subnet: "172.20.202.0/24"
-  all-backend:
-    name: external-network
-
-    
