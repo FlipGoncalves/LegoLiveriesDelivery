@@ -3,7 +3,7 @@ Feature: Legoliveries Register
     @positive
     Scenario: Successful
         Given I am in "http://localhost:3000/register"
-        When I register with "<username>" and "<password>" and "<rep_password>"
+        When I register with "<username>", "<email>", "<password>" and "<rep_password>"
         And I click Register
         Then I should be registered
         Examples:
@@ -13,7 +13,7 @@ Feature: Legoliveries Register
     @negative
     Scenario: Error
         Given I am in "http://localhost:3000/register"
-        When I register with "<username>" and "<password>" and "<rep_password>"
+        When I register with "<username>", "<email>", "<password>" and "<rep_password>"
         And I click Register
         Then I should not be registered
         Examples:

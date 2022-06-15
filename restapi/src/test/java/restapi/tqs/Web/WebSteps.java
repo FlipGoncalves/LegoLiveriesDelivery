@@ -58,9 +58,10 @@ public class WebSteps {
 
 
     // Register Steps
-    @When("I register with {string} and {string} and {string}")
-    public void iTryToRegisterWithAnd(String userName, String password, String rep_pass) {
+    @When("I register with {string}, {string}, {string} and {string}")
+    public void iTryToRegisterWithAnd(String userName, String email, String password, String rep_pass) {
         driver.findElement(By.id("name")).sendKeys(userName);
+        driver.findElement(By.id("email")).sendKeys(email);
         driver.findElement(By.id("password1")).sendKeys(password);
         driver.findElement(By.id("password2")).sendKeys(rep_pass);
     }
