@@ -162,7 +162,6 @@ public class WebSteps {
 
     @Then("I should see the item {string} in my screen")
     public void iVerify(String lego) {
-        System.out.println(driver.findElement(By.xpath("/html/body/div/div/div/section[1]/header/h4")).getAttribute("innerHTML"));
         System.out.println(driver.findElement(By.xpath("/html/body/div/div/div/section[2]/header/h4")).getAttribute("innerHTML"));
         assertEquals(driver.findElement(By.id("cart_length")).getAttribute("innerHTML"), lego);
     }
