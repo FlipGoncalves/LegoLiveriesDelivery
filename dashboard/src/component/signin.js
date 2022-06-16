@@ -38,7 +38,7 @@ class SignIn extends Component {
 
       console.log("Login")
       
-      axios.get('http://localhost:8080/api/login/'+email)
+      axios.get('http://localhost:8080/api/user/login/'+email)
       .then((response) => {
         console.log(response);
         if (response.status === 200 || response.status === 201) {

@@ -135,6 +135,7 @@ public class WebSteps {
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("cart_open")));
         } catch(TimeoutException e) {
             System.err.println(e);
+            driver.findElement(By.id("_submit_cart")).click();
         }
 
         driver.findElement(By.id("cart_open")).click();

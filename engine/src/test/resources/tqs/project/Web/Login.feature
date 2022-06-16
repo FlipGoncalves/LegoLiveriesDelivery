@@ -8,7 +8,7 @@ Feature: Engine Login
         Then I should be logged in
         Examples:
             |  email            |  password   |
-            |  user1@gmail.com  |  user1pass  |
+            |  admin@ua.com     |  admin      |
 
     @negative
     Scenario: Error

@@ -18,4 +18,4 @@ Feature: Engine Register
         Then I should not be registered
         Examples:
             | username | email         | password |
-            |  filipe  | filipeg@ua.pt |  admin   |
+            |  admin   | admin@ua.pt   |  admin   |
