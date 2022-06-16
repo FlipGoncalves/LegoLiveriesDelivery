@@ -31,6 +31,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import restapi.tqs.Controller.OrderController;
+import restapi.tqs.DataModels.AddressDTO;
 import restapi.tqs.DataModels.OrderDTO;
 import restapi.tqs.DataModels.OrderLegoDTO;
 import restapi.tqs.Exceptions.AddressNotFoundException;
@@ -69,7 +70,7 @@ public class OrderControllerTest {
     Lego lego1, lego2, lego3;
     List<OrderLegoDTO> orderLegoDTO1, orderLegoDTO2, orderLegoDTO3;
     ArrayList<Order> all_Orders;
-
+    AddressDTO addressDTO1, addressDTO2, addressDTO3;
 
     @BeforeEach
     void setUp(){
@@ -118,9 +119,13 @@ public class OrderControllerTest {
         orderLegoDTO2 = buildOrderLegoDTO(1l,2l,3l,2);
         orderLegoDTO3 = buildOrderLegoDTO(1l,2l,3l,3);
 
-        orderDTO1 = new OrderDTO(1l, 1l, 2100, orderLegoDTO1);
-        orderDTO2 = new OrderDTO(1l, 1l, 1500, orderLegoDTO2);
-        orderDTO3 = new OrderDTO(2l, 2l, 2000, orderLegoDTO3);
+        addressDTO1 = buildAddressDTO(1);
+        addressDTO2 = buildAddressDTO(2);
+        addressDTO3 = buildAddressDTO(3);
+
+        orderDTO1 = new OrderDTO(1l, addressDTO1, 2100, orderLegoDTO1);
+        orderDTO2 = new OrderDTO(1l, addressDTO1, 1500, orderLegoDTO2);
+        orderDTO3 = new OrderDTO(2l, addressDTO2, 2000, orderLegoDTO3);
     }
 
     @Test
@@ -228,7 +233,7 @@ public class OrderControllerTest {
     @Test
     void test_MakeOrder_InvalidOrderDTO_BadScheduledTimeOfDelivery_ReturnsBadRequestStatus() throws Exception{
         List<OrderLegoDTO> orderLegoDTOTest = buildOrderLegoDTO(1l,2l,3l,1);
-        OrderDTO orderDTOTest = new OrderDTO(1l, 1l, 2700, orderLegoDTOTest);
+        OrderDTO orderDTOTest = new OrderDTO(1l, addressDTO1, 2700, orderLegoDTOTest);
 
         Mockito.when(service.makeOrder(any(OrderDTO.class))).thenThrow(new BadScheduledTimeOfDeliveryException(""));
 
@@ -242,7 +247,7 @@ public class OrderControllerTest {
     @Test
     void test_MakeOrder_InvalidOrderDTO_BadClientId_ReturnsBadRequestStatus() throws Exception{
         List<OrderLegoDTO> orderLegoDTOTest = buildOrderLegoDTO(1l,2l,3l,1);
-        OrderDTO orderDTOTest = new OrderDTO(50l, 1l, 2100, orderLegoDTOTest);
+        OrderDTO orderDTOTest = new OrderDTO(50l, addressDTO1, 2100, orderLegoDTOTest);
 
         Mockito.when(service.makeOrder(any(OrderDTO.class))).thenThrow(new ClientNotFoundException(""));
 
@@ -256,7 +261,7 @@ public class OrderControllerTest {
     @Test
     void test_MakeOrder_InvalidOrderDTO_BadAddressId_ReturnsBadRequestStatus() throws JsonProcessingException, Exception{
         List<OrderLegoDTO> orderLegoDTOTest = buildOrderLegoDTO(1l,2l,3l,1);
-        OrderDTO orderDTOTest = new OrderDTO(1l, 50l, 2100, orderLegoDTOTest);
+        OrderDTO orderDTOTest = new OrderDTO(1l, addressDTO3, 2100, orderLegoDTOTest);
 
         Mockito.when(service.makeOrder(any(OrderDTO.class))).thenThrow(new AddressNotFoundException(""));
 
@@ -270,7 +275,7 @@ public class OrderControllerTest {
     @Test
     void test_MakeOrder_InvalidOrderDTO_BadLegoId_ReturnsBadRequestStatus() throws JsonProcessingException, Exception{
         List<OrderLegoDTO> orderLegoDTOTest = buildOrderLegoDTO(50l,2l,3l,1);
-        OrderDTO orderDTOTest = new OrderDTO(1l, 1l, 2100, orderLegoDTOTest);
+        OrderDTO orderDTOTest = new OrderDTO(1l, addressDTO1, 2100, orderLegoDTOTest);
 
         Mockito.when(service.makeOrder(any(OrderDTO.class))).thenThrow(new LegoNotFoundException(""));
 
@@ -285,7 +290,7 @@ public class OrderControllerTest {
     void test_MakeOrder_InvalidOrderDTO_BadOrderLegoDTO_ReturnsBadRequestStatus() throws JsonProcessingException, Exception{
         List<OrderLegoDTO> orderLegoDTOTest = buildOrderLegoDTO(1l,2l,3l,1);
         orderLegoDTOTest.get(0).setQuantity(-5);
-        OrderDTO orderDTOTest = new OrderDTO(1l, 1l, 2100, orderLegoDTOTest);
+        OrderDTO orderDTOTest = new OrderDTO(1l, addressDTO1, 2100, orderLegoDTOTest);
 
         Mockito.when(service.makeOrder(any(OrderDTO.class))).thenThrow(new BadOrderLegoDTOException(""));
 
@@ -298,7 +303,7 @@ public class OrderControllerTest {
 
     @Test
     void test_MakeOrder_InvalidOrderDTO_BadOrderLegoList_ReturnsBadRequestStatus() throws JsonProcessingException, Exception{
-        OrderDTO orderDTOTest = new OrderDTO(1l, 1l, 2100, new ArrayList<OrderLegoDTO>());
+        OrderDTO orderDTOTest = new OrderDTO(1l, addressDTO1, 2100, new ArrayList<OrderLegoDTO>());
 
         Mockito.when(service.makeOrder(any(OrderDTO.class))).thenThrow(new ClientNotFoundException(""));
 
@@ -312,7 +317,7 @@ public class OrderControllerTest {
     @Test
     void test_MakeOrder_ValidOrderDTO_ReturnsCorrectOrder() throws JsonProcessingException, Exception{
         List<OrderLegoDTO> orderLegoDTOTest = buildOrderLegoDTO(1l,2l,3l,1);
-        OrderDTO orderDTOTest = new OrderDTO(1l, 1l, 2100, orderLegoDTOTest);
+        OrderDTO orderDTOTest = new OrderDTO(1l, addressDTO1, 2100, orderLegoDTOTest);
 
         Mockito.when(service.makeOrder(any(OrderDTO.class))).thenReturn(order1);
 
@@ -326,7 +331,6 @@ public class OrderControllerTest {
         .andExpect(jsonPath("$.scheduledTimeOfDelivery", is(order1.getScheduledTimeOfDelivery())))
         .andExpect(jsonPath("$.riderName", is(order1.getRiderName())))
         .andExpect(jsonPath("$.totalPrice", is(order1.getTotalPrice())))
-        .andExpect(jsonPath("$.address", is((int) order1.getAddress().getAddressId())))
         .andExpect(jsonPath("$.client", is((int) order1.getClient().getClientId())))
         .andExpect(jsonPath("$.orderLego", hasSize(3)));
     }
@@ -384,6 +388,22 @@ public class OrderControllerTest {
 
     Address buildAddressObject(long id){
         Address address = new Address();
+        address.setLongitude(100 + id);
+        address.setLatitude(50 + id);
+        address.setStreet("Street " + id);
+        address.setPostalCode("3810-24" + id);
+        address.setCity("city " + id);
+        address.setCountry("Country " + id);
+        return address;
+    }
+
+    AddressDTO buildAddressDTO(long id){
+        AddressDTO address = new AddressDTO();
+        address.setLongitude(100 + id);
+        address.setLatitude(50 + id);
+        address.setStreet("Street " + id);
+        address.setPostalCode("3810-24" + id);
+        address.setCity("city " + id);
         address.setCountry("Country " + id);
         return address;
     }

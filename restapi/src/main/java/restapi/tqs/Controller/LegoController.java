@@ -30,14 +30,14 @@ public class LegoController {
     @Autowired
     private LegoService legoService;
 
-    @GetMapping("/all_legos")
+    @GetMapping()
     public ResponseEntity<List<Lego>> getAllData() {
         log.info("GET Request -> All Lego Data");
         List<Lego> legos = legoService.getData();
         return new ResponseEntity<>(legos, HttpStatus.OK);
     }
 
-    @GetMapping("/get_lego/name")
+    @GetMapping("/name")
     public ResponseEntity<List<Lego>> getLegoByName(@RequestParam(value = "name", required = true) String name){
         name = name.replaceAll("[\n\r\t]", "_");
         log.info("GET Request -> Lego Data by name: {}", name);
@@ -51,7 +51,7 @@ public class LegoController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
-    @GetMapping("/get_lego/price")
+    @GetMapping("/price")
     public ResponseEntity<List<Lego>> getLegoByPrice(@RequestParam(value = "price", required = true) String price){
         price = price.replaceAll("[\n\r\t]", "_");
         log.info("GET Request -> Lego Data by price: {}", price);
@@ -65,8 +65,7 @@ public class LegoController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
-    
-    @PostMapping("/insert_lego")
+    @PostMapping()
     public ResponseEntity<Lego> insertLego(@RequestBody LegoDTO lego) {
         log.info("Post Request -> Insert Lego: {}", lego);
 
@@ -74,7 +73,6 @@ public class LegoController {
         try {
             lego2 = legoService.insertData(lego);
         } catch (BadLegoDTOException e) {
-            log.info("SHIIIIIIIIIIIIIIIIIIIIIIIIIIIT");
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 

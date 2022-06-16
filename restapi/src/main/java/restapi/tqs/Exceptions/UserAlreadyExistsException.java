@@ -1,13 +1,14 @@
-package tqs.project.exceptions;
+package restapi.tqs.Exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-public class StoreAlreadyExistsException extends Exception{
+public class UserAlreadyExistsException extends Exception {
+
     private static final long serialVersionUID = 1L;
 
-    public StoreAlreadyExistsException(String message){
+    public UserAlreadyExistsException(String message){
         super(message);
     }
 }

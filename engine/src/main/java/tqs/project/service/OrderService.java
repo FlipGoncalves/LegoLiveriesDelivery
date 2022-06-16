@@ -1,8 +1,6 @@
 package tqs.project.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import tqs.project.datamodels.OrderDTO;
@@ -77,22 +75,14 @@ public class OrderService {
 
         order.setStore(store.get());
 
-        ExampleMatcher modelMatcher = ExampleMatcher.matching()
-            .withIgnorePaths("addressId")
-            .withIgnoreCase("street")
-            .withIgnoreCase("postalCode")
-            .withIgnoreCase("city")
-            .withIgnoreCase("country");
-
         Address address = new Address();
-        address.convertDTOtoObject(orderDTO.getAddress());
 
-        Example<Address> example = Example.of(address, modelMatcher);
+        Optional<Address> addressOptional = addressRep.findByLatitudeAndLongitude(orderDTO.getAddress().getLatitude(), orderDTO.getAddress().getLongitude());
 
-        if (addressRep.exists(example)){
-            List<Address> list = addressRep.findAll(example);
-            address = list.get(0);
+        if (addressOptional.isPresent()){
+            address = addressOptional.get();
         } else{
+            address.convertDTOtoObject(orderDTO.getAddress());
             address = addressRep.saveAndFlush(address);
         }
 

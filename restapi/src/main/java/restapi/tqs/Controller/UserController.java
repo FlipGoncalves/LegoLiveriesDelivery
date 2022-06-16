@@ -1,4 +1,4 @@
-package tqs.project.controller;
+package restapi.tqs.Controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import tqs.project.datamodels.RegisterDTO;
-import tqs.project.exceptions.UserAlreadyExistsException;
-import tqs.project.model.User;
-import tqs.project.service.UserService;
+import restapi.tqs.DataModels.RegisterDTO;
+import restapi.tqs.Exceptions.UserAlreadyExistsException;
+import restapi.tqs.Models.User;
+import restapi.tqs.Service.UserService;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/user")
 @Validated
 @CrossOrigin
 public class UserController {

@@ -13,8 +13,13 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
 @Table(name = "`order`")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "orderId")
 public class Order {
     
     @Id
@@ -35,14 +40,17 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "store_id", referencedColumnName = "store_id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Store store;
 
     @ManyToOne
     //@JoinColumn(name = "rider_id", referencedColumnName = "rider_id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Rider rider;
 
     @ManyToOne
     @JoinColumn(name = "address_id", referencedColumnName = "address_id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Address address;
 
     public Order() {

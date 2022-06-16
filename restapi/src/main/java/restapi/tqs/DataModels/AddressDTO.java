@@ -1,7 +1,5 @@
 package restapi.tqs.DataModels;
 
-import java.math.BigDecimal;
-
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,9 +26,7 @@ public class AddressDTO {
     @NonNull
     private String country;
 
-    @NonNull
-    private BigDecimal latitude;
+    private double latitude;
     
-    @NonNull
-    private BigDecimal longitude;
+    private double longitude;
 }

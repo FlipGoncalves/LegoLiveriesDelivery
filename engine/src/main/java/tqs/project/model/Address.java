@@ -1,6 +1,5 @@
 package tqs.project.model;
 
-import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -39,9 +38,9 @@ public class Address {
     @Column(name = "country")
     private String country;
     @Column(name = "latitude", precision = 8, scale = 6)
-    private BigDecimal latitude;
+    private double latitude;
     @Column(name = "longitude", precision = 9, scale = 6)
-    private BigDecimal longitude;
+    private double longitude;
     @OneToOne(mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Store store;
 
@@ -52,7 +51,7 @@ public class Address {
     public Address() {
     }
 
-    public Address(String street, String postalCode, String city, String country, BigDecimal latitude, BigDecimal longitude) {
+    public Address(String street, String postalCode, String city, String country, double latitude, double longitude) {
         this.street = street;
         this.postalCode = postalCode;
         this.city = city;
@@ -102,19 +101,19 @@ public class Address {
         this.country = country;
     }
 
-    public BigDecimal getLatitude() {
+    public double getLatitude() {
         return this.latitude;
     }
 
-    public void setLatitude(BigDecimal latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public BigDecimal getLongitude() {
+    public double getLongitude() {
         return this.longitude;
     }
 
-    public void setLongitude(BigDecimal longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 

@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -116,6 +117,7 @@ public class OrderService {
         Order order = new Order();
 
         if (orderDTO.getScheduledTimeOfDelivery() >= 2400 || orderDTO.getScheduledTimeOfDelivery() < 0){
+            log.info("TimeException");
             throw new BadScheduledTimeOfDeliveryException("The ScheduledTimeOfDelivery " + orderDTO.getScheduledTimeOfDelivery() + ". It needs to be between 0000 and 2400");
         }
         order.setScheduledTimeOfDelivery(orderDTO.getScheduledTimeOfDelivery());
@@ -123,26 +125,33 @@ public class OrderService {
         Optional<Client> client = clientRepository.findById(orderDTO.getClientId());
         
         if (client.isEmpty()){
+            log.info("ClientException");
             throw new ClientNotFoundException("The client with id " + orderDTO.getClientId() + " was not found.");
         }
 
         order.setClient(client.get());
 
-        Optional<Address> address = addressRepository.findById(orderDTO.getAddressId());
+        Optional<Address> addressOptional = addressRepository.findByLatitudeAndLongitude(orderDTO.getAddress().getLatitude(), orderDTO.getAddress().getLongitude());
+        Address address = new Address();
 
-        if (address.isEmpty()){
-            throw new AddressNotFoundException("The address with id " + orderDTO.getAddressId() + " was not found.");
+        if (addressOptional.isPresent()){
+            address = addressOptional.get();
+        } else{
+            address.convertDTOtoObject(orderDTO.getAddress());
+            address = addressRepository.saveAndFlush(address);
         }
 
-        order.setAddress(address.get());
+        order.setAddress(address);
 
         try{
             orderDTO.getLegos();
         }catch(NullPointerException e){
+            log.info("OrderLegoList1");
             throw new BadOrderLegoListException("The orderDTO has a null list of orderLegoDTO: " + orderDTO);
         }
 
         if (orderDTO.getLegos().isEmpty()){
+            log.info("OrderLegoList2");
             throw new BadOrderLegoListException("The orderDTO has an empty list of orderLegoDTO: " + orderDTO);
         }
 
@@ -154,6 +163,7 @@ public class OrderService {
             Optional<Lego> lego = legoRepository.findById(orderLegoDTO.getLegoId());
 
             if(lego.isEmpty()){
+                log.info("Lego");
                 throw new LegoNotFoundException("The lego with id " + orderLegoDTO.getLegoId() + " was not found.");
             }
 
@@ -178,32 +188,34 @@ public class OrderService {
             orderLego.setOrder(order);
             orderLego.setQuantity(legoDTO.getQuantity());
             orderLego.setPrice(legoDTO.getLegoPrice());
+            orderLego = orderLegoRepository.save(orderLego);
             setOrderLegos.add(orderLego);
-            orderLegoRepository.save(orderLego);
         }
 
         order.setOrderLego(setOrderLegos);
 
-        AddressDTO addressDTO = new AddressDTO(address.get().getStreet(), address.get().getPostalCode(), address.get().getCity(), address.get().getCountry(), address.get().getLatitude(), address.get().getLongitude());
+        log.info("BEFORE HTTP CALL");
+
+        AddressDTO addressDTO = orderDTO.getAddress();
 
         MakeOrderDTO makeOrderDTO = new MakeOrderDTO(client.get().getUser().getUsername(), orderDTO.getScheduledTimeOfDelivery(), "Legoliveries", addressDTO);
 
         HttpClient httpClient = HttpClient.create()
-        .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
+        .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000)
         .responseTimeout(Duration.ofMillis(5000))
         .doOnConnected(conn -> 
-            conn.addHandlerLast(new ReadTimeoutHandler(5000, TimeUnit.MILLISECONDS))
-            .addHandlerLast(new WriteTimeoutHandler(5000, TimeUnit.MILLISECONDS)));
+            conn.addHandlerLast(new ReadTimeoutHandler(101000, TimeUnit.MILLISECONDS))
+            .addHandlerLast(new WriteTimeoutHandler(10000, TimeUnit.MILLISECONDS)));
 
         WebClient webClient = WebClient.builder()
         .clientConnector(new ReactorClientHttpConnector(httpClient))
         .build();
 
         ResponseEntity<String> responseSpec = webClient.post()
-            .uri("http://localhost:9001/api/order")
+            .uri("localhost:9001/api/order")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
-            .bodyValue(makeOrderDTO)
+            .body(BodyInserters.fromValue(makeOrderDTO))
             .retrieve()
             .onStatus(
                 status -> status.value() == 400,
@@ -212,7 +224,12 @@ public class OrderService {
             .toEntity(String.class)
             .block();
 
-        if (responseSpec.getStatusCode().value() == 400){
+            log.info("AFTER CALL");
+
+
+        if (responseSpec.getStatusCode().value() != 201){
+            log.info("Order NOT CREATED1");
+
             throw new OrderNotCreatedException("The order was not created in the engine: " + orderDTO);
         }
         
@@ -221,12 +238,16 @@ public class OrderService {
         try {
             map = objectMapper.readValue(response, new TypeReference<Map<String,Object>>(){});
         } catch (JsonProcessingException e) {
+            log.info("OrderNOT CREATED2");
+
             throw new OrderNotCreatedException("The order was not created in the engine: " + orderDTO);
         }
 
         order.setExternalOrderId((long) map.get("orderId"));
 
         Order finalOrder = orderRepository.save(order);
+
+        log.info("END");
 
         return finalOrder;
     }

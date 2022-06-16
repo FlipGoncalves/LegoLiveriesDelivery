@@ -1,6 +1,5 @@
 package restapi.tqs.Models;
 
-import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,6 +16,8 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import restapi.tqs.DataModels.AddressDTO;
 
 @Entity
 @Table(name = "address")
@@ -36,9 +37,9 @@ public class Address {
     @Column(name = "country")
     private String country;
     @Column(name = "latitude", precision = 8, scale = 6)
-    private BigDecimal latitude;
+    private double latitude;
     @Column(name = "longitude", precision = 9, scale = 6)
-    private BigDecimal longitude;
+    private double longitude;
 
     @OneToOne(mappedBy = "address", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIdentityReference(alwaysAsId = true)
@@ -99,19 +100,19 @@ public class Address {
         this.client = client;
     }
 
-    public BigDecimal getLatitude() {
+    public double getLatitude() {
         return this.latitude;
     }
 
-    public void setLatitude(BigDecimal latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public BigDecimal getLongitude() {
+    public double getLongitude() {
         return this.longitude;
     }
 
-    public void setLongitude(BigDecimal longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
@@ -123,8 +124,16 @@ public class Address {
     public void setOrders(Set<Order> orders) {
         this.orders = orders;
     }
-    
 
+    public void convertDTOtoObject(AddressDTO dto){
+        this.setCity(dto.getCity());
+        this.setCountry(dto.getCountry());
+        this.setPostalCode(dto.getPostalCode());
+        this.setStreet(dto.getStreet());
+        this.setLongitude(dto.getLongitude());
+        this.setLatitude(dto.getLongitude());
+    }
+    
     @Override
     public String toString() {
         return "{" +

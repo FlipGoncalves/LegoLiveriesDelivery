@@ -7,5 +7,6 @@ import restapi.tqs.Models.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    
+    User findByEmail(String email);
+    User findByUserId(String email);
 }

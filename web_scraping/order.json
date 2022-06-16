@@ -1,0 +1,31 @@
+[
+    {
+        "clientId":"1",
+        "address":{
+            "street":"Street 6",
+            "postalCode":"3810-246",
+            "city":"Aveiro",
+            "country":"Portugal",
+            "latitude":80,
+            "longitude":50
+        },
+        "scheduledTimeOfDelivery":2100,
+        "legos":[
+            {
+                "legoId":1,
+                "quantity":3,
+                "legoPrice":29.99
+            },
+            {
+                "legoId":2,
+                "quantity":4,
+                "legoPrice":17.99
+            },
+            {
+                "legoId":3,
+                "quantity":5,
+                "legoPrice":49.99
+            }
+        ]
+    }
+]

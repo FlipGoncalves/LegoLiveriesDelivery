@@ -32,6 +32,8 @@ services:
       - MYSQL_DATABASE=legoliveriesdb
       - MYSQL_USER=sa
       - MYSQL_PASSWORD=1234
+    volumes:
+      - legoliveriesData:/var/lib/mysql
     networks:
       legoliveries-backend:
         ipv4_address: 172.20.202.2
@@ -81,6 +83,8 @@ services:
       - MYSQL_DATABASE=enginedb
       - MYSQL_USER=sa
       - MYSQL_PASSWORD=1234
+    volumes:
+      - engineData:/var/lib/mysql
     networks:
       engine-backend:
         ipv4_address: 172.20.200.2
@@ -111,4 +115,6 @@ networks:
   all-backend:
     name: external-network
 
-    
+volumes:
+  engineData:
+  legoliveriesData:    

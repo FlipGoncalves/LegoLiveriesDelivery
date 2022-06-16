@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 @RequestMapping("/order")
 public class OrderController {
     
-    private static final Logger log = LoggerFactory.getLogger(LegoController.class);
+    private static final Logger log = LoggerFactory.getLogger(OrderController.class);
 
     @Autowired
     private OrderService service;
@@ -86,9 +86,7 @@ public class OrderController {
                 | LegoNotFoundException | BadOrderLegoDTOException | BadOrderLegoListException | OrderNotCreatedException e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
-
+        
         return new ResponseEntity<>(order, HttpStatus.CREATED);
-
     }
-
 }

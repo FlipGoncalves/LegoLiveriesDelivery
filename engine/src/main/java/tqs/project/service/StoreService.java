@@ -1,12 +1,11 @@
 package tqs.project.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import tqs.project.datamodels.StoreDTO;
@@ -19,7 +18,7 @@ import tqs.project.repositories.StoreRepository;
 @Service
 public class StoreService {
     
-    private static final Logger log = LoggerFactory.getLogger(OrderService.class);
+    private static final Logger log = LoggerFactory.getLogger(StoreService.class);
 
     @Autowired
     private StoreRepository storeRep;
@@ -28,7 +27,7 @@ public class StoreService {
     private AddressRepository addressRep;
 
     public List<Store> getAllStores(){
-        log.info("Getting all stores");
+        log.info("Getting All Stores");
 
         return storeRep.findAll();
     }
@@ -44,22 +43,14 @@ public class StoreService {
 
         store.setName(storeDTO.getName());
 
-        ExampleMatcher modelMatcher = ExampleMatcher.matching()
-            .withIgnorePaths("addressId")
-            .withIgnoreCase("street")
-            .withIgnoreCase("postalCode")
-            .withIgnoreCase("city")
-            .withIgnoreCase("country");
-
         Address address = new Address();
-        address.convertDTOtoObject(storeDTO.getAddress());
 
-        Example<Address> example = Example.of(address, modelMatcher);
+        Optional<Address> addressOptional = addressRep.findByLatitudeAndLongitude(storeDTO.getAddress().getLatitude(), storeDTO.getAddress().getLongitude());
 
-        if (addressRep.exists(example)){
-            List<Address> list = addressRep.findAll(example);
-            address = list.get(0);
+        if (addressOptional.isPresent()){
+            address = addressOptional.get();
         } else{
+            address.convertDTOtoObject(storeDTO.getAddress());
             address = addressRep.saveAndFlush(address);
         }
 

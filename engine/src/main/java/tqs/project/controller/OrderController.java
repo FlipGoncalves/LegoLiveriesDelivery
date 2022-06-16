@@ -24,7 +24,7 @@ import tqs.project.service.OrderService;
 @Validated
 @CrossOrigin
 public class OrderController {
-    private static final Logger log = LoggerFactory.getLogger(StatisticController.class);
+    private static final Logger log = LoggerFactory.getLogger(OrderController.class);
 
     @Autowired
     private OrderService orderService;

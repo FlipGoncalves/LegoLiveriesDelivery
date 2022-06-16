@@ -1,4 +1,4 @@
-package tqs.project.controller;
+package restapi.tqs.Controller;
 
 import java.util.List;
 
@@ -15,36 +15,38 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import tqs.project.datamodels.StoreDTO;
-import tqs.project.model.Store;
-import tqs.project.service.StoreService;
+import restapi.tqs.DataModels.AddressDTO;
+import restapi.tqs.Exceptions.AddressAlreadyExistsException;
+import restapi.tqs.Models.Address;
+import restapi.tqs.Service.AddressService;
+
 
 @RestController
-@RequestMapping("/api/store")
+@RequestMapping("/address")
 @Validated
 @CrossOrigin
-public class StoreController {
-    private static final Logger log = LoggerFactory.getLogger(StoreController.class);
+public class AddressController {
+    private static final Logger log = LoggerFactory.getLogger(AddressController.class);
 
     @Autowired
-    private StoreService storeService;
+    private AddressService addressService;
 
     @GetMapping()
-    public ResponseEntity<List<Store>> getAllStores() {
+    public ResponseEntity<List<Address>> getAllStores() {
         log.info("GET Request -> All Stores Data");
 
-        List<Store> stores = storeService.getAllStores();
+        List<Address> stores = addressService.getAllAddresses();
 
         return new ResponseEntity<>(stores, HttpStatus.OK);
     }
 
     @PostMapping()
-    public ResponseEntity<Store> insertStore(@RequestBody StoreDTO storeDTO){
+    public ResponseEntity<Address> insertAddress(@RequestBody AddressDTO addressDTO){
 
-        Store store = null;
+        Address store = null;
         try {
-            store = storeService.insertStore(storeDTO);
-        } catch (Exception e) {
+            store = addressService.insertAddress(addressDTO);
+        } catch (AddressAlreadyExistsException e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 

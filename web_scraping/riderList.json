@@ -1,0 +1,17 @@
+[
+    {
+        "username":"User 1",
+        "email":"user1@gmail.com",
+        "password":"user1pass",
+        "numRev": 5,
+        "sumRev": 23
+    },
+    
+    {
+        "username":"User 2",
+        "email":"user2@gmail.com",
+        "password":"user2pass",
+        "numRev": 8,
+        "sumRev": 35
+    }
+]

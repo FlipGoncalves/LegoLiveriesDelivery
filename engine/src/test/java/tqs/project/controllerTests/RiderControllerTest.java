@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import tqs.project.controller.RiderController;
 import tqs.project.datamodels.RiderDTO;
 import tqs.project.exceptions.UserAlreadyExistsException;
+import tqs.project.exceptions.UserNotFoundException;
 import tqs.project.model.Rider;
 import tqs.project.model.User;
 import tqs.project.service.RiderService;
@@ -35,6 +37,7 @@ public class RiderControllerTest {
 
     Rider rider1, rider2;
     User user1, user2;
+    List<Rider> riders;
 
     @BeforeEach
     void setUp(){
@@ -47,12 +50,14 @@ public class RiderControllerTest {
         user2 = new User("User 2", "user2@gmail.com", "password2");
         rider2.setUser(user2);
 
-        when(riderService.getAllData()).thenReturn(new ArrayList<Rider>(Arrays.asList(rider1,rider2)));
+        riders = new ArrayList<Rider>(Arrays.asList(rider1, rider2));
+
+        when(riderService.getAllData()).thenReturn(riders);
     }
 
     @Test
     void test_getAllRiders_ReturnsCorrectRiders(){
-        given().get("/api/riders")
+        given().get("/api/rider")
                .then().log().body().assertThat()
                .contentType(ContentType.JSON).and()
                .status(HttpStatus.OK).and()
@@ -68,7 +73,7 @@ public class RiderControllerTest {
     }
 
     @Test
-    void test_addRider_InvalidRiderDTO_ReturnsBadRequestStatus() throws UserAlreadyExistsException{
+    void test_addRider_InvalidRiderDTO_ReturnsBadRequestStatus() throws UserNotFoundException{
         String username = "User 3";
         String email = "user3@gmail.com";
         String password = "password3";
@@ -78,17 +83,17 @@ public class RiderControllerTest {
         RiderDTO riderDTO = new RiderDTO(username, email, password, numRev, sumRev);
 
 
-        when(riderService.insertRider(riderDTO)).thenThrow(UserAlreadyExistsException.class);
+        when(riderService.insertRider(riderDTO)).thenThrow(UserNotFoundException.class);
         
         given().contentType(ContentType.JSON).body(riderDTO)
-               .post("/api/riders")
+               .post("/api/rider")
                .then().log().body().assertThat()
                .status(HttpStatus.BAD_REQUEST);
     }
 
     
     @Test
-    void test_addRider_ValidRiderDTO_ReturnsCorrectRider() throws UserAlreadyExistsException{
+    void test_addRider_ValidRiderDTO_ReturnsCorrectRider() throws UserAlreadyExistsException, UserNotFoundException{
         String username = "User 1";
         String email = "user1@gmail.com";
         String password = "password1";
@@ -104,7 +109,7 @@ public class RiderControllerTest {
         when(riderService.insertRider(riderDTO)).thenReturn(rider);
         
         given().contentType(ContentType.JSON).body(riderDTO)
-               .post("/api/riders")
+               .post("/api/rider")
                .then().log().body().assertThat()
                .contentType(ContentType.JSON).and()
                .status(HttpStatus.CREATED).and()

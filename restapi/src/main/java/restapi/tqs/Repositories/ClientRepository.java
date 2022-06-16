@@ -7,5 +7,5 @@ import restapi.tqs.Models.Client;
 
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
-    
+    Client findByUserEmail(String email);
 }
