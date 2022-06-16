@@ -1,0 +1,29 @@
+name: Push to DockerHub
+
+on:
+  push:
+      branches:
+          - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      # This is used to complete the identity challenge
+      # with sigstore/fulcio when running outside of PRs.
+      id-token: write
+    steps:
+    - uses: actions/checkout@v2
+    - name: docker login
+      env:
+        DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }} 
+      run: |
+        echo $DOCKER_PASSWORD | docker login ghcr.io -u FlipGoncalves --password-stdin     
+    - name: Build docker-compose
+      run: |
+        docker-compose build
+    - name: Docker push
+      run: |
+        docker-compose push
