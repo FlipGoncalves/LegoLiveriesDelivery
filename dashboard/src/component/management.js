@@ -110,7 +110,6 @@ class Management extends Component {
       .then((response) => {
         console.log(response);
         this.setState({error_message: ""})
-        this.setState({items: []})
         console.log("HERE")
         RequestMapping()
         document.getElementById("name").value = "";
