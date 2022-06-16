@@ -72,7 +72,7 @@ public class WebSteps {
         WebElement baseTable = driver.findElement(By.id("riders"));
         List<WebElement> tableRows = baseTable.findElements(By.tagName("tr"));
 
-        assertEquals(tableRows.get(tableRows.size()-1).getText(), name);
+        assertEquals(tableRows.get(tableRows.size()).getText(), name);
     }
 
 
