@@ -21,6 +21,7 @@ const Login = () => {
     const navigate = useNavigate();
     const [username, setUserName] = useState();
     const [password, setPassword] = useState();
+    const [error_message, setError] = useState("");
 
     const handleSubmit = async e => {
         e.preventDefault();
@@ -36,11 +37,11 @@ const Login = () => {
             if (response.status === 200 || response.status === 201) {
 
             if (response.data["password"] != password) {
-                this.setState({error_message: "Wrong Credentials"})
+                setError("Wrong credential")
                 return
             }
 
-            this.setState({error_message: ""})
+            setError("")
             localStorage.setItem('username', username)
             localStorage.setItem('password', password)
             console.log("HERE")
@@ -50,7 +51,7 @@ const Login = () => {
         })
         .catch((error) => {
             console.log(error);
-            this.setState({error_message: "ERROR during sign in"})
+            setError("ERROR during sign in")
         });
 
         localStorage.setItem('user', infouser);
@@ -84,7 +85,7 @@ const Login = () => {
                                 </div>
                             </div>
                         </form>
-                        {this.state.error_message !== null ? <p id="error">{this.state.error_message}</p> : <></>}
+                        {error_message !== "" ? <p id="error">{error_message}</p> : <></>}
                         <p class="mb-2 text-sm mx-auto">
                             Don't have an account ?
                             <Link to="/register">

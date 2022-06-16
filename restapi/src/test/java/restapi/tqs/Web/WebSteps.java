@@ -38,6 +38,7 @@ public class WebSteps {
     // Login Steps
     @When("I login with {string} and {string}")
     public void iTryToLoginWithAnd(String userName, String password) {
+        driver.findElement(By.xpath(""));
         driver.findElement(By.id("name")).sendKeys(userName);
         driver.findElement(By.id("password")).sendKeys(password);
     }
@@ -104,6 +105,7 @@ public class WebSteps {
     // Order Steps
     @Given("I add an item to the cart")
     public void iHadItemToCart() {
+        System.out.println(driver.findElement(By.xpath("/html/body/div/div/div/section[2]/div/div/div/div/button/a/figcaption/a")).getAttribute("innerHTML"));
         driver.findElement(By.className("openmodal")).click();
         driver.findElement(By.id("_submit_cart")).click();
     }
@@ -158,7 +160,7 @@ public class WebSteps {
 
     @Then("I should see the item {string} in my screen")
     public void iVerify(String lego) {
-        System.out.println("length: " + driver.findElement(By.id("cart_length")).getText());
-        assertEquals(driver.findElement(By.id("cart_length")).getText(), lego);
+        System.out.println("length: " + driver.findElement(By.id("cart_length")).getAttribute("innerHTML"));
+        assertEquals(driver.findElement(By.id("cart_length")).getAttribute("innerHTML"), lego);
     }
 }

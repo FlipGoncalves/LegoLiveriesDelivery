@@ -22,6 +22,7 @@ const Register = () => {
     const [password1, setPassword1] = useState();
     const [password2, setPassword2] = useState();
     const [email, setEmail] = useState();
+    const [error_message, setError] = useState("");
 
 
     const handleSubmit = async e => {
@@ -51,14 +52,14 @@ const Register = () => {
             <div className="col-md-6 offset-md-3">
                 <form method="post" accept-charset="utf-8" autoComplete="off" role="form" onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <b><label htmlFor="name">User Name</label></b>
+                        <b><label>User Name</label></b>
                         <input className="form-control" id="name" name="name" required type="text" value={username} onChange={(e) => setUserName(e.target.value)}/>
                             <small className="form-text text-muted">
                                 Your username on the site
                             </small>
                     </div>
                     <div className="form-group">
-                        <b><label htmlFor="email">Email</label></b>
+                        <b><label>Email</label></b>
                         <input className="form-control input-filled-valid" id="email" name="email" required
                                type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                             <small className="form-text text-muted">
@@ -66,7 +67,7 @@ const Register = () => {
                             </small>
                     </div>
                     <div className="form-group">
-                        <b><label htmlFor="password">Password</label></b>
+                        <b><label>Password</label></b>
                         <input className="form-control input-filled-valid" id="password1" name="password1" required
                                type="password" value={password1} onChange={(e) => setPassword1(e.target.value)} />
                             <small className="form-text text-muted">
@@ -75,7 +76,7 @@ const Register = () => {
                     </div>
 
                     <div className="form-group">
-                        <b><label htmlFor="password">Password Again</label></b>
+                        <b><label>Password Again</label></b>
                         <input className="form-control input-filled-valid" id="password2" name="password2" required
                                type="password" value={password2} onChange={(e) => setPassword2(e.target.value)} />
                             <small className="form-text text-muted">
@@ -85,7 +86,7 @@ const Register = () => {
                         {/* <input id="nonce" name="nonce" type="hidden"
                            value="bdaa00bce142ab38fbe1761a767ab97df9db0e34e260defac78ee197fd818cbf"/> */}
 
-                        {this.state.error_message !== null ? <p id="error">{this.state.error_message}</p> : <></>}
+                        {error_message !== "" ? <p id="error">{error_message}</p> : <></>}
 
                         <div className="row pt-3">
                             <div className="col-md-12">
