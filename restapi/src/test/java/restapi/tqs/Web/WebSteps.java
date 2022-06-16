@@ -30,7 +30,7 @@ public class WebSteps {
 
     @Then("I should see the Cart with {int} items")
     public void iVerify(int num) {
-        assertEquals(driver.findElement(By.id("cart_length")).getText(), num);
+        assertEquals(driver.findElement(By.id("cart_length")).getAttribute("innerHTML"), num);
     }
 
 
@@ -90,7 +90,6 @@ public class WebSteps {
     // Add item to cart
     @When("I click on the Lego {string}")
     public void iSelectLego(String name) {
-        System.out.println(driver.findElement(By.xpath("/html/body/div/div/div/section[1]/div/div")));
         assertEquals(driver.findElement(By.id(name.replaceAll("\\s+", "-"))).getText(), name);
         driver.findElement(By.id(name.replaceAll("\\s+", "-"))).click();
     }
@@ -109,7 +108,6 @@ public class WebSteps {
     // Order Steps
     @Given("I add an item to the cart")
     public void iHadItemToCart() {
-        System.out.println(driver.findElement(By.xpath("/html/body/div/div/div/section[2]/div/div")));
         driver.findElement(By.className("openmodal")).click();
         driver.findElement(By.id("_submit_cart")).click();
     }
@@ -164,7 +162,8 @@ public class WebSteps {
 
     @Then("I should see the item {string} in my screen")
     public void iVerify(String lego) {
-        System.out.println("length: " + driver.findElement(By.id("cart_length")).getAttribute("innerHTML"));
+        System.out.println(driver.findElement(By.xpath("/html/body/div/div/div/section[1]/header/h4")).getAttribute("innerHTML"));
+        System.out.println(driver.findElement(By.xpath("/html/body/div/div/div/section[2]/header/h4")).getAttribute("innerHTML"));
         assertEquals(driver.findElement(By.id("cart_length")).getAttribute("innerHTML"), lego);
     }
 }
