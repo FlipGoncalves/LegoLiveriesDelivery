@@ -41,10 +41,10 @@ class App extends Component {
         <div>
             <div class="col-xl-2 col-lg-3 col-md-4 col-6">
                         <div class="card card-sm card-product-grid">
-                        <button type="button" class="btn openmodal" className="openmodal" data-toggle="modal" data-target={"#"+item["name"].replace(/\s/g, '')}>
+                        <button type="button" class="btn openmodal" data-toggle="modal" data-target={"#"+item["name"].replace(/\s/g, '')}>
                             <a class="img-wrap"> <img src="assets/images/items/1.jpg" width= '70%'/> </a>
                             <figcaption class="info-wrap">
-                                <a class="title" id={item["name"].replace(/\s/g, '')}>{item["name"]}</a>
+                                <a class="title" id={item["name"].replace(/\s/g, '-')}>{item["name"]}</a>
                                 <div class="price mt-1">{item["price"]}</div>
                             </figcaption>
                         </button>

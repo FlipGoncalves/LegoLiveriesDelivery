@@ -85,9 +85,9 @@ public class WebSteps {
     @When("I click on the Lego {string}")
     public void iSelectLego(String name) {
         System.out.println(name);
-        System.out.println(name.replaceAll("\\s+", ""));
-        assertEquals(driver.findElement(By.id(name.replaceAll("\\s+", ""))).getText(), name);
-        driver.findElement(By.id(name.replaceAll("\\s+", ""))).click();
+        System.out.println(name.replaceAll("\\s+", "-"));
+        assertEquals(driver.findElement(By.id(name.replaceAll("\\s+", "-"))).getText(), name);
+        driver.findElement(By.id(name.replaceAll("\\s+", "-"))).click();
     }
     @When("I select the quantity {int} for the lego {string}")
     public void iSelectQtty(int qtty, String name) {
@@ -134,7 +134,7 @@ public class WebSteps {
 
     @Then("I should see an error message")
     public void iVerifyError() {
-        assertEquals(driver.findElement(By.id("error_message")).getText(), anyString());
+        assertEquals(driver.findElement(By.id("error_message")).getText(), "Please add items to your cart");
     }
 
 
@@ -158,12 +158,7 @@ public class WebSteps {
 
     @Then("I should see the item {string} in my screen")
     public void iVerify(String lego) {
+        System.out.println("length: " + driver.findElement(By.id("cart_length")).getText());
         assertEquals(driver.findElement(By.id("cart_length")).getText(), lego);
-    }
-
-    @When("I choose {string} on the dropdown")
-    public void i_choose_on_the_dropdown(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
     }
 }
