@@ -131,8 +131,8 @@ class App extends Component {
                             this.additemtoarray(item)
                         )
                     }); 
-                    
-                    if (list.length() === 0) {
+
+                    if (list.length === 0) {
                         newArray.push(this.additemtoarray({name: 'Lego Test', price: '9.99', imageUrl: 'assets/images/items/1.jpg'}))
                     }
                     this.setState({ items: newArray})
