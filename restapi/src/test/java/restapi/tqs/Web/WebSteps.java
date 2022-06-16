@@ -130,6 +130,8 @@ public class WebSteps {
 
     @When("I click on the cart")
     public void iClickOnCart() {
+        driver.findElement(By.id("_submit_cart")).click();
+
         try {
             wait = new WebDriverWait(driver, 10);
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("cart_open")));

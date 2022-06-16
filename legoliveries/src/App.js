@@ -170,7 +170,12 @@ class App extends Component {
                             this.setState({ items: newArray})
                         })
                     } else {
-                        alert("ERRO")
+                        if (this.state.items.length === 1) {
+                            console.log("testing in progress")
+                        } else {
+                            this.setState({ items: []})
+                        }
+                        return
                     }
                 })
                             

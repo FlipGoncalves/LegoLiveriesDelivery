@@ -16,6 +16,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.JavascriptExecutor;
 
 public class WebSteps {
@@ -57,7 +59,11 @@ public class WebSteps {
     @When("I click Add a Rider")
     public void iAddRider() {
         JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("arguments[0].scrollIntoView();", driver.findElement(By.id("add_rider")));
+        js.executeScript("arguments[0].scrollIntoView(true);", driver.findElement(By.id("add_rider")));
+
+        WebDriverWait wait = new WebDriverWait(driver, 2);
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("add_rider")));
+
         driver.findElement(By.id("add_rider")).click();
     }
 
