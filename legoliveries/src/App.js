@@ -38,73 +38,73 @@ class App extends Component {
 
     additemtoarray(item) {
         return (
-        <div>
-            <div class="col-xl-2 col-lg-3 col-md-4 col-6">
-                        <div class="card card-sm card-product-grid">
-                        <button type="button" class="btn openmodal" data-toggle="modal" data-target={"#"+item["name"].replace(/\s/g, '')}>
-                            <a class="img-wrap"> <img src="assets/images/items/1.jpg" width= '70%'/> </a>
+            <div>
+                <div class="col-xl-2 col-lg-3 col-md-4 col-6">
+                    <div class="card card-sm card-product-grid">
+                        <button type="button" class="btn openmodal" data-toggle="modal" data-target={"#"+item["name"].replace(/\s/g, '')} id={item["name"].replace(/\s/g, "")+"ID"} >
+                            <a class="img-wrap"> <img src={item["imageUrl"]} width= '70%'/> </a>
                             <figcaption class="info-wrap">
-                                <a class="title" id={item["name"].replace(/\s/g, '-')}>{item["name"]}</a>
+                                <a class="title" id={item["name"].replace(/\s/g, "-")}>{item["name"]}</a>
                                 <div class="price mt-1">{item["price"]}</div>
                             </figcaption>
                         </button>
-                        </div>
                     </div>
-                    <div class="modal fade" id={item["name"].replace(/\s/g, '')}>
-                        <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
+                </div>
+                <div class="modal fade" id={item["name"].replace(/\s/g, '')}>
+                    <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                    
+                        <div class="modal-header">
+                        <h4 class="modal-title">{item["name"]}</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
                         
-                            <div class="modal-header">
-                            <h4 class="modal-title">{item["name"]}</h4>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <div class="modal-body">
+                            <div class="container">
+                            <h6>Item Details</h6>
+                            <div class="row">
+                                <div class="col">
+                                    <img class="img-fluid" src={item["imageUrl"]} />
+                                </div>
+                            </div>
+                            <h6>Order Details</h6>
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <ul type="none">
+                                        <li class="left">Order number:</li>
+                                        <li class="left">Price:</li>
+                                    </ul>
+                                </div>
+                                <div class="col-xs-6">
+                                    <ul class="right" type="none">
+                                        <li class="right"></li>
+                                        <li class="right">{item["price"]}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                                <h6>Quantity</h6>
+                                <div class="row" style={{borderBottom: 'none'}}>
+                                    <div class="col-xs-6">
+                                        <select class="custom-select border-right" name="qtty" id={"qtty"+item["name"].replace(/\s/g, '')}>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                             </div>
                             
-                            <div class="modal-body">
-                                <div class="container">
-                                <h6>Item Details</h6>
-                                <div class="row">
-                                    <div class="col">
-                                        <img class="img-fluid" src="assets/images/items/1.jpg" />
-                                    </div>
-                                </div>
-                                <h6>Order Details</h6>
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        <ul type="none">
-                                            <li class="left">Order number:</li>
-                                            <li class="left">Price:</li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-xs-6">
-                                        <ul class="right" type="none">
-                                            <li class="right"></li>
-                                            <li class="right">{item["price"]}</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                    <h6>Quantity</h6>
-                                    <div class="row" style={{borderBottom: 'none'}}>
-                                        <div class="col-xs-6">
-                                            <select class="custom-select border-right" name="qtty" id={"qtty"+item["name"].replace(/\s/g, '')}>
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                </div>
-                                
-                                <div class="modal-footer">
-                                    <button type="button" id="_submit_cart" class="btn" onClick={() => this.setState(prevState => ({cart: [...prevState.cart, this.additemtocart(item)]}))} data-toggle="modal" data-target={"#"+item["name"].replace(/\s/g, '')}>Add to cart</button>
-                                </div>
-                                
+                            <div class="modal-footer">
+                                <button type="button" id="_submit_cart" class="btn" onClick={() => this.setState(prevState => ({cart: [...prevState.cart, this.additemtocart(item)]}))} data-toggle="modal" data-target={"#"+item["name"].replace(/\s/g, '')}>Add to cart</button>
                             </div>
+                            
                         </div>
                     </div>
                 </div>
+            </div>
         )
     }
 
@@ -119,11 +119,12 @@ class App extends Component {
 
         const RequestMapping = () => {
         
-            let resp = fetch('http://localhost:8080/lego/all_legos', {
+            let resp = fetch('http://localhost:8080/lego', {
                 method: 'GET'
             }).then((data) => {
                 this.setState({items: []})
                 data.json().then((list) => {
+                    console.log(list)
                     let newArray = []
                     list.forEach((item) => {
                         newArray.push(
@@ -144,7 +145,7 @@ class App extends Component {
                 RequestMapping();
             } else {
 
-                let resp = fetch('http://localhost:8080/lego/get_lego/'+value_category+'?'+value_category+'='+searchparams, {
+                let resp = fetch('http://localhost:8080/lego/'+value_category+'?'+value_category+'='+searchparams, {
                     method: 'GET'
                 }).then((data) => {
                     if (data.status === 200) {

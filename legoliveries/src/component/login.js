@@ -19,14 +19,14 @@ import axios from 'axios';
 
 const Login = () => {
     const navigate = useNavigate();
-    const [username, setUserName] = useState();
+    const [username, setUserName] = useState(); // its the email
     const [password, setPassword] = useState();
     const [error_message, setError] = useState("");
 
     const handleSubmit = async e => {
         e.preventDefault();
 
-        this.setState({error_message: null})
+        setError("")
 
         const infouser = { username, password }
         console.log(infouser);
@@ -51,10 +51,11 @@ const Login = () => {
         })
         .catch((error) => {
             console.log(error);
-            setError("ERROR during sign in")
+            setError("ERROR during log in")
             return
         });
 
+        setError("ERROR during log in")
         return
     }
 
@@ -69,9 +70,9 @@ const Login = () => {
                     <div class="card-body">
                         <form accept-charset="utf-8" onSubmit={handleSubmit}>
                             <div className="form-group">
-                                <b><label htmlFor="name" >User Name or Email</label></b>
+                                <b><label htmlFor="name" >Email</label></b>
                                 <input className="form-control input-filled-valid" id="name" name="name" required
-                                       type="text" value={username} onChange={(e) => setUserName(e.target.value)}/>
+                                       type="email" value={username} onChange={(e) => setUserName(e.target.value)}/>
                             </div>
                             <div className="form-group">
                                 <b><label htmlFor="password">Password</label></b>
