@@ -19,6 +19,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 public class WebSteps {
     private final FirefoxOptions options = new FirefoxOptions();
     private WebDriver driver;
+    private WebDriverWait wait;
 
     @Given("I am in {string}")
     public void iAmOnThePage(String baseUrl) {
@@ -91,7 +92,7 @@ public class WebSteps {
     // Add item to cart
     @When("I click on the Lego {string}")
     public void iSelectLego(String name) {
-        WebDriverWait wait = new WebDriverWait(driver, 2);
+        wait = new WebDriverWait(driver, 10);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div/div/div/section[2]/div/div[1]")));
 
         driver.findElement(By.id(name.replaceAll("\\s+", "")+"ID")).click();
@@ -111,7 +112,7 @@ public class WebSteps {
     // Order Steps
     @Given("I add an item to the cart")
     public void iHadItemToCart() {
-        WebDriverWait wait = new WebDriverWait(driver, 2);
+        wait = new WebDriverWait(driver, 10);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div/div/div/section[2]/div/div[1]")));
 
         driver.findElement(By.xpath("/html/body/div/div/div/section[2]/div/div[1]/div[1]/div/button")).click();
@@ -120,7 +121,7 @@ public class WebSteps {
 
     @When("I click on the cart")
     public void iClickOnCart() {
-        WebDriverWait wait = new WebDriverWait(driver, 2);
+        wait = new WebDriverWait(driver, 10);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("cart_open")));
 
         driver.findElement(By.id("cart_open")).click();
@@ -178,7 +179,7 @@ public class WebSteps {
             type = "a";
         }
 
-        WebDriverWait wait = new WebDriverWait(driver, 2);
+        wait = new WebDriverWait(driver, 10);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div/div/div/section[2]/div/div[1]")));
         
         assertEquals(driver.findElement(By.xpath("/html/body/div/div/div/section[2]/div/div[1]/div[1]/div/button/figcaption/"+type)).getAttribute("innerHTML"), lego);
