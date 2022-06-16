@@ -47,7 +47,7 @@ class SignUp extends Component {
       axios.post('http://localhost:8080/api/user/register', {
         "username": name,
         "email": email,
-        "password": password
+        "password": pass
       })
       .then((response) => {
         console.log(response);
