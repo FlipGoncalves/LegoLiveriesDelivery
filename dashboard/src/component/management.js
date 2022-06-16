@@ -247,7 +247,7 @@ class Management extends Component {
                           </div>
 
                           <div class="text-center">
-                              <button type="button" class="btn bg-gradient-secondary w-100 my-4 mb-2" onClick={addrider}>Add a Rider</button>
+                              <button type="button" class="btn bg-gradient-secondary w-100 my-4 mb-2" onClick={addrider} id="add_rider">Add a Rider</button>
                           </div>
                     </div>
                 </div>

@@ -98,7 +98,7 @@ class SignUp extends Component {
 
                         {this.state.error_message !== "" ? <>
                           <div>
-                            <label class="form-check-label mb-0 ms-2" style={{color: 'red'}}>{this.state.error_message}</label>
+                            <label class="form-check-label mb-0 ms-2" style={{color: 'red'}} id="error">{this.state.error_message}</label>
                           </div>
                         </> : null}
 

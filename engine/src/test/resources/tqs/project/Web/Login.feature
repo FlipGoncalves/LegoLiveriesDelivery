@@ -7,8 +7,8 @@ Feature: Engine Login
         And I click Login
         Then I should be logged in
         Examples:
-            |  email         | password |
-            |  filipe@ua.pt  |  filipe  |
+            |  email            |  password   |
+            |  user1@gmail.com  |  user1pass  |
 
     @negative
     Scenario: Error
