@@ -50,7 +50,7 @@ class Management extends Component {
 
     const RequestMapping = () => {
 
-        let resp_rider = fetch('http://localhost:8080/api/riders', {  
+        let resp_rider = fetch('http://localhost:9001/api/riders', {  
             method: 'GET'
         }).then((data) => {
             this.setState({riders: []})
@@ -66,7 +66,7 @@ class Management extends Component {
             });
         })
 
-        let resp_order = fetch('http://localhost:8080/api/orders', {
+        let resp_order = fetch('http://localhost:9001/api/orders', {
             method: 'GET'
         }).then((data) => {
             this.setState({orders: []})
@@ -102,7 +102,7 @@ class Management extends Component {
           return false
       }
 
-      axios.post('http://localhost:8080/api/riders', {
+      axios.post('http://localhost:9001/api/riders', {
         "username": name,
         "email": email,
         "password": password

@@ -47,7 +47,7 @@ class App extends Component {
 
     const RequestMapping = () => {
 
-        let resp_rider = fetch('http://localhost:8080/api/statistics', {  
+        let resp_rider = fetch('http://localhost:9001/api/statistics', {  
             method: 'GET'
         }).then((data) => {
             data.json().then((obj) => {
