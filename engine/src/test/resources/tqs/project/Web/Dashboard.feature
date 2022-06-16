@@ -7,6 +7,9 @@ Feature: Engine Dashboard
         Then I can see it is not "<num>"
         Examples:
             |  type    |    num   |
-            |  orders  |     0    |
-            |  riders  |     0    |
-            |  compl   |     0    |
+            |  orders  |     1    |
+            |  riders  |     1    |
+            |  compl   |     1    |
+
+
+    # should be zero

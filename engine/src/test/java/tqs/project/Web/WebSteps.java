@@ -3,6 +3,7 @@ package tqs.project.Web;
 import io.cucumber.java.en.When;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.cucumber.java.en.Then;
+import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 
 import static org.junit.Assert.assertNotEquals;
@@ -25,6 +26,7 @@ public class WebSteps {
     private WebDriver driver;
     private WebElement element;
 
+
     @Given("I am in {string}")
     public void iAmOnThePage(String baseUrl) {
         WebDriverManager.firefoxdriver().setup();
@@ -40,14 +42,13 @@ public class WebSteps {
         driver.findElement(By.id(type));
     }
 
-    @Then("I can see there are more than {string} {string}")
+    @Then("I can see there are at least {string} {string}")
     public void iCanSee(String num, String table) {
 
         WebElement baseTable = driver.findElement(By.id(table));
         List<WebElement> tableRows = baseTable.findElements(By.tagName("tr"));
 
-        // CHANGE
-        // assertTrue(tableRows.size() - 1 > Integer.parseInt(num));
+        assertTrue(tableRows.size() - 1 > Integer.parseInt(num));
     }
 
     @When("I input my {string}, {string} and {string}")

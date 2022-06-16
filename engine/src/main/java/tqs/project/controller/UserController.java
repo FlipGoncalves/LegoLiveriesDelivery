@@ -33,14 +33,6 @@ public class UserController {
     public ResponseEntity<Object> loginUser(@PathVariable String email){
         log.info("GET Request -> User Data for login email");
 
-        // For tests
-        User userReg;
-        try {
-            userReg = userservice.register(new RegisterDTO("admin", "admin@ua.com", "admin"));
-        } catch (UserAlreadyExistsException e) {
-            log.info("Register -> Test User already exists");
-        }
-
         User userLog = userservice.getUser(email);
 
         if (userLog == null) {
@@ -56,14 +48,6 @@ public class UserController {
     public ResponseEntity<Object> registerUser(@RequestBody RegisterDTO reg){
 
         log.info("POST Request -> User Data for register");
-
-        // For tests
-        User rege;
-        try {
-            rege = userservice.register(new RegisterDTO("admin", "admin@ua.com", "admin"));
-        } catch (UserAlreadyExistsException e) {
-            log.info("Register -> Test User already exists");
-        }
 
         User userReg;
         try {
