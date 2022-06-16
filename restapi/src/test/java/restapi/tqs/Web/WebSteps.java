@@ -31,7 +31,7 @@ public class WebSteps {
         driver.get(baseUrl);
     }
 
-    @Then("I should see the Cart with {int} items")
+    @Then("I should see the Cart with {string} items")
     public void iVerify(int num) {
         assertEquals(driver.findElement(By.id("cart_length")).getAttribute("innerHTML"), num);
     }
@@ -102,8 +102,8 @@ public class WebSteps {
 
         driver.findElement(By.id(name.replaceAll("\\s+", "")+"ID")).click();
     }
-    @When("I select the quantity {int} for the lego {string}")
-    public void iSelectQtty(int qtty, String name) {
+    @When("I select the quantity {string} for the lego {string}")
+    public void iSelectQtty(String qtty, String name) {
         Select sel = new Select(driver.findElement(By.id("qtty"+name.replaceAll("\\s+", ""))));
         sel.selectByValue(qtty+"");
     }
@@ -130,12 +130,11 @@ public class WebSteps {
 
     @When("I click on the cart")
     public void iClickOnCart() {
-        driver.findElement(By.id("_submit_cart")).click();
-
         try {
             wait = new WebDriverWait(driver, 10);
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("cart_open")));
         } catch(TimeoutException e) {
+            driver.findElement(By.id("_submit_cart")).click();
             System.err.println(e);
         }
 
