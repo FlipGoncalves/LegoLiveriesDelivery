@@ -8,7 +8,9 @@ import io.cucumber.java.en.Given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -89,9 +91,10 @@ public class WebSteps {
     // Add item to cart
     @When("I click on the Lego {string}")
     public void iSelectLego(String name) {
-        // assertEquals(driver.findElement(By.id(name.replaceAll("\\s+", "-"))).getAttribute("innerHTML"), name);
-        System.out.println("here");
-        driver.findElement(By.cssSelector("button[id='FordMustangShelbyGT500-42138ID']")).click();
+        WebDriverWait wait = new WebDriverWait(driver, 2);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div/div/div/section[2]/div/div[1]")));
+
+        driver.findElement(By.id(name.replaceAll("\\s+", "")+"ID")).click();
     }
     @When("I select the quantity {int} for the lego {string}")
     public void iSelectQtty(int qtty, String name) {
@@ -108,12 +111,18 @@ public class WebSteps {
     // Order Steps
     @Given("I add an item to the cart")
     public void iHadItemToCart() {
+        WebDriverWait wait = new WebDriverWait(driver, 2);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div/div/div/section[2]/div/div[1]")));
+
         driver.findElement(By.xpath("/html/body/div/div/div/section[2]/div/div[1]/div[1]/div/button")).click();
         driver.findElement(By.id("_submit_cart")).click();
     }
 
     @When("I click on the cart")
     public void iClickOnCart() {
+        WebDriverWait wait = new WebDriverWait(driver, 2);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("cart_open")));
+
         driver.findElement(By.id("cart_open")).click();
     }
 
@@ -162,7 +171,16 @@ public class WebSteps {
 
     @Then("I should see the item {string} in my screen")
     public void iVerify(String lego) {
-        System.out.println(driver.findElement(By.xpath("/html/body/div/div/div/section[1]/header/h4")).getAttribute("innerHTML"));
-        // assertEquals(driver.findElement(By.xpath("/html/body/div/div/div/section[2]/header/h4")).getAttribute("innerHTML"), lego);
+        String type;
+        if (lego.matches("\\d+\\.\\d+")) {
+            type = "div";
+        } else {
+            type = "a";
+        }
+
+        WebDriverWait wait = new WebDriverWait(driver, 2);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div/div/div/section[2]/div/div[1]")));
+        
+        assertEquals(driver.findElement(By.xpath("/html/body/div/div/div/section[2]/div/div[1]/div[1]/div/button/figcaption/"+type)).getAttribute("innerHTML"), lego);
     }
 }
