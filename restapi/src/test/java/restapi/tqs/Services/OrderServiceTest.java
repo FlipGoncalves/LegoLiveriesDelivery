@@ -225,13 +225,6 @@ public class OrderServiceTest {
     }
 
     @Test
-    void test_MakeOrder_AddressNotFound_ThrowsAddressNotFoundException(){
-        OrderDTO orderDTOTest1 = new OrderDTO(1l, addressDTO3, 2000, orderLegoDTO1);
-
-        assertThrows(AddressNotFoundException.class, () -> {service.makeOrder(orderDTOTest1);});
-    }
-
-    @Test
     void test_MakeOrder_LegoNotFound_ThrowsLegoNotFoundException(){
         OrderDTO orderDTOTest1 = new OrderDTO(1l, addressDTO1, 2000, buildOrderLegoDTO(1l,2l,5l,1));
 
