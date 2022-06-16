@@ -125,11 +125,11 @@ public class WebSteps {
         }
 
         driver.findElement(By.xpath("/html/body/div/div/div/section[2]/div/div[1]/div[1]/div/button")).click();
+        driver.findElement(By.id("_submit_cart")).click();
     }
 
     @When("I click on the cart")
     public void iClickOnCart() {
-        driver.findElement(By.id("_submit_cart")).click();
         try {
             wait = new WebDriverWait(driver, 10);
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("cart_open")));

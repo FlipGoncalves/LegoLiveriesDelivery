@@ -45,35 +45,6 @@ class Management extends Component {
       </tr>
     )
   }
-
-  addOrderToArray(item) {
-    console.log(item)
-    let store = item["store"]
-    let addr = item["address"]
-    let addr_total = addr["city"] + ", " + addr["country"] + ", " + addr["postalCode"] + ", " + addr["street"]
-
-    return (
-      <tr>
-        <td class="align-middle text-center">
-          <div>
-            <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{addr_total}</h6>
-            </div>
-          </div>
-        </td>
-        <td>
-          <p class="text-xs font-weight-bold mb-0">{store["name"]}</p>
-        </td>
-        <td class="align-middle text-center">
-          <span class="text-secondary text-xs font-weight-bold">{item["clientName"]}</span>
-        </td>
-        <td class="align-middle text-center text-sm">
-          <span class="badge badge-sm bg-gradient-success">Done</span>
-          <span class="badge badge-sm bg-gradient-secondary">In Progress</span>
-        </td>
-      </tr>
-    )
-  }
   
   render() {
 
