@@ -74,7 +74,9 @@ public class WebSteps {
         WebElement baseTable = driver.findElement(By.id("riders"));
         List<WebElement> tableRows = baseTable.findElements(By.tagName("tr"));
 
-        System.out.println(tableRows);
+        for (WebElement e: tableRows) {
+            System.out.println(e);
+        }
         assertTrue(tableRows.get(tableRows.size()-1).getText().contains(name));
     }
 
@@ -89,13 +91,6 @@ public class WebSteps {
     @When("I click Login")
     public void iClickLogin() {
         driver.findElement(By.id("signin")).click();
-    }
-    @Then("I should be logged in")
-    public void iVerifyLogin() {
-
-        // engine connection not working //
-
-        assertTrue(driver.getCurrentUrl().equals("http://localhost:3001"));
     }
     @Then("I should not be logged in")
     public void iVerifyNotLogin() {
@@ -118,16 +113,8 @@ public class WebSteps {
     }
     @Then("I should be registered")
     public void iVerifyRegister() {
-
-        // engine connection not working //
-
+        System.out.println(driver.getCurrentUrl());
         assertTrue(driver.getCurrentUrl().equals("http://localhost:3001"));
-    }
-
-    @Then("I should not be registered")
-    public void iVerifyNotRegister() {
-        assertTrue(driver.getCurrentUrl().equals("http://localhost:3001/sign-up"));
-        assertEquals(driver.findElement(By.id("error")).getText(), "ERROR during sign up");
     }
 
     
