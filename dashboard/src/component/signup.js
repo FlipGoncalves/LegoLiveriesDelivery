@@ -52,7 +52,6 @@ class SignUp extends Component {
       .then((response) => {
         console.log(response);
         this.setState({error_message: ""})
-        this.setState({items: []})
         console.log("HERE")
         navigation("/")
       })

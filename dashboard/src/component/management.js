@@ -109,16 +109,13 @@ class Management extends Component {
       })
       .then((response) => {
         console.log(response);
-        if (response.status === 200 || response.status === 201) {
-          this.setState({error_message: ""})
-          this.setState({items: []})
-          console.log("HERE")
-          RequestMapping()
-          document.getElementById("name").value = "";
-          document.getElementById("password").value = "";
-          document.getElementById("email").value = "";
-          // info notification of success
-        }
+        this.setState({error_message: ""})
+        this.setState({items: []})
+        console.log("HERE")
+        RequestMapping()
+        document.getElementById("name").value = "";
+        document.getElementById("password").value = "";
+        document.getElementById("email").value = "";
       })
       .catch((error) => {
         console.log(error);
