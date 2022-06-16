@@ -8,8 +8,8 @@ Feature: Legoliveries Search Item By Name / Price
         And I click Search
         Then I should see the item "<lego>" in my screen
         Examples:
-            | lego          |   type   |
-            | Ford Mustang  |   name   |
+            | lego       |   type   |
+            | Lego Test  |   name   |
 
     @positive
     Scenario: Successful by Price

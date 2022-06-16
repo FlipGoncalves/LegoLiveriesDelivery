@@ -24,7 +24,7 @@ class App extends Component {
 
         return (
             <div class="row">
-                <a class="img-wrap"><img class="left" src="assets/images/items/1.jpg" height="130" width="auto"/></a>
+                <a class="img-wrap"><img class="left" src={item["imageUrl"]} height="130" width="auto"/></a>
                 <div class="d-flex justify-content-between align-items-center">
                     <button type="button" class="close" aria-label="Close" onClick="Custombox.modal.close();">
                     </button>
@@ -131,6 +131,10 @@ class App extends Component {
                             this.additemtoarray(item)
                         )
                     }); 
+                    
+                    if (list.length() === 0) {
+                        newArray.push(this.additemtoarray({name: 'Lego Test', price: '9.99', imageUrl: 'assets/images/items/1.jpg'}))
+                    }
                     this.setState({ items: newArray})
                 });
             })
