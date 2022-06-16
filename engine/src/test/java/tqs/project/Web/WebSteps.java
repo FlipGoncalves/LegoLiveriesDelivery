@@ -16,7 +16,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.JavascriptExecutor;
 
 public class WebSteps {
     private final FirefoxOptions options = new FirefoxOptions();
@@ -56,8 +56,9 @@ public class WebSteps {
 
     @When("I click Add a Rider")
     public void iAddRider() {
-        Actions act=new Actions(driver);
-        act.moveToElement(driver.findElement(By.id("add_rider"))).click().perform();
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView();", driver.findElement(By.id("add_rider")));
+        driver.findElement(By.id("add_rider")).click();
     }
 
     @Then("I can see the rider {string} was added")
