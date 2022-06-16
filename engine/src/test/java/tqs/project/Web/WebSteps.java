@@ -8,7 +8,8 @@ import io.cucumber.java.en.Given;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.anyString;
+
+import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -33,13 +34,16 @@ public class WebSteps {
     // Management Steps
     @When("I look at the {string} table")
     public void iLookAtTable(String type) {
-        element = driver.findElement(By.id(type));
+        driver.findElement(By.id(type));
     }
 
-    @Then("I can see there are more than {string}")
-    public void iCanSee(String num) {
-        System.out.println(element.getText());
-        // assertTrue(Integer.parseInt(element.getText()) > num);
+    @Then("I can see there are more than {string} {string}")
+    public void iCanSee(String num, String table) {
+
+        WebElement baseTable = driver.findElement(By.id(table));
+        List<WebElement> tableRows = baseTable.findElements(By.tagName("tr"));
+
+        assertTrue(tableRows.size() - 1 > Integer.parseInt(num));
     }
 
     @When("I input my {string}, {string} and {string}")
@@ -56,7 +60,10 @@ public class WebSteps {
 
     @Then("I can see the rider {string} was added")
     public void iVerifyRider(String name) {
-        driver.findElement(By.id("riders"));
+        WebElement baseTable = driver.findElement(By.id("riders"));
+        List<WebElement> tableRows = baseTable.findElements(By.tagName("tr"));
+
+        assertEquals(tableRows.get(tableRows.size()-1).getText(), name);
     }
 
 
@@ -73,12 +80,15 @@ public class WebSteps {
     }
     @Then("I should be logged in")
     public void iVerifyLogin() {
-        assertTrue(driver.getCurrentUrl().equals("http://localhost:3000"));
+
+        // engine connection not working //
+
+        assertTrue(driver.getCurrentUrl().equals("http://localhost:3001"));
     }
     @Then("I should not be logged in")
     public void iVerifyNotLogin() {
-        assertTrue(driver.getCurrentUrl().equals("http://localhost:3000/login"));
-        assertEquals(driver.findElement(By.id("error")).getText(), anyString());
+        assertTrue(driver.getCurrentUrl().equals("http://localhost:3001/sign-in"));
+        assertEquals(driver.findElement(By.id("error")).getText(), "ERROR during sign in");
     }
 
 
@@ -96,13 +106,16 @@ public class WebSteps {
     }
     @Then("I should be registered")
     public void iVerifyRegister() {
-        assertTrue(driver.getCurrentUrl().equals("http://localhost:3000"));
+
+        // engine connection not working //
+
+        assertTrue(driver.getCurrentUrl().equals("http://localhost:3001"));
     }
 
     @Then("I should not be registered")
     public void iVerifyNotRegister() {
-        assertTrue(driver.getCurrentUrl().equals("http://localhost:3000/sign-up"));
-        assertEquals(driver.findElement(By.id("error")).getText(), anyString());
+        assertTrue(driver.getCurrentUrl().equals("http://localhost:3001/sign-up"));
+        assertEquals(driver.findElement(By.id("error")).getText(), "ERROR during sign up");
     }
 
     
@@ -111,11 +124,6 @@ public class WebSteps {
     @When("I look at the number of {string}")
     public void iTryToLoginWithAnd(String type) {
         element = driver.findElement(By.id(type));
-    }
-
-    @When("I click Sumbit")
-    public void iClickSubmit() {
-        driver.findElement(By.id("_submit")).click();
     }
 
     @Then("I can see it is not {string}")

@@ -4,7 +4,7 @@ Feature: Engine Management
     Scenario: Successful View
         Given I am in "http://localhost:3001/management"
         When I look at the "<table>" table
-        Then I can see there are more than "<num>"
+        Then I can see there are more than "<num>" "<table>"
         Examples:
             |  table   |    num   |
             |  orders  |     0    |
