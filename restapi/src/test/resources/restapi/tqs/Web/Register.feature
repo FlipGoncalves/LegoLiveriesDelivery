@@ -7,8 +7,8 @@ Feature: Legoliveries Register
         And I click Register
         Then I should be registered
         Examples:
-            | username | password | rep_password |
-            |  filipe  |  filipe  |    filipe    |
+            | username | password | rep_password | email         |
+            |  filipe  |  filipe  |    filipe    | filipeg@ua.pt |
 
     @negative
     Scenario: Error
@@ -17,5 +17,5 @@ Feature: Legoliveries Register
         And I click Register
         Then I should not be registered
         Examples:
-            | username | password | rep_password |
-            |  filipe  |  admin   |    admin     |
+            | username | password | rep_password | email         |
+            |  filipe  |  admin   |    admin     | filipeg@ua.pt |

@@ -3,6 +3,7 @@ import { useNavigate} from 'react-router-dom';
 import '../App.css';
 import Footer from "./Footer";
 import Navbar from "./Navbar";
+import axios from 'axios';
 
 {/*async function loginUser(credentials) {
     return fetch('http://localhost:8080/login', {
@@ -29,17 +30,29 @@ const Register = () => {
         e.preventDefault();
         if(password1 === password2){
             const infouser = { username, email, password1 }
-            // navigate('/log/User?=' + id);
             console.log(infouser);
-            navigate('/');
 
-        }
-        {/*const token = await loginUser({
-            username,
-            password
-        });
-        setToken(token); */}
 
+            axios.post('http://localhost:8080/lego/register', {
+                body: infouser
+            })
+            .then((response) => {
+                console.log(response);
+                if (response.status === 200 || response.status === 201) {
+                    setError("")
+                    console.log("HERE")
+                    navigate("/")
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                setError("ERROR during sign up")
+                return
+            });
+
+        } 
+        setError("Passwords not equal")
+        return
     }
 
     return (
