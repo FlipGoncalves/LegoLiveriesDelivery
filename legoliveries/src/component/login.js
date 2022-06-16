@@ -36,26 +36,26 @@ const Login = () => {
             console.log(response);
             if (response.status === 200 || response.status === 201) {
 
-            if (response.data["password"] != password) {
-                setError("Wrong credential")
-                return
-            }
+                if (response.data["password"] != password) {
+                    setError("Wrong credential")
+                    return
+                }
 
-            setError("")
-            localStorage.setItem('username', username)
-            localStorage.setItem('password', password)
-            console.log("HERE")
-            localStorage.setItem('user', infouser);
-            navigate("/")
+                setError("")
+                localStorage.setItem('username', username)
+                localStorage.setItem('password', password)
+                console.log("HERE")
+                localStorage.setItem('user', infouser);
+                navigate("/")
             }
         })
         .catch((error) => {
             console.log(error);
             setError("ERROR during sign in")
+            return
         });
 
-        localStorage.setItem('user', infouser);
-        navigate("/")
+        return
     }
 
     return (

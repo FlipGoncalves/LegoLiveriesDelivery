@@ -8,5 +8,5 @@ Feature: Legoliveries Add Item
         And I click Add item to cart
         Then I should see the Cart with "<num>" items
         Examples:
-            | name                              | qtty | cart |
-            | Ford Mustang Shelby GT500 - 42138 |  2   |  1   |
+            | name                              | qtty | cart | num |
+            | Ford Mustang Shelby GT500 - 42138 |  2   |  1   |  1  |

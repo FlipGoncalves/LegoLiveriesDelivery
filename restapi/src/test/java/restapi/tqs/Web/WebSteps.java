@@ -47,12 +47,15 @@ public class WebSteps {
     }
     @Then("I should be logged in")
     public void iVerifyLogin() {
+
+        // rest api connection not working //
+
         assertTrue(driver.getCurrentUrl().equals("http://localhost:3000"));
     }
     @Then("I should not be logged in")
     public void iVerifyNotLogin() {
         assertTrue(driver.getCurrentUrl().equals("http://localhost:3000/login"));
-        assertEquals(driver.findElement(By.id("error")).getText(), "ERROR during sign in");
+        assertEquals(driver.findElement(By.id("error")).getAttribute("innerHTML"), "ERROR during sign in");
     }
 
 
@@ -71,13 +74,15 @@ public class WebSteps {
     }
     @Then("I should be registered")
     public void iVerifyRegister() {
-        System.out.println(driver.getCurrentUrl());
+
+        // rest api connection not working //
+
         assertTrue(driver.getCurrentUrl().equals("http://localhost:3000"));
     }
     @Then("I should not be registered")
     public void iVerifyNotRegister() {
         assertTrue(driver.getCurrentUrl().equals("http://localhost:3000/register"));
-        assertEquals(driver.findElement(By.id("error")).getText(), "ERROR during sign up");
+        assertEquals(driver.findElement(By.id("error")).getAttribute("innerHTML"), "ERROR during sign up");
     }
 
 
@@ -85,7 +90,7 @@ public class WebSteps {
     // Add item to cart
     @When("I click on the Lego {string}")
     public void iSelectLego(String name) {
-        System.out.println(driver.findElement(By.xpath("/html/body/div/div/div/section[1]")));
+        System.out.println(driver.findElement(By.xpath("/html/body/div/div/div/section[1]/div/div")));
         assertEquals(driver.findElement(By.id(name.replaceAll("\\s+", "-"))).getText(), name);
         driver.findElement(By.id(name.replaceAll("\\s+", "-"))).click();
     }
@@ -104,7 +109,7 @@ public class WebSteps {
     // Order Steps
     @Given("I add an item to the cart")
     public void iHadItemToCart() {
-        System.out.println(driver.findElement(By.xpath("/html/body/div/div/div/section[2]")));
+        System.out.println(driver.findElement(By.xpath("/html/body/div/div/div/section[2]/div/div")));
         driver.findElement(By.className("openmodal")).click();
         driver.findElement(By.id("_submit_cart")).click();
     }
