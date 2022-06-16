@@ -102,7 +102,7 @@ class Management extends Component {
           return false
       }
 
-      axios.post('http://localhost:8080/api/addrider', {
+      axios.post('http://localhost:8080/api/riders', {
         "email": email,
         "name": name,
         "password": password

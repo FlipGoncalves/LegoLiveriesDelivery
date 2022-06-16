@@ -51,12 +51,10 @@ class SignUp extends Component {
       })
       .then((response) => {
         console.log(response);
-        if (response.status === 200 || response.status === 201) {
-          this.setState({error_message: ""})
-          this.setState({items: []})
-          console.log("HERE")
-          navigation("/")
-        }
+        this.setState({error_message: ""})
+        this.setState({items: []})
+        console.log("HERE")
+        navigation("/")
       })
       .catch((error) => {
         console.log(error);

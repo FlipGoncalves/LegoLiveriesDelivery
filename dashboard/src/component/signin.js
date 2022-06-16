@@ -41,19 +41,16 @@ class SignIn extends Component {
       axios.get('http://localhost:8080/api/user/login/'+email)
       .then((response) => {
         console.log(response);
-        if (response.status === 200 || response.status === 201) {
-
-          if (response.data["password"] != pass) {
-            this.setState({error_message: "Wrong Credentials"})
-            return
-          }
-
-          this.setState({error_message: ""})
-          localStorage.setItem('email', email)
-          localStorage.setItem('password', pass)
-          console.log("HERE")
-          navigation("/")
+        if (response.data["password"] != pass) {
+          this.setState({error_message: "Wrong Credentials"})
+          return
         }
+
+        this.setState({error_message: ""})
+        localStorage.setItem('email', email)
+        localStorage.setItem('password', pass)
+        console.log("HERE")
+        navigation("/")
       })
       .catch((error) => {
         console.log(error);

@@ -48,7 +48,7 @@ public class WebSteps {
         WebElement baseTable = driver.findElement(By.id(table));
         List<WebElement> tableRows = baseTable.findElements(By.tagName("tr"));
 
-        assertTrue(tableRows.size() - 1 > Integer.parseInt(num));
+        assertTrue(tableRows.size() - 1 >= Integer.parseInt(num));
     }
 
     @When("I input my {string}, {string} and {string}")
