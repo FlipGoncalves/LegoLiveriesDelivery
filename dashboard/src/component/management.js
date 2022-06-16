@@ -103,8 +103,8 @@ class Management extends Component {
       }
 
       axios.post('http://localhost:8080/api/riders', {
+        "username": name,
         "email": email,
-        "name": name,
         "password": password
       })
       .then((response) => {
