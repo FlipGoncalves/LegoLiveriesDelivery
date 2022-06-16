@@ -14,8 +14,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
-import java.util.concurrent.TimeUnit;
-
 public class WebSteps {
     private final FirefoxOptions options = new FirefoxOptions();
     private WebDriver driver;
@@ -90,11 +88,10 @@ public class WebSteps {
 
     // Add item to cart
     @When("I click on the Lego {string}")
-    public void iSelectLego(String name) throws InterruptedException {
-        TimeUnit.MINUTES.sleep(1);
+    public void iSelectLego(String name) {
         // assertEquals(driver.findElement(By.id(name.replaceAll("\\s+", "-"))).getAttribute("innerHTML"), name);
         System.out.println("here");
-        driver.findElement(By.id("FordMustangShelbyGT500-42138ID")).click();
+        driver.findElement(By.cssSelector("button[id='FordMustangShelbyGT500-42138ID']")).click();
     }
     @When("I select the quantity {int} for the lego {string}")
     public void iSelectQtty(int qtty, String name) {
@@ -110,8 +107,7 @@ public class WebSteps {
 
     // Order Steps
     @Given("I add an item to the cart")
-    public void iHadItemToCart() throws InterruptedException {
-        TimeUnit.MINUTES.sleep(1);
+    public void iHadItemToCart() {
         driver.findElement(By.xpath("/html/body/div/div/div/section[2]/div/div[1]/div[1]/div/button")).click();
         driver.findElement(By.id("_submit_cart")).click();
     }
@@ -165,8 +161,7 @@ public class WebSteps {
     }
 
     @Then("I should see the item {string} in my screen")
-    public void iVerify(String lego) throws InterruptedException {
-        TimeUnit.MINUTES.sleep(1);
+    public void iVerify(String lego) {
         System.out.println(driver.findElement(By.xpath("/html/body/div/div/div/section[1]/header/h4")).getAttribute("innerHTML"));
         // assertEquals(driver.findElement(By.xpath("/html/body/div/div/div/section[2]/header/h4")).getAttribute("innerHTML"), lego);
     }
