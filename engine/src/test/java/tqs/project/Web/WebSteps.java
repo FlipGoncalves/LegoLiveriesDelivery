@@ -125,7 +125,7 @@ public class WebSteps {
         System.out.println(driver.getCurrentUrl());
         try {
             WebDriverWait wait = new WebDriverWait(driver, 30);
-            wait.until(ExpectedConditions.urlToBe("http://localhost:3001"));
+            wait.until(ExpectedConditions.urlToBe("http://localhost:3001/"));
         } catch(TimeoutException e) {
             System.err.println(e);
             if (driver.findElement(By.id("error")).isDisplayed()) {
@@ -133,7 +133,7 @@ public class WebSteps {
             }
         }
         System.out.println(driver.getCurrentUrl());
-        assertTrue(driver.getCurrentUrl().equals("http://localhost:3001"));
+        assertTrue(driver.getCurrentUrl().equals("http://localhost:3001/"));
     }
 
     
