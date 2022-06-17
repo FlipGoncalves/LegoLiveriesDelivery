@@ -76,16 +76,16 @@ public class WebSteps {
         WebElement baseTable = driver.findElement(By.id("riders"));
         List<WebElement> tableRows = baseTable.findElements(By.tagName("tr"));
 
-        System.out.println(tableRows.size());
-        try {
-            WebDriverWait wait = new WebDriverWait(driver, 10);
-            wait.until(ExpectedConditions.numberOfElementsToBe(By.id("riders"), 2));
-        } catch(TimeoutException e) {
-            System.err.println(e);
-        }
+        // System.out.println(tableRows.size());
+        // try {
+        //     WebDriverWait wait = new WebDriverWait(driver, 10);
+        //     wait.until(ExpectedConditions.numberOfElementsToBe(By.id("riders"), 2));
+        // } catch(TimeoutException e) {
+        //     System.err.println(e);
+        // }
 
-        tableRows = baseTable.findElements(By.tagName("tr"));
-        System.out.println(tableRows.size());
+        // tableRows = baseTable.findElements(By.tagName("tr"));
+        // System.out.println(tableRows.size());
 
         assertTrue(tableRows.get(tableRows.size()-1).getText().contains(name));
     }
@@ -129,7 +129,9 @@ public class WebSteps {
             wait.until(ExpectedConditions.urlToBe("http://localhost:3001"));
         } catch(TimeoutException e) {
             System.err.println(e);
-            System.out.println("Error message is visible ? " + driver.findElement(By.id("error")).isDisplayed());
+            if (driver.findElement(By.id("error")).isDisplayed()) {
+                System.out.println("Error message is visible ? " + driver.findElement(By.id("error")).getAttribute("innerHTML"));
+            }
         }
         System.out.println(driver.getCurrentUrl());
         assertTrue(driver.getCurrentUrl().equals("http://localhost:3001"));

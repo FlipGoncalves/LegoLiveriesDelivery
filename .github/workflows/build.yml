@@ -67,7 +67,7 @@ jobs:
       - name: Build Legoliveries Backend
         run: docker-compose -f ../docker-compose.yml build legoliveries
       - name: Start Legoliveries Backend
-        run: docker-compose -f ../docker-compose.yml run -p 8081:8081 -d legoliveries
+        run: docker-compose -f ../docker-compose.yml run -p 8080:8080 -d legoliveries
       - name: Build Legoliveries Frontend
         run: docker-compose -f ../docker-compose.yml build legoliveries-app
       - name: Start Legoliveries Frontend
