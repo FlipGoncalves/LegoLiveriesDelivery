@@ -44,6 +44,10 @@ public class Client {
         return this.clientId;
     }
 
+    public void setClientId(long clientId) {
+        this.clientId = clientId;
+    }
+
     public User getUser() {
         return this.user;
     }

@@ -18,11 +18,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.netty.channel.ChannelOption;
@@ -74,8 +76,9 @@ public class OrderService {
     @Autowired
     OrderLegoRepository orderLegoRepository;
 
-    @Autowired
     private ObjectMapper objectMapper;
+
+    private String engineURL = "engine:9001/api/order";
 
     public List<Order> getAllOrders(){
         log.info("Getting all orders");
@@ -112,11 +115,13 @@ public class OrderService {
         return orders;
     }
     
+    @Transactional(rollbackFor = {BadScheduledTimeOfDeliveryException.class, ClientNotFoundException.class, AddressNotFoundException.class, LegoNotFoundException.class, BadOrderLegoDTOException.class, BadOrderLegoListException.class, OrderNotCreatedException.class})
     public Order makeOrder(OrderDTO orderDTO) throws BadScheduledTimeOfDeliveryException, ClientNotFoundException, AddressNotFoundException, LegoNotFoundException, BadOrderLegoDTOException, BadOrderLegoListException, OrderNotCreatedException{
         log.info("Making new order");
 
         Order order = new Order();
 
+        order = orderRepository.saveAndFlush(order);
 
         if (orderDTO.getScheduledTimeOfDelivery() >= 2400 || orderDTO.getScheduledTimeOfDelivery() < 0){
             log.info("TimeException");
@@ -132,6 +137,7 @@ public class OrderService {
         }
 
         order.setClient(client.get());
+        client.get().getOrders().add(order);
 
         Optional<Address> addressOptional = addressRepository.findByLatitudeAndLongitude(orderDTO.getAddress().getLatitude(), orderDTO.getAddress().getLongitude());
         Address address = new Address();
@@ -144,6 +150,7 @@ public class OrderService {
         }
 
         order.setAddress(address);
+        address.getOrders().add(order);
 
         try{
             orderDTO.getLegos();
@@ -159,7 +166,7 @@ public class OrderService {
 
         double totalPrice = 0;
 
-        Map<Long,Lego> orderLegoMap = new HashMap<>();
+        Set<OrderLego> setOrderLegos = new HashSet<>();
 
         for (OrderLegoDTO orderLegoDTO : orderDTO.getLegos()) {
             Optional<Lego> lego = legoRepository.findById(orderLegoDTO.getLegoId());
@@ -172,28 +179,20 @@ public class OrderService {
             if (orderLegoDTO.getQuantity() <= 0 || orderLegoDTO.getLegoPrice() <= 0){
                 throw new BadOrderLegoDTOException("The orderDTo is invalid: " + orderLegoDTO.toString());
             }
-            orderLegoMap.put(orderLegoDTO.getLegoId(), lego.get());
+
+            OrderLego orderLego = new OrderLego();
+            //orderLego.setId(new OrderLegoId(order.getOrderId(), lego.get().getLegoId()));
+            orderLego.setLego(lego.get());
+            orderLego.setOrder(order);
+            orderLego.setQuantity(orderLegoDTO.getQuantity());
+            orderLego.setPrice(orderLegoDTO.getLegoPrice());
+            orderLegoRepository.saveAndFlush(orderLego);
+            setOrderLegos.add(orderLego);
+
             totalPrice += orderLegoDTO.getQuantity() * orderLegoDTO.getLegoPrice();
         }
 
         order.setTotalPrice(totalPrice);
-
-        Set<OrderLego> setOrderLegos = new HashSet<>();
-
-        for (OrderLegoDTO legoDTO : orderDTO.getLegos()) {
-
-            Lego lego = orderLegoMap.get(legoDTO.getLegoId());
-
-            OrderLego orderLego = new OrderLego();
-            orderLego.setId(new OrderLegoId(order.getOrderId(), lego.getLegoId()));
-            orderLego.setLego(lego);
-            orderLego.setOrder(order);
-            orderLego.setQuantity(legoDTO.getQuantity());
-            orderLego.setPrice(legoDTO.getLegoPrice());
-            orderLego = orderLegoRepository.save(orderLego);
-            setOrderLegos.add(orderLego);
-        }
-
         order.setOrderLego(setOrderLegos);
 
         log.info("BEFORE HTTP CALL");
@@ -214,7 +213,7 @@ public class OrderService {
         .build();
 
         ResponseEntity<String> responseSpec = webClient.post()
-            .uri("engine:9001/api/order")
+            .uri(this.engineURL)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .body(BodyInserters.fromValue(makeOrderDTO))
@@ -236,21 +235,25 @@ public class OrderService {
         }
         
         String response = responseSpec.getBody();
-        Map<String, Object> map = null;
+        log.info(response);
         try {
-            map = objectMapper.readValue(response, new TypeReference<Map<String,Object>>(){});
+            objectMapper = new ObjectMapper();
+            JsonNode map = objectMapper.readTree(response);
+            order.setExternalOrderId(map.get("orderId").asLong());
         } catch (JsonProcessingException e) {
-            log.info("OrderNOT CREATED2");
-
             throw new OrderNotCreatedException("The order was not created in the engine: " + orderDTO);
         }
-
-        order.setExternalOrderId( Long.valueOf(String.valueOf(map.get("orderId"))));
         
         order.setDate(new Date());
         
-        order = orderRepository.saveAndFlush(order);
-
         return order;
+    }
+
+    public void setEngineURL(String url){
+        this.engineURL = url;
+    }
+
+    public String getEngineURL(){
+        return this.engineURL;
     }
 }

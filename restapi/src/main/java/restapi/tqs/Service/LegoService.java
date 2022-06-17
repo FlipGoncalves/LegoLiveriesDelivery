@@ -47,10 +47,6 @@ public class LegoService {
 
     public Lego insertLego(LegoDTO legoDTO) throws BadLegoDTOException {
         log.info("Inserting Lego");
-        
-        if (legoDTO.hasNullFields()){
-            throw new BadLegoDTOException("The LegoDTO has a null attribute: " + legoDTO.toString());
-        }
 
         if (legoDTO.getImgUrl().isBlank()|| legoDTO.getName().isBlank()|| legoDTO.getPrice() <= 0){
             throw new BadLegoDTOException("The LegoDTO is invalid: " + legoDTO.toString());

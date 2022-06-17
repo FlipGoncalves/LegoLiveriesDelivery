@@ -60,8 +60,8 @@ public class LegoServiceTest {
     }
 
     @Test
-    void test_GetAllData(){
-        List<Lego> result = service.getData();
+    void test_GetAllLegos(){
+        List<Lego> result = service.getLegos();
 
         assertTrue(!result.isEmpty());
         assertEquals(3, result.size());
@@ -73,8 +73,8 @@ public class LegoServiceTest {
     }
 
     @Test
-    void test_GetDataByName_WithFullName(){
-        List<Lego> result = service.getData(LEGO_NAME1);
+    void test_GetLegosByName_WithFullName(){
+        List<Lego> result = service.getLegosByName(LEGO_NAME1);
 
         assertTrue(!result.isEmpty());
         assertEquals(1, result.size());
@@ -86,8 +86,19 @@ public class LegoServiceTest {
     }
 
     @Test
-    void test_GetDataByPrice(){
-        List<Lego> result = service.getData(LEGO_PRICE2);
+    void test_GetLegosByName_WithParcialName(){
+        List<Lego> result = service.getLegosByName("Policial");
+
+        assertTrue(!result.isEmpty());
+        assertEquals(2, result.size());
+        assertTrue(!result.contains(lego1));
+        assertTrue(result.contains(lego2));
+        assertTrue(result.contains(lego3));
+    }
+
+    @Test
+    void test_GetLegosByPrice(){
+        List<Lego> result = service.getLegosByPrice(LEGO_PRICE2);
 
         assertTrue(!result.isEmpty());
         assertEquals(1, result.size());
@@ -99,66 +110,55 @@ public class LegoServiceTest {
     }
 
     @Test
-    void test_GetDataByName_WithParcialName(){
-        List<Lego> result = legoRepository.findAllByNameContainingIgnoreCase("Policial");
-
-        assertTrue(!result.isEmpty());
-        assertEquals(2, result.size());
-        assertTrue(!result.contains(lego1));
-        assertTrue(result.contains(lego2));
-        assertTrue(result.contains(lego3));
-    }
-
-    @Test
-    void test_InsertData_ValidLegoDTO() throws BadLegoDTOException{
+    void test_InsertLego_ValidLegoDTO() throws BadLegoDTOException{
 
         LegoDTO legoDTO = new LegoDTO("A Lego Name", 30, "A Lego imgUrl");
-        service.insertData(legoDTO);
+        service.insertLego(legoDTO);
 
         verify(legoRepository, times(1)).save(any(Lego.class));
     }
 
     @Test
-    void test_InsertData_NullLegoName_ThrowsBadLegoDTOException() throws BadLegoDTOException{
+    void test_InsertLego_NullLegoName_ThrowsBadLegoDTOException() throws BadLegoDTOException{
 
         LegoDTO legoDTO = new LegoDTO(null, 30, "A Lego imgUrl");
         
-        assertThrows(BadLegoDTOException.class, () -> {service.insertData(legoDTO);});
+        assertThrows(BadLegoDTOException.class, () -> {service.insertLego(legoDTO);});
 
     }
 
     @Test
-    void test_InsertData_BlankLegoName_ThrowsBadLegoDTOException() throws BadLegoDTOException{
+    void test_InsertLego_BlankLegoName_ThrowsBadLegoDTOException() throws BadLegoDTOException{
 
         LegoDTO legoDTO = new LegoDTO(" ", 30, "A Lego imgUrl");
         
-        assertThrows(BadLegoDTOException.class, () -> {service.insertData(legoDTO);});
+        assertThrows(BadLegoDTOException.class, () -> {service.insertLego(legoDTO);});
     }
 
     @Test
-    void test_InsertData_LegoPriceLessorEqualToZero_ThrowsBadLegoDTOException() throws BadLegoDTOException{
+    void test_InsertLego_LegoPriceLessorEqualToZero_ThrowsBadLegoDTOException() throws BadLegoDTOException{
 
         LegoDTO legoDTO = new LegoDTO("A Lego Name", 0, "A Lego imgUrl");
         
-        assertThrows(BadLegoDTOException.class, () -> {service.insertData(legoDTO);});
+        assertThrows(BadLegoDTOException.class, () -> {service.insertLego(legoDTO);});
 
     }
 
     @Test
-    void test_InsertData_NullLegoImgUrl_ThrowsBadLegoDTOException() throws BadLegoDTOException{
+    void test_InsertLego_NullLegoImgUrl_ThrowsBadLegoDTOException() throws BadLegoDTOException{
 
         LegoDTO legoDTO = new LegoDTO("A Lego Name", 30, null);
         
-        assertThrows(BadLegoDTOException.class, () -> {service.insertData(legoDTO);});
+        assertThrows(BadLegoDTOException.class, () -> {service.insertLego(legoDTO);});
 
     }
 
     @Test
-    void test_InsertData_BlankLegoImgUrl_ThrowsBadLegoDTOException() throws BadLegoDTOException{
+    void test_InsertLego_BlankLegoImgUrl_ThrowsBadLegoDTOException() throws BadLegoDTOException{
 
         LegoDTO legoDTO = new LegoDTO("A Lego Name", 30, "  ");
         
-        assertThrows(BadLegoDTOException.class, () -> {service.insertData(legoDTO);});
+        assertThrows(BadLegoDTOException.class, () -> {service.insertLego(legoDTO);});
 
     }
 

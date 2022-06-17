@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -14,6 +15,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +26,12 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Pageable;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
 import restapi.tqs.DataModels.AddressDTO;
 import restapi.tqs.DataModels.OrderDTO;
 import restapi.tqs.DataModels.OrderLegoDTO;
@@ -39,6 +48,7 @@ import restapi.tqs.Models.Client;
 import restapi.tqs.Models.Lego;
 import restapi.tqs.Models.Order;
 import restapi.tqs.Models.OrderLego;
+import restapi.tqs.Models.OrderLegoId;
 import restapi.tqs.Models.User;
 import restapi.tqs.Repositories.AddressRepository;
 import restapi.tqs.Repositories.ClientRepository;
@@ -68,6 +78,8 @@ public class OrderServiceTest {
     @InjectMocks
     private OrderService service;
 
+    public static MockWebServer mockBackEnd;
+
     Order order1, order2, order3;
     Client client1, client2;
     Address address1, address2;
@@ -78,8 +90,18 @@ public class OrderServiceTest {
     List<OrderLegoDTO> orderLegoDTO1, orderLegoDTO2, orderLegoDTO3;
     AddressDTO addressDTO1, addressDTO2, addressDTO3;
 
+    @BeforeAll
+    static void allSetUp() throws IOException{
+        mockBackEnd = new MockWebServer();
+        mockBackEnd.start();
+    }
+
     @BeforeEach
     void setUp(){
+        
+        String baseUrl = String.format("http://localhost:%s", mockBackEnd.getPort());
+        service.setEngineURL(baseUrl);
+
         List<Object> array1 = buildUserAndClientObject(1);
         user1 = (User) array1.get(0);
         client1 = (Client) array1.get(1);
@@ -158,6 +180,11 @@ public class OrderServiceTest {
         orderDTO3 = new OrderDTO(2l, addressDTO2, 2000, orderLegoDTO3);
     }
 
+    @AfterAll
+    static void cleanUp() throws IOException{
+        mockBackEnd.shutdown();
+    }
+
     @Test
     void test_GetAllOrder_ReturnsCorrectOrders(){
         List<Order> result = service.getAllOrders();
@@ -219,6 +246,8 @@ public class OrderServiceTest {
 
     @Test
     void test_MakeOrder_ClientNotFound_ThrowsClientNotFoundException(){
+        Mockito.when(orderRepository.saveAndFlush(any(Order.class))).thenReturn(new Order());
+
         OrderDTO orderDTOTest1 = new OrderDTO(50l, addressDTO1, 2000, orderLegoDTO1);
 
         assertThrows(ClientNotFoundException.class, () -> {service.makeOrder(orderDTOTest1);});
@@ -226,6 +255,8 @@ public class OrderServiceTest {
 
     @Test
     void test_MakeOrder_LegoNotFound_ThrowsLegoNotFoundException(){
+        Mockito.when(orderRepository.saveAndFlush(any(Order.class))).thenReturn(new Order());
+
         OrderDTO orderDTOTest1 = new OrderDTO(1l, addressDTO1, 2000, buildOrderLegoDTO(1l,2l,5l,1));
 
         assertThrows(LegoNotFoundException.class, () -> {service.makeOrder(orderDTOTest1);});
@@ -233,6 +264,8 @@ public class OrderServiceTest {
 
     @Test
     void test_MakeOrder_EmptyListOfOrderLegoDTO_ThrowsBadOrderDTOException(){
+        Mockito.when(orderRepository.saveAndFlush(any(Order.class))).thenReturn(new Order());
+
         OrderDTO orderDTOTest1 = new OrderDTO(1l, addressDTO1, 2000, new ArrayList<>());
 
         assertThrows(BadOrderLegoListException.class, () -> {service.makeOrder(orderDTOTest1);});
@@ -240,6 +273,8 @@ public class OrderServiceTest {
 
     @Test
     void test_MakeOrder_InvalidOrderLegoDTO_ThrowsBadOrderLegoDTOException(){
+        Mockito.when(orderRepository.saveAndFlush(any(Order.class))).thenReturn(new Order());
+
         List<OrderLegoDTO> orderLegoDTOs = buildOrderLegoDTO(1l,2l,3l,1);
         orderLegoDTOs.get(0).setQuantity(-3);
 
@@ -248,21 +283,38 @@ public class OrderServiceTest {
         assertThrows(BadOrderLegoDTOException.class, () -> {service.makeOrder(orderDTOTest1);});
     }
 
-    /*@Test
-    void test_MakeOrder_AllValid_ReturnsCorrectOrder() throws BadScheduledTimeOfDeliveryException, ClientNotFoundException, AddressNotFoundException, LegoNotFoundException, BadOrderLegoDTOException, BadOrderLegoListException, OrderNotCreatedException{
-        Mockito.when(orderRepository.save(any(Order.class))).thenReturn(order1);
+    @Test
+    void test_MakeOrder_AllValid_ReturnsCorrectOrder() throws BadScheduledTimeOfDeliveryException, ClientNotFoundException, AddressNotFoundException, LegoNotFoundException, BadOrderLegoDTOException, BadOrderLegoListException, OrderNotCreatedException, InterruptedException, JsonProcessingException{
+        System.out.println("TESTE");
+        Mockito.when(orderRepository.saveAndFlush(any(Order.class))).thenReturn(new Order());
+        
+        String responseFromEngine = "{\"orderId\" : " + 1 + " }";
+
+        mockBackEnd.enqueue(new MockResponse().setBody(responseFromEngine).setResponseCode(201));
+
+        System.out.println("antes");
         
         Order order = service.makeOrder(orderDTO1);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(order);
+        System.out.println("depois " + json);
+
+        RecordedRequest recordedRequest = mockBackEnd.takeRequest();
+
+        System.out.println("RecordedREquest: " + recordedRequest);
         assertTrue(order != null);
         assertEquals(orderDTO1.getScheduledTimeOfDelivery(), order.getScheduledTimeOfDelivery());
         assertEquals(address1, order.getAddress());
         assertEquals(client1, order.getClient());
-        assertEquals(orderLegos1, order.getOrderLego());
-    }*/
+        assertEquals(orderLegos1.size(), order.getOrderLego().size());
+        assertEquals(1, order.getExternalOrderId());
+    }
 
     Order buildAndSaveOrderObject(Client client, Address address, Set<OrderLego> orderLegos, long id){
 
         Order order = new Order();
+        order.setOrderId(id);
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(2020, 6, (int) id);
@@ -287,6 +339,7 @@ public class OrderServiceTest {
 
     Lego buildLegoObject(long id){
         Lego lego =  new Lego();
+        lego.setLegoId(id);
         lego.setName("Lego " + id);
         lego.setImageUrl("URL " + id);
         lego.setPrice(10 + id);
@@ -299,6 +352,8 @@ public class OrderServiceTest {
         user.setUsername("Person " + id);
         user.setClient(client);
         client.setUser(user);
+        user.setUserId(id);
+        client.setClientId(id);
         ArrayList<Object> array = new ArrayList<>();
         array.add(user);
         array.add(client);
@@ -307,6 +362,7 @@ public class OrderServiceTest {
 
     Address buildAddressObject(long id){
         Address address = new Address();
+        address.setAddressId(id);
         address.setLongitude(100 + id);
         address.setLatitude(50 + id);
         address.setStreet("Street " + id);
@@ -330,14 +386,17 @@ public class OrderServiceTest {
     Set<OrderLego> buildOrderLegoList(Lego lego1, Lego lego2, Lego lego3, long id){
 
         OrderLego orderLego1 = new OrderLego();
+        orderLego1.setId(new OrderLegoId(id, lego1.getLegoId()));
         orderLego1.setLego(lego1);
         orderLego1.setPrice(lego1.getPrice());
         orderLego1.setQuantity(1 + (int) id);
         OrderLego orderLego2 = new OrderLego();
+        orderLego2.setId(new OrderLegoId(id, lego2.getLegoId()));
         orderLego2.setLego(lego2);
         orderLego2.setPrice(lego2.getPrice());
         orderLego2.setQuantity(2 + (int) id);
         OrderLego orderLego3 = new OrderLego();
+        orderLego3.setId(new OrderLegoId(id, lego3.getLegoId()));
         orderLego3.setLego(lego3);
         orderLego3.setPrice(lego3.getPrice());
         orderLego3.setQuantity(3 + (int) id);
