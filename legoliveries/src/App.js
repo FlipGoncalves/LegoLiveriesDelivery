@@ -227,9 +227,7 @@ class App extends Component {
                 method: 'POST',
                 body: dic
             }).then((data) => {
-                if (data.status === 200) {
-                    console.log("Success address")
-                }
+                console.log("Success address")
             })
 
             // create order
@@ -237,16 +235,13 @@ class App extends Component {
                 method: 'POST',
                 body: dic
             }).then((data) => {
-                if (data.status === 200) {
-                    console.log("Success")
-                    // close modal
-                    document.getElementById("btn-close").click();
-                }
+                document.getElementById("btn-close").click();
             })
 
             this.setState({error_message: ""})
 
             console.log("here")
+            this.setState({cart: []})
 
             // error message
         }
