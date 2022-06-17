@@ -12,6 +12,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -111,12 +112,14 @@ public class WebSteps {
 
     @When("I click on the cart")
     public void iClickOnCart() {
-        try {
-            wait = new WebDriverWait(driver, 10);
-            wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("cart_open")));
-        } catch(TimeoutException e) {
-            System.err.println(e);
+
+        if (! driver.findElement(By.id("cart_open")).isDisplayed()) {
+            wait = new WebDriverWait(driver, 15);
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("cart_open")));
         }
+
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView(true);", driver.findElement(By.id("cart_open")));
 
         driver.findElement(By.id("cart_open")).click();
     }
