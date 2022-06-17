@@ -48,13 +48,6 @@ public class WebSteps {
     public void iClickLogin() {
         driver.findElement(By.id("_submit")).click();
     }
-    @Then("I should be logged in")
-    public void iVerifyLogin() {
-
-        // rest api connection not working //
-
-        assertTrue(driver.getCurrentUrl().equals("http://localhost:3000"));
-    }
     @Then("I should not be logged in")
     public void iVerifyNotLogin() {
         assertTrue(driver.getCurrentUrl().equals("http://localhost:3000/login"));
@@ -82,12 +75,6 @@ public class WebSteps {
 
         assertTrue(driver.getCurrentUrl().equals("http://localhost:3000"));
     }
-    @Then("I should not be registered")
-    public void iVerifyNotRegister() {
-        assertTrue(driver.getCurrentUrl().equals("http://localhost:3000/register"));
-        assertEquals(driver.findElement(By.id("error")).getAttribute("innerHTML"), "ERROR during sign up");
-    }
-
 
 
     // Add item to cart
@@ -117,15 +104,9 @@ public class WebSteps {
     // Order Steps
     @Given("I add an item to the cart")
     public void iHadItemToCart() {
-        try {
-            wait = new WebDriverWait(driver, 10);
-            wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div/div/div/section[2]/div/div[1]")));
-        } catch(TimeoutException e) {
-            System.err.println(e);
-        }
-
-        driver.findElement(By.xpath("/html/body/div/div/div/section[2]/div/div[1]/div[1]/div/button")).click();
-        driver.findElement(By.id("_submit_cart")).click();
+        iSelectLego("Lego Test");
+        iSelectQtty("1", "Lego Test");
+        iClickAddToCart();
     }
 
     @When("I click on the cart")
@@ -135,7 +116,6 @@ public class WebSteps {
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("cart_open")));
         } catch(TimeoutException e) {
             System.err.println(e);
-            driver.findElement(By.id("_submit_cart")).click();
         }
 
         driver.findElement(By.id("cart_open")).click();

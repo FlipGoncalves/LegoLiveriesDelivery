@@ -44,7 +44,7 @@ jobs:
       - name: Assert of service running
         run: curl localhost:3001
       - name: Assert of service backend running
-        run: curl localhost:9001
+        run: curl localhost:9001/api/statistics
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
@@ -67,7 +67,7 @@ jobs:
       - name: Build Legoliveries Backend
         run: docker-compose -f ../docker-compose.yml build legoliveries
       - name: Start Legoliveries Backend
-        run: docker-compose -f ../docker-compose.yml run -d legoliveries
+        run: docker-compose -f ../docker-compose.yml run -p 8081:8081 -d legoliveries
       - name: Build Legoliveries Frontend
         run: docker-compose -f ../docker-compose.yml build legoliveries-app
       - name: Start Legoliveries Frontend
