@@ -52,7 +52,7 @@ class SignUp extends Component {
       })
       .catch((error) => {
         console.log(error);
-        this.setState({error_message: "ERROR during sign up"})
+        this.setState({error_message: "ERROR during sign up : " + error})
       });
 
     }
