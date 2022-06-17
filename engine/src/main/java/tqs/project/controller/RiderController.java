@@ -51,6 +51,7 @@ public class RiderController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
+        log.info("Rider Created Okay");
         return new ResponseEntity<>(riderSaved, HttpStatus.CREATED);
     }
 }

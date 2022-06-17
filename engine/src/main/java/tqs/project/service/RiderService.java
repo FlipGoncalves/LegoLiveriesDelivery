@@ -36,11 +36,12 @@ public class RiderService {
     }
 
     public Rider insertRider(RiderDTO rider) throws UserAlreadyExistsException {
-        log.info("Getting All Rider Data");
+        log.info("Posting Rider Data");
 
         User usr = userrep.findByEmail((String) rider.getEmail());
 
         if (usr != null) {
+            log.info("User Already Exists");
             throw new UserAlreadyExistsException("User with email " + rider.getEmail() + " already exists");
         } 
 
@@ -59,7 +60,9 @@ public class RiderService {
         }
 
         usr = new User(rider.getUsername(), rider.getEmail(),rider.getPassword());
-            rider2.setUser(usr);
+        rider2.setUser(usr);
+
+        log.info("Created Rider: {}", rider2);
 
         return rep.save(rider2);
     }

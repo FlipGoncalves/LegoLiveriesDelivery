@@ -45,6 +45,36 @@ class Management extends Component {
       </tr>
     )
   }
+
+  addRiderToArray(item) {
+    let user = item["user"]
+
+    console.log(item)
+
+    return (
+        <tr>
+          <td class="align-middle text-center">
+            <div>
+              <div class="d-flex flex-column justify-content-center">
+                <h6 class="mb-0 text-sm">{user["username"]}</h6>
+                <p class="text-xs text-secondary mb-0">{user["email"]}</p>
+                <p class="text-xs text-secondary mb-0">{item["riderId"]}</p>
+              </div>
+            </div>
+          </td>
+          <td>
+            <p class="text-xs font-weight-bold mb-0">Aveiro</p>
+          </td>
+          <td class="align-middle text-center text-sm">
+            <span class="badge badge-sm bg-gradient-success">Online</span>
+            <span class="badge badge-sm bg-gradient-secondary">Offline</span>
+          </td>
+          <td class="align-middle text-center">
+            <span class="text-secondary text-xs font-weight-bold">{item["totalReviews"] === 0 ? 0 : Math.round(item["reviewSum"] / item["totalReviews"] * 100) / 100}</span>
+          </td>
+        </tr>
+    )
+  }
   
   render() {
 
@@ -56,7 +86,7 @@ class Management extends Component {
             this.setState({riders: []})
             data.json().then((list) => {
                 let newArray = []
-                list = list["riders"]
+                // list["riders"]
                 list.forEach((item) => {
                     newArray.push(
                         this.addRiderToArray(item)
