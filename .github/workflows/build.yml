@@ -24,7 +24,7 @@ jobs:
       - name: Build Engine Backend
         run: docker-compose -f ../docker-compose.yml build engine
       - name: Start Engine Backend
-        run: docker-compose -f ../docker-compose.yml run -d engine
+        run: docker-compose -f ../docker-compose.yml run -p 9001:9001 -d engine
       - name: Build Engine Frontend
         run: docker-compose -f ../docker-compose.yml build engine-app
       - name: Start Engine Frontend
