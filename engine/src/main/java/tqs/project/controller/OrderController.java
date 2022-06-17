@@ -17,7 +17,7 @@ import tqs.project.model.Order;
 import tqs.project.service.OrderService;
 
 @RestController
-@RequestMapping("/api/order")
+@RequestMapping("/api/orders")
 @Validated
 @CrossOrigin
 public class OrderController {
