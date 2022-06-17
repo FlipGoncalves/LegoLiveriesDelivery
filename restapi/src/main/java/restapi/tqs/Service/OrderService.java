@@ -1,6 +1,7 @@
 package restapi.tqs.Service;
 
 import java.time.Duration;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -116,6 +117,7 @@ public class OrderService {
 
         Order order = new Order();
 
+
         if (orderDTO.getScheduledTimeOfDelivery() >= 2400 || orderDTO.getScheduledTimeOfDelivery() < 0){
             log.info("TimeException");
             throw new BadScheduledTimeOfDeliveryException("The ScheduledTimeOfDelivery " + orderDTO.getScheduledTimeOfDelivery() + ". It needs to be between 0000 and 2400");
@@ -212,7 +214,7 @@ public class OrderService {
         .build();
 
         ResponseEntity<String> responseSpec = webClient.post()
-            .uri("localhost:9001/api/order")
+            .uri("engine:9001/api/order")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .body(BodyInserters.fromValue(makeOrderDTO))
@@ -224,7 +226,7 @@ public class OrderService {
             .toEntity(String.class)
             .block();
 
-            log.info("AFTER CALL");
+        log.info("AFTER CALL");
 
 
         if (responseSpec.getStatusCode().value() != 201){
@@ -243,12 +245,12 @@ public class OrderService {
             throw new OrderNotCreatedException("The order was not created in the engine: " + orderDTO);
         }
 
-        order.setExternalOrderId((long) map.get("orderId"));
+        order.setExternalOrderId( Long.valueOf(String.valueOf(map.get("orderId"))));
+        
+        order.setDate(new Date());
+        
+        order = orderRepository.saveAndFlush(order);
 
-        Order finalOrder = orderRepository.save(order);
-
-        log.info("END");
-
-        return finalOrder;
+        return order;
     }
 }

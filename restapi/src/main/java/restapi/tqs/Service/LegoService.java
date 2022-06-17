@@ -21,14 +21,14 @@ public class LegoService {
     private LegoRepository legorep;
 
 
-    public List<Lego> getData() {
+    public List<Lego> getLegos() {
         log.info("Getting All Lego");
 
         List<Lego> legos = legorep.findAll();
         return legos;
     }
 
-    public List<Lego> getData(String name) {
+    public List<Lego> getLegosByName(String name) {
         
         name = name.replaceAll("[\n\r\t]", "_");
         log.info("Getting Lego By Name {}", name);
@@ -37,7 +37,7 @@ public class LegoService {
         return legos;
     }
 
-    public List<Lego> getData(double price) {
+    public List<Lego> getLegosByPrice(double price) {
         log.info("Getting Lego By Price {}", price);
         
         List<Lego> legos = legorep.findAllByPrice(price);
@@ -45,7 +45,7 @@ public class LegoService {
 
     }
 
-    public Lego insertData(LegoDTO legoDTO) throws BadLegoDTOException {
+    public Lego insertLego(LegoDTO legoDTO) throws BadLegoDTOException {
         log.info("Inserting Lego");
         
         if (legoDTO.hasNullFields()){

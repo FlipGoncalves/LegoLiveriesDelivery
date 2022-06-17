@@ -41,6 +41,7 @@ public class Address {
     private double latitude;
     @Column(name = "longitude", precision = 9, scale = 6)
     private double longitude;
+    
     @OneToOne(mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Store store;
 

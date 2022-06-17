@@ -8,6 +8,8 @@ import restapi.tqs.Exceptions.UserAlreadyExistsException;
 import restapi.tqs.Models.User;
 import restapi.tqs.Repositories.UserRepository;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,10 +23,10 @@ public class UserService {
     public User getUser(String email) {
         log.info("Getting User with email: {}", email);
 
-        User user = rep.findByEmail(email);
+        Optional<User> user = rep.findByEmail(email);
 
         log.info("Got User: {}", user);
-        return user;
+        return user.get();
     }
 
     public User register(RegisterDTO user) throws UserAlreadyExistsException {

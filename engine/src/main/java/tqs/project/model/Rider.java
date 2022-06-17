@@ -33,7 +33,6 @@ public class Rider {
     private int totalReviews;
 
     @OneToOne
-    @JoinColumn(referencedColumnName = "user_id")
     @MapsId
     private User user;
 

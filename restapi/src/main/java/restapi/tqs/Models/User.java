@@ -82,6 +82,7 @@ public class User {
             ", username='" + getUsername() + "'" +
             ", email='" + getEmail() + "'" +
             ", password='" + getPassword() + "'" +
+            ", client='" + getClient().getClientId() +
             "}";
     }
 

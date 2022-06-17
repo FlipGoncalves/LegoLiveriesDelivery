@@ -39,17 +39,14 @@ public class Order {
     private int status; //0 = Not done 1 = In Transit 2 = Done
 
     @ManyToOne
-    @JoinColumn(name = "store_id", referencedColumnName = "store_id")
     @JsonIdentityReference(alwaysAsId = true)
     private Store store;
 
     @ManyToOne
-    //@JoinColumn(name = "rider_id", referencedColumnName = "rider_id")
     @JsonIdentityReference(alwaysAsId = true)
     private Rider rider;
 
     @ManyToOne
-    @JoinColumn(name = "address_id", referencedColumnName = "address_id")
     @JsonIdentityReference(alwaysAsId = true)
     private Address address;
 

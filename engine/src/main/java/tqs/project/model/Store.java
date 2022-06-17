@@ -31,7 +31,6 @@ public class Store {
     private String name;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "address_id", referencedColumnName = "address_id")
     @JsonIdentityReference(alwaysAsId = true)
     private Address address;
 

@@ -74,7 +74,6 @@ public class OrderService {
         }
 
         order.setStore(store.get());
-
         Address address = new Address();
 
         Optional<Address> addressOptional = addressRep.findByLatitudeAndLongitude(orderDTO.getAddress().getLatitude(), orderDTO.getAddress().getLongitude());

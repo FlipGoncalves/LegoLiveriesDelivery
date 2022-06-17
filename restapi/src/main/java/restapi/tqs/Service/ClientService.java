@@ -1,6 +1,7 @@
 package restapi.tqs.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,9 +37,9 @@ public class ClientService {
 
         Client client = new Client();
 
-        User user = userRepository.findByEmail(dto.getEmail());
+        Optional<User> user = userRepository.findByEmail(dto.getEmail());
         
-        if (user == null) {
+        if (user.isEmpty()) {
             throw new UserNotFoundException("User not found: " + dto.toString());
         }
 
@@ -46,7 +47,7 @@ public class ClientService {
             throw new ClientAlreadyExistsException("Client already exists: " + dto.toString());
         }
 
-        client.setUser(user);
+        client.setUser(user.get());
 
         return clientRepository.saveAndFlush(client);
     }

@@ -11,12 +11,6 @@ usersEngine = json_load("userEngineList.json")
 usersLegoliveries = json_load("userLegoliveriesList.json")
 order = json_load("order.json")
 
-"""for j in order:
-    print(j)
-    r = requests.post(url="http://localhost:8080/order", json=j)
-    print(r.status_code)
-
-"""
 print("ADDRESSES ENGINE")
 for j in addressesEngine:
     print(j)
@@ -62,4 +56,9 @@ for j in clients:
 for j in legos:
     print(j)
     r = requests.post(url="http://localhost:8080/lego", json=j)
+    print(r.status_code)
+
+for j in order:
+    print(j)
+    r = requests.post(url="http://localhost:8080/order", json=j)
     print(r.status_code)

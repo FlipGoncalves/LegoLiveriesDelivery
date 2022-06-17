@@ -113,7 +113,6 @@ networks:
       config:
         - subnet: "172.20.202.0/24"
   all-backend:
-    name: external-network
 
 volumes:
   engineData:
