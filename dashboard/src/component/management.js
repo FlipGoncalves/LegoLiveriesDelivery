@@ -102,7 +102,7 @@ class Management extends Component {
             this.setState({orders: []})
             data.json().then((list) => {
                 let newArray = []
-                list = list["orders"]
+                // list["orders"]
                 list.forEach((item) => {
                     newArray.push(
                         this.addOrderToArray(item)
