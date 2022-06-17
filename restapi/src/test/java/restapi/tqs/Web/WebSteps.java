@@ -77,6 +77,7 @@ public class WebSteps {
             wait.until(ExpectedConditions.urlToBe("http://localhost:3000"));
         } catch(TimeoutException e) {
             System.err.println(e);
+            System.out.println("Error message is visible ? " + driver.findElement(By.id("error")).isDisplayed());
         }
         System.out.println(driver.getCurrentUrl());
         assertTrue(driver.getCurrentUrl().equals("http://localhost:3000"));
