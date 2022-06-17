@@ -73,7 +73,7 @@ public class LegoControllerTest {
 
         Mockito.when(service.getData()).thenReturn(all_legos);
 
-        mvc.perform(get("/lego/all_legos")
+        mvc.perform(get("/lego")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -94,7 +94,7 @@ public class LegoControllerTest {
 
         Mockito.when(service.getData("Monster Jam Megalodon - 42134")).thenReturn(new ArrayList<>(Arrays.asList(lego1)));
 
-        mvc.perform(get("/lego/get_lego/name")
+        mvc.perform(get("/lego/name")
         .param("name","Monster Jam Megalodon - 42134")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
@@ -110,7 +110,7 @@ public class LegoControllerTest {
 
         Mockito.when(service.getData("Policial")).thenReturn(new ArrayList<>(Arrays.asList(lego2,lego3)));
         
-        mvc.perform(get("/lego/get_lego/name")
+        mvc.perform(get("/lego/name")
         .param("name","Policial")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
@@ -129,7 +129,7 @@ public class LegoControllerTest {
 
         Mockito.when(service.getData("Not a valid name")).thenReturn(new ArrayList<>());
         
-        mvc.perform(get("/lego/get_lego/name")
+        mvc.perform(get("/lego/name")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
     }
@@ -139,7 +139,7 @@ public class LegoControllerTest {
 
         Mockito.when(service.getData(17.99)).thenReturn(new ArrayList<>(Arrays.asList(lego1,lego3)));
         
-        mvc.perform(get("/lego/get_lego/price")
+        mvc.perform(get("/lego/price")
         .param("price","17.99")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
@@ -158,7 +158,7 @@ public class LegoControllerTest {
 
         Mockito.when(service.getData(30)).thenReturn(new ArrayList<>());
         
-        mvc.perform(get("/lego/get_lego/price")
+        mvc.perform(get("/lego/price")
         .param("price","30")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
@@ -172,7 +172,7 @@ public class LegoControllerTest {
 
         Mockito.when(service.insertData(legoDTO)).thenReturn(lego1);
         
-        mvc.perform(post("/lego/insert_lego")
+        mvc.perform(post("/lego")
         .content(objectMapper.writeValueAsString(legoDTO))
         .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
@@ -190,7 +190,7 @@ public class LegoControllerTest {
 
         Mockito.when(service.insertData(legoDTO)).thenThrow(new BadLegoDTOException("The LegoDTO is invalid: " + legoDTO.toString()));
         
-        mvc.perform(post("/lego/insert_lego")
+        mvc.perform(post("/lego")
         .content(objectMapper.writeValueAsString(legoDTO))
         .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())

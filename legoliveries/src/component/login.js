@@ -31,12 +31,13 @@ const Login = () => {
         const infouser = { username, password }
         console.log(infouser);
         
-        axios.get('http://localhost:8080/lego/login/'+username)
+        axios.get('http://localhost:8080/client/login/'+username)
         .then((response) => {
             console.log(response);
             if (response.status === 200 || response.status === 201) {
-
-                if (response.data["password"] != password) {
+                console.log(response.data);
+                let user = response.data["user"]
+                if (user["password"] != password) {
                     setError("Wrong credential")
                     return
                 }

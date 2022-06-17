@@ -28,21 +28,20 @@ const Register = () => {
 
     const handleSubmit = async e => {
         e.preventDefault();
+
+        setError("")
+
         if(password1 === password2){
-            const infouser = { username, email, password1 }
-            console.log(infouser);
 
-
-            axios.post('http://localhost:8080/lego/register', {
-                body: infouser
+            axios.post('http://localhost:8080/client/register', {
+                username: username,
+                email: email,
+                password: password1
             })
             .then((response) => {
                 console.log(response);
-                if (response.status === 200 || response.status === 201) {
-                    setError("")
-                    console.log("HERE")
-                    navigate("/")
-                }
+                setError("")
+                navigate("/")
             })
             .catch((error) => {
                 console.log(error);
@@ -50,7 +49,8 @@ const Register = () => {
                 return
             });
 
-        } 
+        }
+        
         setError("Passwords not equal")
         return
     }
