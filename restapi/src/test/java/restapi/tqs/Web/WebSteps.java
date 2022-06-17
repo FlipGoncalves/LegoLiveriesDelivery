@@ -114,7 +114,8 @@ public class WebSteps {
     public void iClickOnCart() {
 
         if (! driver.findElement(By.id("cart_open")).isDisplayed()) {
-            wait = new WebDriverWait(driver, 15);
+            iClickAddToCart();
+            wait = new WebDriverWait(driver, 5);
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("cart_open")));
         }
 
