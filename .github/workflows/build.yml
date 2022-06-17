@@ -44,7 +44,7 @@ jobs:
       - name: Assert of service running
         run: curl localhost:3001
       - name: Assert of service backend running
-        run: curl localhost:9001/api/statistics
+        run: curl localhost:9001
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
