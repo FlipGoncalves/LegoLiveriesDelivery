@@ -52,7 +52,7 @@ public class OrderControllerTest {
     void test_GetAllOrders_ReturnsCorrectOrders(){
         when(orderService.getAllOrders()).thenReturn(orders);
 
-        given().get("/api/order")
+        given().get("/api/orders")
                .then().log().body().assertThat()
                .contentType(ContentType.JSON).and()
                .status(HttpStatus.OK).and()

@@ -76,16 +76,16 @@ public class WebSteps {
         WebElement baseTable = driver.findElement(By.id("riders"));
         List<WebElement> tableRows = baseTable.findElements(By.tagName("tr"));
 
-        // System.out.println(tableRows.size());
-        // try {
-        //     WebDriverWait wait = new WebDriverWait(driver, 10);
-        //     wait.until(ExpectedConditions.numberOfElementsToBe(By.id("riders"), 2));
-        // } catch(TimeoutException e) {
-        //     System.err.println(e);
-        // }
+        System.out.println(tableRows.size());
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, 10);
+            wait.until(ExpectedConditions.numberOfElementsToBe(By.id("riders"), 2));
+        } catch(TimeoutException e) {
+            System.err.println(e);
+        }
 
-        // tableRows = baseTable.findElements(By.tagName("tr"));
-        // System.out.println(tableRows.size());
+        tableRows = baseTable.findElements(By.tagName("tr"));
+        System.out.println(tableRows.size());
 
         assertTrue(tableRows.get(tableRows.size()-1).getText().contains(name));
     }
@@ -125,7 +125,7 @@ public class WebSteps {
     public void iVerifyRegister() {
         System.out.println(driver.getCurrentUrl());
         try {
-            WebDriverWait wait = new WebDriverWait(driver, 10);
+            WebDriverWait wait = new WebDriverWait(driver, 30);
             wait.until(ExpectedConditions.urlToBe("http://localhost:3001"));
         } catch(TimeoutException e) {
             System.err.println(e);
