@@ -4,11 +4,12 @@ services:
   legoliveries:
     container_name: legoliveriesBackend
     hostname: legoliveriesBackend
+    image: ghcr.io/flipgoncalves/tqsproject/legoliveries_backend:latest
     build:
       context: restapi
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - 8080:8080
     deploy:
       restart_policy:
         condition: on-failure
@@ -18,7 +19,7 @@ services:
     networks:
       legoliveries-backend:
         ipv4_address: 172.20.202.10
-      all-backend:
+      all_backend:
     depends_on:
       - mysql-legoliveries
       
@@ -39,7 +40,7 @@ services:
         ipv4_address: 172.20.202.2
 
   legoliveries-app:
-    #image: legoliveries-web-app
+    image: ghcr.io/flipgoncalves/tqsproject/legoliveries_frontend:latest
     build:
       context: legoliveries
       dockerfile: Dockerfile
@@ -55,6 +56,7 @@ services:
   engine:
     container_name: engineBackend
     hostname: engineBackend
+    image: ghcr.io/flipgoncalves/tqsproject/deliverio_backend:latest
     build:
       context: engine
       dockerfile: Dockerfile
@@ -71,8 +73,7 @@ services:
     networks:
       engine-backend:
         ipv4_address: 172.20.200.10
-      all-backend:
-
+      all_backend:
   mysql-engine:
     image: mysql:5.7
     container_name: mysqldbengine
@@ -91,6 +92,7 @@ services:
   
   engine-app:
     #image: engine-web-app
+    image: ghcr.io/flipgoncalves/tqsproject/deliverio_frontend:latest
     build:
       context: dashboard
       dockerfile: Dockerfile
