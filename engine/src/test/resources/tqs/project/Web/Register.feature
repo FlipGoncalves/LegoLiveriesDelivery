@@ -7,8 +7,8 @@ Feature: Engine Register
         And I click Register
         Then I should be registered
         Examples:
-            | username | email         | password |
-            |  filipe  | filipeg@ua.pt |  filipe  |
+            | username | email            | password |
+            |  filipe  | filipe@gmail.com |  filipe  |
 
     # @negative
     # Scenario: Error
