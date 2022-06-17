@@ -20,6 +20,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.TimeoutException;
 
 public class WebSteps {
     private final FirefoxOptions options = new FirefoxOptions();
@@ -71,10 +72,21 @@ public class WebSteps {
 
     @Then("I can see the rider {string} was added")
     public void iVerifyRider(String name) {
+
         WebElement baseTable = driver.findElement(By.id("riders"));
         List<WebElement> tableRows = baseTable.findElements(By.tagName("tr"));
 
-        System.out.println(tableRows);
+        System.out.println(tableRows.size());
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, 10);
+            wait.until(ExpectedConditions.numberOfElementsToBe(By.id("riders"), 2));
+        } catch(TimeoutException e) {
+            System.err.println(e);
+        }
+
+        tableRows = baseTable.findElements(By.tagName("tr"));
+        System.out.println(tableRows.size());
+
         assertTrue(tableRows.get(tableRows.size()-1).getText().contains(name));
     }
 
@@ -111,6 +123,14 @@ public class WebSteps {
     }
     @Then("I should be registered")
     public void iVerifyRegister() {
+        System.out.println(driver.getCurrentUrl());
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, 10);
+            wait.until(ExpectedConditions.urlToBe("http://localhost:3001"));
+        } catch(TimeoutException e) {
+            System.err.println(e);
+            System.out.println("Error message is visible ? " + driver.findElement(By.id("error")).isDisplayed());
+        }
         System.out.println(driver.getCurrentUrl());
         assertTrue(driver.getCurrentUrl().equals("http://localhost:3001"));
     }
