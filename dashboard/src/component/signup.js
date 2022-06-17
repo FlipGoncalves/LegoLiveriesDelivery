@@ -1,11 +1,6 @@
 import React, {Component} from 'react';
 import logo from '../assets/../assets/img/favicon.png';
 import '../App.css';
-import '../assets/css/material-dashboard.css';
-import '../assets/css/material-dashboard.css.map';
-import '../assets/css/material-dashboard.min.css';
-import '../assets/css/nucleo-svg.css';
-import '../assets/css/nucleo-icons.css';
 import { Link, useNavigate } from 'react-router-dom';
 import Aside from './aside';
 import axios from 'axios';

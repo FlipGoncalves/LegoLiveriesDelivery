@@ -1,6 +1,11 @@
 import React, {Component} from 'react';
 import logo from './assets//img/favicon.png';
 import './App.css';
+import '../assets/css/material-dashboard.css';
+import '../assets/css/material-dashboard.css.map';
+import '../assets/css/material-dashboard.min.css';
+import '../assets/css/nucleo-svg.css';
+import '../assets/css/nucleo-icons.css';
 import Aside from './component/aside'
 import { Link } from 'react-router-dom';
 import {

@@ -76,7 +76,7 @@ public class WebSteps {
         WebElement baseTable = driver.findElement(By.id("riders"));
         List<WebElement> tableRows = baseTable.findElements(By.tagName("tr"));
 
-        System.out.println(tableRows.size());
+        // wait to update
         try {
             WebDriverWait wait = new WebDriverWait(driver, 10);
             wait.until(ExpectedConditions.numberOfElementsToBe(By.id("riders"), 2));
@@ -85,7 +85,6 @@ public class WebSteps {
         }
 
         tableRows = baseTable.findElements(By.tagName("tr"));
-        System.out.println(tableRows.size());
 
         assertTrue(tableRows.get(tableRows.size()-1).getText().contains(name));
     }
