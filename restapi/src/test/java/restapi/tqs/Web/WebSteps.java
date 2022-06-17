@@ -73,14 +73,16 @@ public class WebSteps {
     public void iVerifyRegister() {
         System.out.println(driver.getCurrentUrl());
         try {
-            wait = new WebDriverWait(driver, 10);
-            wait.until(ExpectedConditions.urlToBe("http://localhost:3000"));
+            WebDriverWait wait = new WebDriverWait(driver, 30);
+            wait.until(ExpectedConditions.urlToBe("http://localhost:3000/"));
         } catch(TimeoutException e) {
             System.err.println(e);
-            System.out.println("Error message is visible ? " + driver.findElement(By.id("error")).isDisplayed());
+            if (driver.findElement(By.id("error")).isDisplayed()) {
+                System.out.println("Error message is visible ? " + driver.findElement(By.id("error")).getAttribute("innerHTML"));
+            }
         }
         System.out.println(driver.getCurrentUrl());
-        assertTrue(driver.getCurrentUrl().equals("http://localhost:3000"));
+        assertTrue(driver.getCurrentUrl().equals("http://localhost:3000/"));
     }
 
 
