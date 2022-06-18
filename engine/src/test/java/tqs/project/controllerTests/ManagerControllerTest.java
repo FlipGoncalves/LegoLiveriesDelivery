@@ -55,7 +55,7 @@ public class ManagerControllerTest {
                .then().log().body().assertThat()
                .contentType(ContentType.JSON).and()
                .status(HttpStatus.OK).and()
-               .body("user", is(user1))
+               .body("user", is(user1));
     }
 
     @Test
