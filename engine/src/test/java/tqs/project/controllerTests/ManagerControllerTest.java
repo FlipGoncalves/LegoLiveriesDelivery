@@ -55,8 +55,8 @@ public class ManagerControllerTest {
                .then().log().body().assertThat()
                .contentType(ContentType.JSON).and()
                .status(HttpStatus.OK).and()
-               .body("user", is(user1.getUsername())).and()
-               .body("email", is(user1.getEmail()));
+               .body("user.username", is(user1.getUsername())).and()
+               .body("user.email", is(user1.getEmail()));
     }
 
     @Test
@@ -85,8 +85,8 @@ public class ManagerControllerTest {
                .then().log().body().assertThat()
                .contentType(ContentType.JSON).and()
                .status(HttpStatus.CREATED).and()
-               .body("username", is(reg.getUsername())).and()
-               .body("email", is(reg.getEmail()));
+               .body("user.username", is(reg.getUsername())).and()
+               .body("user.email", is(reg.getEmail()));
     }
 
 }
