@@ -39,7 +39,7 @@ class SignUp extends Component {
 
       console.log("Register")
       
-      axios.post('http://localhost:9001/api/user/register', {
+      axios.post('http://localhost:9001/api/manager', {
         "username": name,
         "email": email,
         "password": pass
