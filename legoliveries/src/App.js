@@ -191,20 +191,13 @@ class App extends Component {
                 return false
             }
 
-            let dic = []
-            let count = 0
-
-            this.state.cart.forEach((item) => {
-                dic.push({  name: document.getElementById(count).textContent, 
-                            price: document.getElementById(count+'price').textContent,
-                            qtty: document.getElementById(count+'qtty').textContent});
-                count++;
-            })
 
             let street = document.getElementById("street").value;
             let city = document.getElementById("city").value;
             let country = document.getElementById("country").value;
             let postal = document.getElementById("postal").value;
+            let latit = document.getElementById("latit").value;
+            let longit = document.getElementById("longit").value;
 
             if (street === "") {
                 this.setState({error_message: "Please insert street"})
@@ -218,22 +211,56 @@ class App extends Component {
             } else if (postal === "") {
                 this.setState({error_message: "Please insert postal code"})
                 return false
+            } else if (latit === "") {
+                this.setState({error_message: "Please insert latittude"})
+                return false
+            } else if (longit === "") {
+                this.setState({error_message: "Please insert longitude"})
+                return false
             }
 
             let time_of_delivery = document.getElementById("hour").value
+            let address = null
 
             // create address
-            let resp = fetch('http://localhost:8080/lego/address', {
+            let resp = fetch('http://localhost:8080/address', {
                 method: 'POST',
-                body: dic
+                body: {
+                    street: street,
+                    city: city,
+                    country: country,
+                    postalCode: postal,
+                    latitude: latit,
+                    longitude: longit
+                }
             }).then((data) => {
                 console.log("Success address")
+                console.log(data)                                   // needs to save address
+                address = data
+            }).catch((error) => {
+                console.log("ERROR IN ADDRESS CREATION")
+                return
+            })
+
+            let count = 0
+
+            let dic = []
+            this.state.cart.forEach((item) => {
+                dic.push({
+                            legoPrice: document.getElementById(count+'price').textContent,
+                            quantity: document.getElementById(count+'qtty').textContent
+                        });
+                count++;
             })
 
             // create order
-            resp = fetch('http://localhost:8080/lego/order', {
+            resp = fetch('http://localhost:8080/order', {
                 method: 'POST',
-                body: dic
+                body: {
+                    address: address,
+                    scheduledTimeOfDelivery: time_of_delivery,
+                    legos: dic
+                }
             }).then((data) => {
                 document.getElementById("btn-close").click();
             })
@@ -403,6 +430,18 @@ class App extends Component {
                                         <div className="form-group">
                                             <b><label htmlFor="postal">Postal-Code</label></b>
                                             <input className="form-control input-filled-valid" id="postal" name="postal"
+                                                required type="text"/>
+                                        </div>
+                                    </div>
+                                     <div class="row">
+                                        <div className="form-group">
+                                            <b><label htmlFor="city">Latitude</label></b>
+                                            <input className="form-control input-filled-valid" id="letit" name="letit"
+                                                required type="text"/>
+                                        </div>
+                                        <div className="form-group">
+                                            <b><label htmlFor="country">Longitude</label></b>
+                                            <input className="form-control input-filled-valid" id="longit" name="longit"
                                                 required type="text"/>
                                         </div>
                                     </div>

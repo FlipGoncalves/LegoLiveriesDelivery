@@ -133,12 +133,14 @@ public class WebSteps {
         driver.findElement(By.id("cart_open")).click();
     }
 
-    @When("I input my {string}, {string}, {string} and {string}")
-    public void iSelectType(String street, String city, String country, String code) {
+    @When("I input the street: {string}, the city: {string}, the country: {string}, the postal code: {string}, the latitude: {string} and the longitude: {string}")
+    public void iSelectType(String street, String city, String country, String code, String latit, String longit) {
         driver.findElement(By.id("street")).sendKeys(street);
         driver.findElement(By.id("city")).sendKeys(city);
         driver.findElement(By.id("country")).sendKeys(country);
         driver.findElement(By.id("postal")).sendKeys(code);
+        driver.findElement(By.id("latit")).sendKeys(latit);
+        driver.findElement(By.id("longit")).sendKeys(longit);
     }
 
     @When("I choose {string}")
