@@ -217,6 +217,12 @@ class App extends Component {
             } else if (longit === "") {
                 this.setState({error_message: "Please insert longitude"})
                 return false
+            } else if (latit < 0 || latit > 90) {
+                this.setState({error_message: "Please insert valid latitude values"})
+                return false
+            } else if (longit < -180 || longit > 180) {
+                this.setState({error_message: "Please insert valid longitude values"})
+                return false
             }
 
             let time_of_delivery = document.getElementById("hour").value
@@ -239,7 +245,8 @@ class App extends Component {
                 address = data
             }).catch((error) => {
                 console.log("ERROR IN ADDRESS CREATION")
-                return
+                this.setState({error_message: "Could not create the order, please try again"})
+                // return
             })
 
             let count = 0
@@ -247,11 +254,29 @@ class App extends Component {
             let dic = []
             this.state.cart.forEach((item) => {
                 dic.push({
-                            legoPrice: document.getElementById(count+'price').textContent,
+                            name: document.getElementById(count).textContent,
+                            legoPrice: document.getElementById(count+'price').textContent / document.getElementById(count+'qtty').textContent,
                             quantity: document.getElementById(count+'qtty').textContent
                         });
                 count++;
             })
+
+            console.log("Address: ")
+            console.log({
+                street: street,
+                city: city,
+                country: country,
+                postalCode: postal,
+                latitude: latit,
+                longitude: longit
+            })
+
+            console.log("Order: ")
+            console.log({
+                address: address,
+                scheduledTimeOfDelivery: time_of_delivery,
+                legos: dic
+            });
 
             // create order
             resp = fetch('http://localhost:8080/order', {
@@ -262,15 +287,20 @@ class App extends Component {
                     legos: dic
                 }
             }).then((data) => {
+                this.setState({error_message: ""})
                 document.getElementById("btn-close").click();
+                
+            }).catch((error) => {
+                console.log("ERROR IN ORDER CREATION");
+                this.setState({error_message: "Could not create the order, please try again"})
+                // return
             })
-
-            this.setState({error_message: ""})
 
             console.log("here")
             this.setState({cart: []})
+            this.setState({total_price: 0})
+            this.setState({total_products: 0})
 
-            // error message
         }
 
         if (this.state.count === 1) {
@@ -435,12 +465,12 @@ class App extends Component {
                                     </div>
                                      <div class="row">
                                         <div className="form-group">
-                                            <b><label htmlFor="city">Latitude</label></b>
-                                            <input className="form-control input-filled-valid" id="letit" name="letit"
+                                            <b><label htmlFor="latit">Latitude</label></b>
+                                            <input className="form-control input-filled-valid" id="latit" name="latit"
                                                 required type="text"/>
                                         </div>
                                         <div className="form-group">
-                                            <b><label htmlFor="country">Longitude</label></b>
+                                            <b><label htmlFor="longit">Longitude</label></b>
                                             <input className="form-control input-filled-valid" id="longit" name="longit"
                                                 required type="text"/>
                                         </div>
