@@ -171,7 +171,7 @@ public class LegoControllerTestIT {
 
         LegoDTO legoDTO = new LegoDTO(LEGO_NAME1, LEGO_PRICE1, LEGO_IMAGEURL1);
         
-        mvc.perform(post("/lego")
+        mvc.perform(post("/legos")
         .content(objectMapper.writeValueAsString(legoDTO))
         .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
@@ -187,7 +187,7 @@ public class LegoControllerTestIT {
 
         LegoDTO legoDTO = new LegoDTO("  ", LEGO_PRICE1, LEGO_IMAGEURL1); 
         
-        mvc.perform(post("/lego")
+        mvc.perform(post("/legos")
         .content(objectMapper.writeValueAsString(legoDTO))
         .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())

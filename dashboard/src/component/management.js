@@ -135,7 +135,9 @@ class Management extends Component {
       axios.post('http://localhost:9001/api/riders', {
         "username": name,
         "email": email,
-        "password": password
+        "password": password,
+        "totalReviews": 0,
+        "reviewSum": 0
       })
       .then((response) => {
         console.log(response);
