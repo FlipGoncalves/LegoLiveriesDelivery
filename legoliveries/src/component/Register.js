@@ -33,7 +33,7 @@ const Register = () => {
 
         if(password1 === password2){
 
-            axios.post('http://localhost:8080/client/register', {
+            axios.post('http://localhost:8080/clients/register', {
                 username: username,
                 email: email,
                 password: password1

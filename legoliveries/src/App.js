@@ -119,7 +119,7 @@ class App extends Component {
 
         const RequestMapping = () => {
         
-            let resp = fetch('http://localhost:8080/lego', {
+            let resp = fetch('http://localhost:8080/legos', {
                 method: 'GET'
             }).then((data) => {
                 this.setState({items: []})
@@ -155,7 +155,7 @@ class App extends Component {
                 RequestMapping();
             } else {
 
-                let resp = fetch('http://localhost:8080/lego/'+value_category+'?'+value_category+'='+searchparams, {
+                let resp = fetch('http://localhost:8080/legos/'+value_category+'?'+value_category+'='+searchparams, {
                     method: 'GET'
                 }).then((data) => {
                     if (data.status === 200) {
@@ -229,7 +229,7 @@ class App extends Component {
             let address = null
 
             // create address
-            let resp = fetch('http://localhost:8080/address', {
+            let resp = fetch('http://localhost:8080/addresses', {
                 method: 'POST',
                 body: {
                     street: street,
@@ -279,7 +279,7 @@ class App extends Component {
             });
 
             // create order
-            resp = fetch('http://localhost:8080/order', {
+            resp = fetch('http://localhost:8080/orders', {
                 method: 'POST',
                 body: {
                     address: address,

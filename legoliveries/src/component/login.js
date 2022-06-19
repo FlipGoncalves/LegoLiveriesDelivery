@@ -31,7 +31,7 @@ const Login = () => {
         const infouser = { username, password }
         console.log(infouser);
         
-        axios.get('http://localhost:8080/client/login/'+username)
+        axios.get('http://localhost:8080/clients/login/'+username)
         .then((response) => {
             console.log(response);
             if (response.status === 200 || response.status === 201) {
