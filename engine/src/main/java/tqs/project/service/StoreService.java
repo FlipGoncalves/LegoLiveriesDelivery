@@ -12,8 +12,8 @@ import tqs.project.datamodels.StoreDTO;
 import tqs.project.exceptions.StoreAlreadyExistsException;
 import tqs.project.model.Address;
 import tqs.project.model.Store;
-import tqs.project.repositories.AddressRepository;
-import tqs.project.repositories.StoreRepository;
+import tqs.project.repository.AddressRepository;
+import tqs.project.repository.StoreRepository;
 
 @Service
 public class StoreService {

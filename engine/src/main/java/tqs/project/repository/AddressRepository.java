@@ -1,4 +1,4 @@
-package tqs.project.repositories;
+package tqs.project.repository;
 
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package tqs.project.servicesTests;
+package tqs.project.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import tqs.project.model.Order;
 import tqs.project.model.Store;
-import tqs.project.repositories.OrderRepository;
+import tqs.project.repository.OrderRepository;
 import tqs.project.service.OrderService;
 
 import java.util.ArrayList;

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import tqs.project.datamodels.AddressDTO;
 import tqs.project.exceptions.AddressAlreadyExistsException;
 import tqs.project.model.Address;
-import tqs.project.repositories.AddressRepository;
+import tqs.project.repository.AddressRepository;
 
 @Service
 public class AddressService {

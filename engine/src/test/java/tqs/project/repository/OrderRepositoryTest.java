@@ -1,4 +1,4 @@
-package tqs.project.repositoryTests;
+package tqs.project.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -13,10 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-import tqs.project.repositories.OrderRepository;
-import tqs.project.repositories.StoreRepository;
 import tqs.project.model.Order;
 import tqs.project.model.Store;
+import tqs.project.repository.OrderRepository;
+import tqs.project.repository.StoreRepository;
 
 @DataJpaTest
 class OrderRepositoryTest {

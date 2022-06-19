@@ -5,44 +5,48 @@ import org.springframework.stereotype.Service;
 
 import tqs.project.datamodels.RegisterDTO;
 import tqs.project.exceptions.UserAlreadyExistsException;
+import tqs.project.model.Manager;
 import tqs.project.model.User;
-import tqs.project.repository.UserRepository;
+import tqs.project.repository.ManagerRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Service
-public class UserService {    
+public class ManagerService {    
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
-    private UserRepository rep;
+    private ManagerRepository rep;
 
-    public User getUser(String email) {
+    public Manager getUser(String email) {
         log.info("Getting User with email: {}", email);
 
-        User user = rep.findByEmail(email);
+        Manager user = rep.findByUserEmail(email);
 
         log.info("Got User: {}", user);
         return user;
     }
 
-    public User register(RegisterDTO user) throws UserAlreadyExistsException {
+    public Manager register(RegisterDTO user) throws UserAlreadyExistsException {
         log.info("Registering User: {}", user);
 
-        User registerUser = new User();
+        Manager registerManager = new Manager();
 
-        if (rep.findByEmail(user.getEmail()) != null) {
+        if (rep.findByUserEmail(user.getEmail()) != null) {
             throw new UserAlreadyExistsException("User already exists: " + user.toString());
         }
+
+        User registerUser = new User();
 
         registerUser.setEmail(user.getEmail());
         registerUser.setPassword(user.getPassword());
         registerUser.setUsername(user.getUsername());
 
-        registerUser = rep.save(registerUser);
-        log.info("User Registered: {}", registerUser);
+        registerManager.setUser(registerUser);
+        registerManager = rep.save(registerManager);
+        log.info("User Registered: {}", registerManager);
 
-        return registerUser;
+        return registerManager;
     }
 }

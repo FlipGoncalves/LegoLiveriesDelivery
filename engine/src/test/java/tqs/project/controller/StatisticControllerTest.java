@@ -1,4 +1,4 @@
-package tqs.project.controllerTests;
+package tqs.project.controller;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.hamcrest.Matchers.is;

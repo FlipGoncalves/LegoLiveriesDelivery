@@ -8,9 +8,9 @@ import tqs.project.exceptions.StoreNotFoundException;
 import tqs.project.model.Address;
 import tqs.project.model.Order;
 import tqs.project.model.Store;
-import tqs.project.repositories.AddressRepository;
-import tqs.project.repositories.OrderRepository;
-import tqs.project.repositories.StoreRepository;
+import tqs.project.repository.AddressRepository;
+import tqs.project.repository.OrderRepository;
+import tqs.project.repository.StoreRepository;
 
 import java.util.List;
 import java.util.Optional;

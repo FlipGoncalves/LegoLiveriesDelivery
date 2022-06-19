@@ -12,8 +12,8 @@ import tqs.project.datamodels.RiderDTO;
 import tqs.project.exceptions.UserNotFoundException;
 import tqs.project.model.Rider;
 import tqs.project.model.User;
-import tqs.project.repositories.RiderRepository;
-import tqs.project.repositories.UserRepository;
+import tqs.project.repository.RiderRepository;
+import tqs.project.repository.UserRepository;
 
 @Service
 public class RiderService {    

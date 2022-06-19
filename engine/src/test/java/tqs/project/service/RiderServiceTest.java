@@ -1,4 +1,4 @@
-package tqs.project.servicesTests;
+package tqs.project.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -22,8 +22,8 @@ import tqs.project.exceptions.UserAlreadyExistsException;
 import tqs.project.exceptions.UserNotFoundException;
 import tqs.project.model.Rider;
 import tqs.project.model.User;
-import tqs.project.repositories.RiderRepository;
-import tqs.project.repositories.UserRepository;
+import tqs.project.repository.RiderRepository;
+import tqs.project.repository.UserRepository;
 import tqs.project.service.RiderService;
 
 @ExtendWith(MockitoExtension.class)
