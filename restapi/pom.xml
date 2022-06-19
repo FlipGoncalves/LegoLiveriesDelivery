@@ -30,8 +30,8 @@
 
 		<junit-platform-suite.version>1.8.2</junit-platform-suite.version>
 		<cucumber.version>7.2.3</cucumber.version>
-		<selenium-java.version>4.2.2</selenium-java.version>
-		<webdrivermanager.version>5.1.0</webdrivermanager.version>
+		<selenium-java.version>3.141.59</selenium-java.version>
+		<webdrivermanager.version>4.3.1</webdrivermanager.version>
 
 		<project.encondig>UTF-8</project.encondig>
 		<project.build.sourceEncoding>${project.encondig}</project.build.sourceEncoding>
