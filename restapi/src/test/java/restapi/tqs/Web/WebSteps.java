@@ -14,6 +14,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.TimeoutException;
@@ -25,9 +26,9 @@ public class WebSteps {
 
     @Given("I am in {string}")
     public void iAmOnThePage(String baseUrl) {
-        WebDriverManager.firefoxdriver().setup();
+        WebDriverManager.chromedriver().setup();
         options.setHeadless(true);
-        driver = new FirefoxDriver(options);
+        driver = new ChromeDriver(options);
         
         driver.get(baseUrl);
     }
