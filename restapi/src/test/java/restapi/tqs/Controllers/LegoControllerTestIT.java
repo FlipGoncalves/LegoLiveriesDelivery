@@ -185,7 +185,7 @@ public class LegoControllerTestIT {
     @Test
     void test_InsertLego_InvalidLegoDTO_ReturnsBadRequestStatus() throws Exception{
 
-        LegoDTO legoDTO = new LegoDTO(null, LEGO_PRICE1, LEGO_IMAGEURL1); 
+        LegoDTO legoDTO = new LegoDTO("  ", LEGO_PRICE1, LEGO_IMAGEURL1); 
         
         mvc.perform(post("/lego")
         .content(objectMapper.writeValueAsString(legoDTO))

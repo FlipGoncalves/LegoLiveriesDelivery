@@ -13,8 +13,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class OrderDTO {
-    
-    private long externalOrderId;
 
     @NonNull
     private String clientName;

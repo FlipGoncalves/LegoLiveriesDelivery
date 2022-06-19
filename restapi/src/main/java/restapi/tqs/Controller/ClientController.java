@@ -17,8 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import restapi.tqs.DataModels.RegisterDTO;
 import restapi.tqs.Exceptions.ClientAlreadyExistsException;
-import restapi.tqs.Exceptions.UserAlreadyExistsException;
-import restapi.tqs.Exceptions.UserNotFoundException;
+import restapi.tqs.Exceptions.ClientNotFoundException;
 import restapi.tqs.Models.Client;
 import restapi.tqs.Service.ClientService;
 
@@ -26,7 +25,7 @@ import restapi.tqs.Service.ClientService;
 @CrossOrigin
 @RequestMapping("/client")
 public class ClientController {
-    private static final Logger log = LoggerFactory.getLogger(LegoController.class);
+    private static final Logger log = LoggerFactory.getLogger(ClientController.class);
 
     @Autowired
     private ClientService clientService;
@@ -38,27 +37,27 @@ public class ClientController {
         return new ResponseEntity<>(clients, HttpStatus.OK);
     }
 
-    @GetMapping("/login/{clientemail}")
-    public ResponseEntity<Client> login(@PathVariable String clientemail) {
-        log.info("GET Request -> Login Client");
+    @GetMapping("/login/{clientEmail}")
+    public ResponseEntity<Client> getClientByEmail(@PathVariable String clientEmail) {
+        log.info("GET Request -> Login Email ");
         Client client;
         try {
-            client = clientService.login(clientemail);
-        } catch (UserNotFoundException e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            client = clientService.login(clientEmail);
+        } catch (ClientNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(client, HttpStatus.OK);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Client> register(@RequestBody RegisterDTO clientDTO) {
-        log.info("POST Request -> Insert Client: {}", clientDTO);
+    public ResponseEntity<Client> insertClient(@RequestBody RegisterDTO clientDTO) {
+        log.info("Post Request -> Insert Client: {}", clientDTO);
 
         Client client;
         try {
             client = clientService.insertClient(clientDTO);
-        } catch (UserAlreadyExistsException | ClientAlreadyExistsException e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        } catch (ClientAlreadyExistsException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(client, HttpStatus.CREATED);

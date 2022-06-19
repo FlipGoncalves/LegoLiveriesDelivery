@@ -20,9 +20,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 
 @RestController
 @CrossOrigin
+@Validated
 @RequestMapping("/lego")
 public class LegoController {
     private static final Logger log = LoggerFactory.getLogger(LegoController.class);
@@ -31,9 +33,9 @@ public class LegoController {
     private LegoService legoService;
 
     @GetMapping()
-    public ResponseEntity<List<Lego>> getAllData() {
+    public ResponseEntity<List<Lego>> getAllLegos() {
         log.info("GET Request -> All Lego Data");
-        List<Lego> legos = legoService.getData();
+        List<Lego> legos = legoService.getLegos();
         return new ResponseEntity<>(legos, HttpStatus.OK);
     }
 
@@ -42,7 +44,7 @@ public class LegoController {
         name = name.replaceAll("[\n\r\t]", "_");
         log.info("GET Request -> Lego Data by name: {}", name);
 
-        List<Lego> data = legoService.getData(name);
+        List<Lego> data = legoService.getLegosByName(name);
 
         if (data.isEmpty()) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -56,7 +58,7 @@ public class LegoController {
         price = price.replaceAll("[\n\r\t]", "_");
         log.info("GET Request -> Lego Data by price: {}", price);
 
-        List<Lego> data = legoService.getData(Double.parseDouble(price));
+        List<Lego> data = legoService.getLegosByPrice(Double.parseDouble(price));
 
         if (data.isEmpty()) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -65,14 +67,13 @@ public class LegoController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
-    
     @PostMapping()
     public ResponseEntity<Lego> insertLego(@RequestBody LegoDTO lego) {
         log.info("Post Request -> Insert Lego: {}", lego);
 
         Lego lego2;
         try {
-            lego2 = legoService.insertData(lego);
+            lego2 = legoService.insertLego(lego);
         } catch (BadLegoDTOException e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }

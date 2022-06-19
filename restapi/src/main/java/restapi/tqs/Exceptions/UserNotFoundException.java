@@ -1,4 +1,3 @@
-
 package restapi.tqs.Exceptions;
 
 import org.springframework.http.HttpStatus;

@@ -19,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import tqs.project.datamodels.RiderDTO;
 import tqs.project.exceptions.UserAlreadyExistsException;
+import tqs.project.exceptions.UserNotFoundException;
 import tqs.project.model.Rider;
 import tqs.project.model.User;
 import tqs.project.repositories.RiderRepository;
@@ -55,7 +56,7 @@ class RiderServiceTest {
     }
 
     @Test
-    void insertRider_ValidRider_WithNumRev_ReturnsCorrectRider() throws UserAlreadyExistsException{
+    void insertRider_ValidRider_WithNumRev_ReturnsCorrectRider() throws UserAlreadyExistsException, UserNotFoundException{
 
         RiderDTO request = new RiderDTO("New User", "user@gmail.com", "password", 10, 30);
         
@@ -63,11 +64,12 @@ class RiderServiceTest {
         user.setEmail("user@gmail.com");
         user.setUsername("New User");
 
+
         Rider rider = new Rider(30,10);
         rider.setUser(user);
 
         
-        when(userRep.findByEmail("user@gmail.com")).thenReturn(null);
+        when(userRep.findByEmail("user@gmail.com")).thenReturn(user);
         when(riderRep.save(any(Rider.class))).thenReturn(rider);
 
         Rider response = service.insertRider(request);
@@ -83,40 +85,7 @@ class RiderServiceTest {
     }
 
     @Test
-    void insertRider_ValidRider_WithoutNumRev_ReturnsCorrectRider() throws UserAlreadyExistsException{
-        int numRev = 25;
-        int totalRev = 5;
-
-        RiderDTO request = new RiderDTO();
-        request.setEmail("user@gmail.com");
-        request.setUsername("New User");
-        request.setPassword("password");
-        
-        User user = new User();
-        user.setEmail("user@gmail.com");
-        user.setUsername("New User");
-
-        Rider rider = new Rider(numRev,totalRev); //The reviewSum and totalReviews here are random numbers that would be created in the service
-        rider.setUser(user);
-        
-        when(userRep.findByEmail("user@gmail.com")).thenReturn(null);
-        when(riderRep.save(any(Rider.class))).thenReturn(rider);
-
-        Rider response = service.insertRider(request);
-
-        verify(userRep, times(1)).findByEmail("user@gmail.com");
-        verify(riderRep, times(1)).save(any(Rider.class));
-
-        assertEquals(user.getUsername(), response.getUser().getUsername());
-        assertEquals(user.getEmail(), response.getUser().getEmail());
-        assertEquals(totalRev, response.getTotalReviews());
-        assertEquals(numRev, response.getReviewSum());
-
-    }
-
-    @Test
-    void insertRider_UserAlreadyExists_ThrowsUserAlreadyExistsException(){
-
+    void insertRider_ValidRider_WithoutNumRev_ReturnsCorrectRider() throws UserAlreadyExistsException, UserNotFoundException{
         int numRev = 25;
         int totalRev = 5;
 
@@ -133,8 +102,41 @@ class RiderServiceTest {
         rider.setUser(user);
         
         when(userRep.findByEmail("user@gmail.com")).thenReturn(user);
+        when(riderRep.save(any(Rider.class))).thenReturn(rider);
+
+        Rider response = service.insertRider(request);
+
+        verify(userRep, times(1)).findByEmail("user@gmail.com");
+        verify(riderRep, times(1)).save(any(Rider.class));
+
+        assertEquals(user.getUsername(), response.getUser().getUsername());
+        assertEquals(user.getEmail(), response.getUser().getEmail());
+        assertEquals(totalRev, response.getTotalReviews());
+        assertEquals(numRev, response.getReviewSum());
+
+    }
+
+    @Test
+    void insertRider_UserDoesNotExist_ThrowsUserNotFoundException(){
+
+        int numRev = 25;
+        int totalRev = 5;
+
+        RiderDTO request = new RiderDTO();
+        request.setEmail("user@gmail.com");
+        request.setUsername("New User");
+        request.setPassword("password");
         
-        assertThrows(UserAlreadyExistsException.class, () -> {service.insertRider(request);});
+        User user = new User();
+        user.setEmail("user@gmail.com");
+        user.setUsername("New User");
+
+        Rider rider = new Rider(numRev,totalRev); //The reviewSum and totalReviews here are random numbers that would be created in the service
+        rider.setUser(user);
+        
+        when(userRep.findByEmail("user@gmail.com")).thenReturn(null);
+        
+        assertThrows(UserNotFoundException.class, () -> {service.insertRider(request);});
         verify(userRep, times(1)).findByEmail("user@gmail.com");
         verify(riderRep, times(0)).save(any(Rider.class));
     }

@@ -24,7 +24,7 @@ import tqs.project.service.UserService;
 @Validated
 @CrossOrigin
 public class UserController {
-    private static final Logger log = LoggerFactory.getLogger(StatisticController.class);
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserService userservice;

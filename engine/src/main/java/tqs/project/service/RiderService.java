@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tqs.project.datamodels.RiderDTO;
-import tqs.project.exceptions.UserAlreadyExistsException;
+import tqs.project.exceptions.UserNotFoundException;
 import tqs.project.model.Rider;
 import tqs.project.model.User;
 import tqs.project.repositories.RiderRepository;
@@ -35,14 +35,13 @@ public class RiderService {
         return riders;
     }
 
-    public Rider insertRider(RiderDTO rider) throws UserAlreadyExistsException {
-        log.info("Posting Rider Data");
+    public Rider insertRider(RiderDTO rider) throws UserNotFoundException{
+        log.info("Getting All Rider Data");
 
         User usr = userrep.findByEmail((String) rider.getEmail());
 
-        if (usr != null) {
-            log.info("User Already Exists");
-            throw new UserAlreadyExistsException("User with email " + rider.getEmail() + " already exists");
+        if (usr == null) {
+            throw new UserNotFoundException("User with email " + rider.getEmail() + " already exists");
         } 
 
         Rider rider2;
@@ -59,10 +58,14 @@ public class RiderService {
             rider2 = new Rider(sum, numRev);
         }
 
+<<<<<<< HEAD
         usr = new User(rider.getUsername(), rider.getEmail(),rider.getPassword());
         rider2.setUser(usr);
 
         log.info("Created Rider: {}", rider2);
+=======
+        rider2.setUser(usr);
+>>>>>>> origin/new/connect_legoriveries_to_engine
 
         return rep.save(rider2);
     }
