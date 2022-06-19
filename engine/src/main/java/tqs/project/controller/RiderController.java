@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import tqs.project.datamodels.RiderDTO;
+import tqs.project.exceptions.RiderAlreadyExistsException;
+import tqs.project.exceptions.RiderNotFoundException;
 import tqs.project.exceptions.UserNotFoundException;
 import tqs.project.model.Rider;
 import tqs.project.service.RiderService;
@@ -34,7 +36,7 @@ public class RiderController {
     public ResponseEntity<List<Rider>> getAllRiders() {
         log.info("GET Request -> All Riders Data");
 
-        List<Rider> riders = riderservice.getAllData();
+        List<Rider> riders = riderservice.getAllRiders();
 
         return new ResponseEntity<>(riders, HttpStatus.OK);
     }
@@ -44,10 +46,11 @@ public class RiderController {
         log.info("POST Request -> Rider data");
 
         Rider riderSaved;
+        
         try {
             riderSaved = riderservice.insertRider(rider);
-        } catch (UserNotFoundException e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        } catch (RiderAlreadyExistsException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(riderSaved, HttpStatus.CREATED);

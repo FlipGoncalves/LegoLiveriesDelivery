@@ -37,7 +37,7 @@ public class StatisticController {
 
         if (storeId == null){
             stats.setNumOrders(orderservice.getAllOrders().size());
-            stats.setNumRiders(riderservice.getAllData().size());
+            stats.setNumRiders(riderservice.getAllRiders().size());
             stats.setCompletedOrders(orderservice.getAllOrdersByStatus(2).size());
         }else{
             stats.setNumOrders(orderservice.getAllOrdersByStoreId(storeId).size());
