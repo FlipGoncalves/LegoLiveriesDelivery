@@ -13,22 +13,23 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import tqs.project.model.Manager;
+import tqs.project.model.Rider;
 import tqs.project.model.User;
 
 @DataJpaTest
-class ManagerRepositoryTest {
+class RiderRepositoryTest {
 
     @Autowired
     private TestEntityManager entityManager;
 
     @Autowired
-    private ManagerRepository managerRepository;
+    private RiderRepository riderRepository;
 
     @Autowired 
     UserRepository userRepository;
 
     User user1;
-    Manager manager1;
+    Rider rider1;
 
     @BeforeEach
     void setUp(){
@@ -36,13 +37,13 @@ class ManagerRepositoryTest {
 
         user1 = userRepository.saveAndFlush(user1);
 
-        manager1 = new Manager();
+        rider1 = new Rider();
 
-        manager1.setUser(user1);
+        rider1.setUser(user1);
 
-        manager1 = managerRepository.saveAndFlush(manager1);
+        rider1 = riderRepository.saveAndFlush(rider1);
 
-        user1.setManager(manager1);
+        user1.setRider(rider1);
     }
 
     @AfterEach
@@ -52,15 +53,15 @@ class ManagerRepositoryTest {
 
     @Test
     void test_FindByUserEmail_ValidEmail_ReturnsCorrectManager(){
-        Optional<Manager> result = managerRepository.findByUserEmail(user1.getEmail());
+        Optional<Rider> result = riderRepository.findByUserEmail(user1.getEmail());
 
         assertTrue(result.isPresent());
-        assertEquals(manager1, result.get());  
+        assertEquals(rider1, result.get());  
     }
 
     @Test
     void test_FindByUserEmail_InvalidEmail_ReturnsEmptyOptional(){
-        Optional<Manager> result = managerRepository.findByUserEmail("Not a user email");
+        Optional<Rider> result = riderRepository.findByUserEmail("Not a user email");
 
         assertTrue(result.isEmpty());
     }

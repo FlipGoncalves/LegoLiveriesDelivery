@@ -47,7 +47,6 @@ public class User {
         this.password = password;
     }
 
-
     public long getUserId() {
         return this.userId;
     }
@@ -94,7 +93,7 @@ public class User {
 
     public void setManager(Manager manager) {
         this.manager = manager;
-    }
+    }    
 
     @Override
     public String toString() {

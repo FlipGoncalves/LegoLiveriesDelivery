@@ -132,7 +132,7 @@ public class Address {
 
     public void setOrders(Set<Order> orders) {
         this.orders = orders;
-    }
+    }    
 
     public void convertDTOtoObject(AddressDTO dto){
         this.setCity(dto.getCity());

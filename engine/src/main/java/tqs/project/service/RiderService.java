@@ -2,6 +2,7 @@ package tqs.project.service;
 
 import java.security.SecureRandom;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tqs.project.datamodels.RiderDTO;
+import tqs.project.exceptions.RiderAlreadyExistsException;
+import tqs.project.exceptions.RiderNotFoundException;
 import tqs.project.exceptions.UserNotFoundException;
 import tqs.project.model.Rider;
 import tqs.project.model.User;
@@ -22,44 +25,65 @@ public class RiderService {
     private SecureRandom rand = new SecureRandom();
 
     @Autowired
-    private RiderRepository rep;
+    private RiderRepository riderRepository;
 
     @Autowired
-    private UserRepository userrep;
+    private UserRepository userRepository;
 
-    public List<Rider> getAllData() {
+    public List<Rider> getAllRiders() {
         log.info("Getting All Rider Data");
 
-        List<Rider> riders = rep.findAll();
-
-        return riders;
+        return riderRepository.findAll();
     }
 
-    public Rider insertRider(RiderDTO rider) throws UserNotFoundException{
+    public Rider insertRider(RiderDTO dto) throws RiderAlreadyExistsException{
         log.info("Getting All Rider Data");
 
-        User usr = userrep.findByEmail((String) rider.getEmail());
+        Rider rider = new Rider();
 
-        if (usr == null) {
-            throw new UserNotFoundException("User with email " + rider.getEmail() + " already exists");
+        if (riderRepository.findByUserEmail(dto.getEmail()).isPresent()) {
+            throw new RiderAlreadyExistsException("Rider with email " + dto.getEmail() + " already exists");
         } 
 
-        Rider rider2;
+        User user = createOrGetUser(dto);
 
-        if (rider.getNumRev() < 0) {
-            rider2 = new Rider(rider.getSumRev(), rider.getNumRev());
+        int numRev = rand.nextInt(16);
+        int sumRev = 0;
+        if (dto.getNumRev() < 0) {
+            numRev = dto.getNumRev();
+            sumRev = dto.getSumRev();
         } else {
-            int numRev = rand.nextInt(16);
-            int sum = 0;
             for (int i = 0; i < numRev; i++) {
-                sum += rand.nextInt(5) + 1;
+                sumRev += rand.nextInt(5) + 1;
             }
-            
-            rider2 = new Rider(sum, numRev);
         }
 
-        rider2.setUser(usr);
+        rider.setReviewSum(sumRev);
+        rider.setTotalReviews(numRev);
 
-        return rep.save(rider2);
+        rider.setUser(user);
+
+        rider = riderRepository.saveAndFlush(rider);
+
+        user.setRider(rider);
+
+        return rider;
+    }
+
+    public User createOrGetUser(RiderDTO dto){
+        Optional<User> userOptional = userRepository.findByEmail(dto.getEmail());
+        
+        User user = new User();
+        
+        if (userOptional.isEmpty()) {
+            user.setEmail(dto.getEmail());
+            user.setUsername(dto.getUsername());
+            user.setPassword(dto.getPassword());
+            user = userRepository.saveAndFlush(user);
+        } else{
+            user = userOptional.get();
+        }
+
+        return user;
     }
 }

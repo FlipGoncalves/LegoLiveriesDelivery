@@ -1,74 +1,101 @@
 package tqs.project.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.internal.verification.VerificationModeFactory.times;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import tqs.project.datamodels.RegisterDTO;
 import tqs.project.exceptions.UserAlreadyExistsException;
+import tqs.project.exceptions.UserNotFoundException;
 import tqs.project.model.User;
 import tqs.project.repository.UserRepository;
-import tqs.project.service.UserService;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
-    User user;
+    @Mock(lenient = true)
+    private UserRepository userRepository;
 
     @InjectMocks
     private UserService service;
 
-    @Mock
-    private UserRepository rep;
+    User user1, user2, user3;
 
     @BeforeEach
-    void setUp() {
-        this.user = new User("Filipe", "filipeg@ua.pt", "filipe");
-    }
+    void setUp(){
+        user1 = createUser(1);
+        user2 = createUser(2);
+        user3 = createUser(3);
 
-
-    @Test
-    void testGetUser() {
-        when(rep.findByEmail("filipeg@ua.pt")).thenReturn(this.user);
-
-        User found = service.getUser("filipeg@ua.pt");
-
-        verify(rep, times(1)).findByEmail(anyString());
-        assertEquals(found, this.user);
+        Mockito.when(userRepository.findAll()).thenReturn(new ArrayList<>(Arrays.asList(user1, user2)));
+        Mockito.when(userRepository.findByEmail(user1.getEmail())).thenReturn(Optional.of(user1));
+        Mockito.when(userRepository.findByEmail(user2.getEmail())).thenReturn(Optional.of(user2));
+        Mockito.when(userRepository.findByEmail(user3.getEmail())).thenReturn(Optional.empty());
     }
 
     @Test
-    void testRegisterValid() throws UserAlreadyExistsException {
-        when(rep.findByEmail("filipeg@ua.pt")).thenReturn(null);
+    void test_GetAllUsers_ReturnsCorrectUsers(){
 
-        RegisterDTO user = new RegisterDTO("Filipe", "filipeg@ua.pt", "filipe");
+        List<User> result = service.getAllUsers();
 
-        service.register(user);
-
-        verify(rep, times(1)).findByEmail(anyString());
-        verify(rep, times(1)).save(any());
+        assertTrue(!result.isEmpty());
+        assertEquals(2, result.size());
+        assertTrue(result.contains(user1));
+        assertTrue(result.contains(user2));
     }
 
     @Test
-    void testRegisterInvalid() {
-        when(rep.findByEmail("filipeg@ua.pt")).thenReturn(this.user);
+    void test_Login_UserExists_ReturnsCorrectUser() throws UserNotFoundException{
+        User result = service.login(user1.getEmail());
 
-        RegisterDTO user = new RegisterDTO("Filipe", "filipeg@ua.pt", "filipe");
+        assertEquals(result, user1);
+    }
 
-        assertThrows(UserAlreadyExistsException.class, () -> {service.register(user);});
+    @Test
+    void test_Login_UserDoesNotExist_ThrowsUserNotFoundException(){
+        
+        assertThrows(UserNotFoundException.class, () -> {service.login(user3.getEmail());});
+    }
 
-        verify(rep, times(1)).findByEmail(anyString());
-        verify(rep, times(0)).save(any());
+    @Test
+    void test_Register_UserExists_ThrowsUserAlreadyExistsException(){
+        RegisterDTO dto = new RegisterDTO(user1.getUsername(), user1.getEmail(), user1.getPassword());
+
+        assertThrows(UserAlreadyExistsException.class, () -> {service.register(dto);});
+    }
+
+    @Test
+    void test_Register_UserDoesNotExist_ReturnsCorrectUser() throws UserAlreadyExistsException{
+        RegisterDTO dto = new RegisterDTO(user3.getUsername(), user3.getEmail(), user3.getPassword());
+
+        User result = service.register(dto);
+
+        assertNotNull(result);
+        assertEquals(user3.getUsername(), result.getUsername());
+        assertEquals(user3.getPassword(), result.getPassword());
+        assertEquals(user3.getEmail(), result.getEmail());
+
+    }
+
+    User createUser(long id){
+        User user = new User();
+        user.setEmail("user" + id + "@gmail.com");
+        user.setUsername("User " + id);
+        user.setPassword("password" + id);
+        return user;
     }
 }

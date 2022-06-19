@@ -5,8 +5,12 @@ import org.springframework.stereotype.Service;
 
 import tqs.project.datamodels.RegisterDTO;
 import tqs.project.exceptions.UserAlreadyExistsException;
+import tqs.project.exceptions.UserNotFoundException;
 import tqs.project.model.User;
 import tqs.project.repository.UserRepository;
+
+import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,15 +20,25 @@ public class UserService {
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
-    private UserRepository rep;
+    private UserRepository userRepository;
 
-    public User getUser(String email) {
+    public List<User> getAllUsers(){
+        log.info("Getting All Users");
+
+        return userRepository.findAll();
+    }
+
+    public User login(String email) throws UserNotFoundException {
         log.info("Getting User with email: {}", email);
 
-        User user = rep.findByEmail(email);
+        Optional<User> user = userRepository.findByEmail(email);
+
+        if (user.isEmpty()){
+            throw new UserNotFoundException("User with email " + email + " was not found");
+        }
 
         log.info("Got User: {}", user);
-        return user;
+        return user.get();
     }
 
     public User register(RegisterDTO user) throws UserAlreadyExistsException {
@@ -32,7 +46,7 @@ public class UserService {
 
         User registerUser = new User();
 
-        if (rep.findByEmail(user.getEmail()) != null) {
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new UserAlreadyExistsException("User already exists: " + user.toString());
         }
 
@@ -40,7 +54,7 @@ public class UserService {
         registerUser.setPassword(user.getPassword());
         registerUser.setUsername(user.getUsername());
 
-        registerUser = rep.save(registerUser);
+        userRepository.saveAndFlush(registerUser);
         log.info("User Registered: {}", registerUser);
 
         return registerUser;
