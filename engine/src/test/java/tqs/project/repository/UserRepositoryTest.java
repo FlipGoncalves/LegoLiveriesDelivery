@@ -1,51 +1,62 @@
 package tqs.project.repository;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import tqs.project.model.User;
-import tqs.project.repository.UserRepository;
 
-@RunWith(SpringRunner.class)
 @DataJpaTest
-public class UserRepositoryTest {
+class UserRepositoryTest {
 
     @Autowired
     private TestEntityManager entityManager;
 
     @Autowired
-    private UserRepository rep;
+    private UserRepository userRepository;
 
-    @Test
-    public void findByNameTest() {
-        User data = new User("Filipe", "filipeg@ua.pt", "filipefilipe");
+    User user1;
 
-        entityManager.persistAndFlush(data);
+    @BeforeEach
+    void setUp(){
+        user1 = createUser(1);
 
-        User data_get = rep.findByEmail("filipeg@ua.pt");
+        entityManager.persistAndFlush(user1);
+    }
 
-        assertThat(data_get).isNotNull();
-        assertEquals(data, data_get);
+    @AfterEach
+    void cleanUp(){
+        entityManager.clear();
     }
 
     @Test
-    public void findByIDTest() {
-        User data = new User("Filipe", "filipeg@ua.pt", "filipefilipe");
+    void test_FindByEmail_ValidEmail_ReturnCorrectUser(){
+        Optional<User> result = userRepository.findByEmail(user1.getEmail());
 
-        entityManager.persistAndFlush(data);
+        assertTrue(result.isPresent());
+        assertEquals(user1, result.get());
+    }
 
-        Optional<User> data_get = rep.findById(data.getUserId());
+    @Test
+    void test_FindByEmail_InvalidEmail_ReturnEmptyOptional(){
+        Optional<User> result = userRepository.findByEmail("Not an email");
 
-        assertThat(data_get).isNotNull();
-        assertEquals(data, data_get.get());
+        assertTrue(result.isEmpty());
+    }
+
+    User createUser(long id){
+        User user = new User();
+        user.setEmail("user" + id + "@gmail.com");
+        user.setUsername("User " + id);
+        user.setPassword("password" + id);
+        return user;
     }
 }

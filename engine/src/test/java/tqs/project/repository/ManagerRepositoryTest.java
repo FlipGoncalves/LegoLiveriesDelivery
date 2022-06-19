@@ -1,40 +1,75 @@
 package tqs.project.repository;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import java.util.Optional;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import tqs.project.model.Manager;
 import tqs.project.model.User;
-import tqs.project.repository.ManagerRepository;
 
-@RunWith(SpringRunner.class)
 @DataJpaTest
-public class ManagerRepositoryTest {
+class ManagerRepositoryTest {
 
     @Autowired
     private TestEntityManager entityManager;
 
     @Autowired
-    private ManagerRepository rep;
+    private ManagerRepository managerRepository;
+
+    @Autowired 
+    UserRepository userRepository;
+
+    User user1;
+    Manager manager1;
+
+    @BeforeEach
+    void setUp(){
+        user1 = createUser(1);
+
+        user1 = userRepository.saveAndFlush(user1);
+
+        manager1 = new Manager();
+
+        manager1.setUser(user1);
+
+        manager1 = managerRepository.saveAndFlush(manager1);
+
+        user1.setManager(manager1);
+    }
+
+    @AfterEach
+    void cleanUp(){
+        entityManager.clear();
+    }
 
     @Test
-    public void findByNameTest() {
-        User data = new User("Filipe", "filipeg@ua.pt", "filipefilipe");
-        Manager manager = new Manager();
-        manager.setUser(data);
+    void test_FindByUserEmail_ValidEmail_ReturnsCorrectUser(){
+        Optional<Manager> result = managerRepository.findByUserEmail(user1.getEmail());
 
-        entityManager.persistAndFlush(manager);
+        assertTrue(result.isPresent());
+        assertEquals(manager1, result.get());  
+    }
 
-        Manager data_get = rep.findByUserEmail("filipeg@ua.pt");
+    @Test
+    void test_FindByUserEmail_InvalidEmail_ReturnsEmptyOptional(){
+        Optional<Manager> result = managerRepository.findByUserEmail("Not a user email");
 
-        assertThat(data_get).isNotNull();
-        assertEquals(manager, data_get);
+        assertTrue(result.isEmpty());
+    }
+
+    User createUser(long id){
+        User user = new User();
+        user.setEmail("user" + id + "@gmail.com");
+        user.setUsername("User " + id);
+        user.setPassword("password" + id);
+        return user;
     }
 }
