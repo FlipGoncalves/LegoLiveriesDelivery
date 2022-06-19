@@ -2,12 +2,8 @@ package restapi.tqs.Service;
 
 import java.time.Duration;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -23,7 +19,6 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -227,7 +222,7 @@ public class OrderService {
         log.info("AFTER CALL");
 
 
-        if (responseSpec.getStatusCode().value() != 201){
+        if (responseSpec != null && responseSpec.getStatusCode().value() != 201){
             log.info("Order NOT CREATED1");
 
             throw new OrderNotCreatedException("The order was not created in the engine: " + orderDTO);

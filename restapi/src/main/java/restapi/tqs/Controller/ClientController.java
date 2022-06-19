@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import restapi.tqs.DataModels.RegisterDTO;
 import restapi.tqs.Exceptions.ClientAlreadyExistsException;
 import restapi.tqs.Exceptions.ClientNotFoundException;
-import restapi.tqs.Exceptions.UserNotFoundException;
 import restapi.tqs.Models.Client;
 import restapi.tqs.Service.ClientService;
 

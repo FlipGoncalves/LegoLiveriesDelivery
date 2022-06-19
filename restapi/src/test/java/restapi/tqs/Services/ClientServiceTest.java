@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,19 +18,14 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import restapi.tqs.DataModels.LegoDTO;
 import restapi.tqs.DataModels.RegisterDTO;
-import restapi.tqs.Exceptions.BadLegoDTOException;
 import restapi.tqs.Exceptions.ClientAlreadyExistsException;
 import restapi.tqs.Exceptions.ClientNotFoundException;
 import restapi.tqs.Models.Client;
-import restapi.tqs.Models.Lego;
 import restapi.tqs.Models.User;
 import restapi.tqs.Repositories.ClientRepository;
-import restapi.tqs.Repositories.LegoRepository;
 import restapi.tqs.Repositories.UserRepository;
 import restapi.tqs.Service.ClientService;
-import restapi.tqs.Service.LegoService;
 
 @ExtendWith(MockitoExtension.class)
 public class ClientServiceTest {

@@ -1,10 +1,16 @@
 package restapi.tqs.Controllers;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,30 +21,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static org.hamcrest.Matchers.*;
-
-import restapi.tqs.Controller.ClientController;
-import restapi.tqs.Controller.LegoController;
 import restapi.tqs.Controller.UserController;
-import restapi.tqs.DataModels.LegoDTO;
 import restapi.tqs.DataModels.RegisterDTO;
-import restapi.tqs.Exceptions.BadLegoDTOException;
-import restapi.tqs.Exceptions.ClientAlreadyExistsException;
-import restapi.tqs.Exceptions.ClientNotFoundException;
 import restapi.tqs.Exceptions.UserAlreadyExistsException;
 import restapi.tqs.Exceptions.UserNotFoundException;
-import restapi.tqs.Models.Client;
-import restapi.tqs.Models.Lego;
 import restapi.tqs.Models.User;
-import restapi.tqs.Service.ClientService;
-import restapi.tqs.Service.LegoService;
 import restapi.tqs.Service.UserService;
 
 @WebMvcTest(UserController.class)

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import restapi.tqs.DataModels.RegisterDTO;
 import restapi.tqs.Exceptions.ClientAlreadyExistsException;
 import restapi.tqs.Exceptions.ClientNotFoundException;
-import restapi.tqs.Exceptions.UserNotFoundException;
 import restapi.tqs.Models.Client;
 import restapi.tqs.Models.User;
 import restapi.tqs.Repositories.ClientRepository;
