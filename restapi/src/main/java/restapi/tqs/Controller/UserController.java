@@ -1,5 +1,7 @@
 package restapi.tqs.Controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import restapi.tqs.DataModels.RegisterDTO;
 import restapi.tqs.Exceptions.UserAlreadyExistsException;
+import restapi.tqs.Exceptions.UserNotFoundException;
 import restapi.tqs.Models.User;
 import restapi.tqs.Service.UserService;
 
@@ -27,16 +30,25 @@ public class UserController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
-    private UserService userservice;
+    private UserService userService;
+
+    @GetMapping()
+    public ResponseEntity<List<User>> getAllUsers(){
+        log.info("GET Request -> All Users");
+
+        List<User> users = userService.getAllUsers();
+
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
 
     @GetMapping("/login/{email}")
-    public ResponseEntity<Object> loginUser(@PathVariable String email){
+    public ResponseEntity<User> loginUser(@PathVariable String email){
         log.info("GET Request -> User Data for login email");
 
-        User userLog = userservice.getUser(email);
-
-        if (userLog == null) {
-            log.info("Login -> User does not exist");
+        User userLog;
+        try {
+            userLog = userService.login(email);
+        } catch (UserNotFoundException e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
@@ -45,13 +57,13 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Object> registerUser(@RequestBody RegisterDTO reg){
+    public ResponseEntity<User> registerUser(@RequestBody RegisterDTO reg){
 
         log.info("POST Request -> User Data for register");
 
         User userReg;
         try {
-            userReg = userservice.register(reg);
+            userReg = userService.register(reg);
         } catch (UserAlreadyExistsException e) {
             log.info("Register -> User already exists");
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);

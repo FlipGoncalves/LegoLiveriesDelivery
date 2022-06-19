@@ -131,7 +131,7 @@ public class Address {
         this.setPostalCode(dto.getPostalCode());
         this.setStreet(dto.getStreet());
         this.setLongitude(dto.getLongitude());
-        this.setLatitude(dto.getLongitude());
+        this.setLatitude(dto.getLatitude());
     }
     
     @Override

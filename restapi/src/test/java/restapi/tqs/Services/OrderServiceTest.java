@@ -85,7 +85,7 @@ public class OrderServiceTest {
     Address address1, address2;
     User user1, user2;
     OrderDTO orderDTO1, orderDTO2, orderDTO3;
-    Set<OrderLego> orderLegos1, orderLegos2, orderLegos3;
+    List<OrderLego> orderLegos1, orderLegos2, orderLegos3;
     Lego lego1, lego2, lego3;
     List<OrderLegoDTO> orderLegoDTO1, orderLegoDTO2, orderLegoDTO3;
     AddressDTO addressDTO1, addressDTO2, addressDTO3;
@@ -285,15 +285,13 @@ public class OrderServiceTest {
 
     @Test
     void test_MakeOrder_AllValid_ReturnsCorrectOrder() throws BadScheduledTimeOfDeliveryException, ClientNotFoundException, AddressNotFoundException, LegoNotFoundException, BadOrderLegoDTOException, BadOrderLegoListException, OrderNotCreatedException, InterruptedException, JsonProcessingException{
-        System.out.println("TESTE");
-        Mockito.when(orderRepository.saveAndFlush(any(Order.class))).thenReturn(new Order());
         
+        Mockito.when(orderRepository.saveAndFlush(any(Order.class))).thenReturn(new Order());
+
         String responseFromEngine = "{\"orderId\" : " + 1 + " }";
 
         mockBackEnd.enqueue(new MockResponse().setBody(responseFromEngine).setResponseCode(201));
 
-        System.out.println("antes");
-        
         Order order = service.makeOrder(orderDTO1);
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -311,7 +309,7 @@ public class OrderServiceTest {
         assertEquals(1, order.getExternalOrderId());
     }
 
-    Order buildAndSaveOrderObject(Client client, Address address, Set<OrderLego> orderLegos, long id){
+    Order buildAndSaveOrderObject(Client client, Address address, List<OrderLego> orderLegos, long id){
 
         Order order = new Order();
         order.setOrderId(id);
@@ -331,7 +329,7 @@ public class OrderServiceTest {
         order.setDate(date);
         order.setScheduledTimeOfDelivery(2100);
         order.setRiderName("Paulo " + id);
-        order.setOrderLego(orderLegos);
+        order.setOrderLego(new HashSet<>(orderLegos));
         order.setTotalPrice(totalPrice);
 
         return order;
@@ -383,7 +381,7 @@ public class OrderServiceTest {
         return address;
     }
 
-    Set<OrderLego> buildOrderLegoList(Lego lego1, Lego lego2, Lego lego3, long id){
+    List<OrderLego> buildOrderLegoList(Lego lego1, Lego lego2, Lego lego3, long id){
 
         OrderLego orderLego1 = new OrderLego();
         orderLego1.setId(new OrderLegoId(id, lego1.getLegoId()));
@@ -401,7 +399,7 @@ public class OrderServiceTest {
         orderLego3.setPrice(lego3.getPrice());
         orderLego3.setQuantity(3 + (int) id);
 
-        Set<OrderLego> orderLegos = new HashSet<>();
+        List<OrderLego> orderLegos = new ArrayList<>();
         orderLegos.add(orderLego1);
         orderLegos.add(orderLego2);
         orderLegos.add(orderLego3);

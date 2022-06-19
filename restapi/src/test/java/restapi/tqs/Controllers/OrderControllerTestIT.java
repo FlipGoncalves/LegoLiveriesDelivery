@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -16,7 +17,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +31,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,10 +56,12 @@ import restapi.tqs.Repositories.LegoRepository;
 import restapi.tqs.Repositories.OrderLegoRepository;
 import restapi.tqs.Repositories.OrderRepository;
 import restapi.tqs.Repositories.UserRepository;
+import restapi.tqs.Service.OrderService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = TqsApplication.class)
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
+@Transactional
 public class OrderControllerTestIT {
     
     @Autowired
@@ -86,22 +98,44 @@ public class OrderControllerTestIT {
 
     @Autowired
     private UserRepository userRepository;
-    
+
+    @PersistenceContext
+    private EntityManager em;
+
+    @Autowired
+    private OrderService orderService;
+
+    public static MockWebServer mockBackEnd;
+
+    @BeforeAll
+    static void allSetUp() throws IOException{
+        mockBackEnd = new MockWebServer();
+        mockBackEnd.start();
+    }
+
     @BeforeEach
     void setUp(){
 
-        List<Object> array1 = buildUserAndClientObject(1);
-        user1 = (User) array1.get(0);
-        client1 = (Client) array1.get(1);
+        String baseUrl = String.format("http://localhost:%s", mockBackEnd.getPort());
+        orderService.setEngineURL(baseUrl);
 
-        List<Object> array2 = buildUserAndClientObject(2);
-        user2 = (User) array2.get(0);
-        client2 = (Client) array2.get(1);
+        user1 = createUser(1);
+        user2 = createUser(2);
+
+        user1 = userRepository.saveAndFlush(user1);
+        user2 = userRepository.saveAndFlush(user2);
+
+        client1 = new Client();
+        client2 = new Client();
+
+        client1.setUser(user1);
+        client2.setUser(user2);
 
         client1 = clientRepository.saveAndFlush(client1);
         client2 = clientRepository.saveAndFlush(client2);
-        user1 = userRepository.saveAndFlush(user1);
-        user2 = userRepository.saveAndFlush(user2);
+
+        user1.setClient(client1);
+        user2.setClient(client2);
 
         address1 = buildAddressObject(1);
         address2 = buildAddressObject(2);
@@ -117,48 +151,21 @@ public class OrderControllerTestIT {
         lego2 = legoRepository.saveAndFlush(lego2);
         lego3 = legoRepository.saveAndFlush(lego3);
 
-        orderLegos1 = buildOrderLegoList(lego1, lego2, lego3,1);
-        orderLegos2 = buildOrderLegoList(lego1, lego2, lego3,2);
-        orderLegos3 = buildOrderLegoList(lego1, lego2, lego3,3);
-
-        order1 = buildAndSaveOrderObject(client1, address1, orderLegos1, 1);
-        order2 = buildAndSaveOrderObject(client1, address1, orderLegos2, 2);
-        order3 = buildAndSaveOrderObject(client2, address2, orderLegos3, 3);
+        order1 = new Order();
+        order2 = new Order();
+        order3 = new Order();
 
         order1 = orderRepository.saveAndFlush(order1);
         order2 = orderRepository.saveAndFlush(order2);
         order3 = orderRepository.saveAndFlush(order3);
 
-        Set<Order> orders = client1.getOrders();
-        orders.add(order1);
-        client1.setOrders(orders);
+        orderLegos1 = buildAndSaveOrderLegoList(order1, lego1, lego2, lego3,1);
+        orderLegos2 = buildAndSaveOrderLegoList(order2, lego1, lego2, lego3,2);
+        orderLegos3 = buildAndSaveOrderLegoList(order3, lego1, lego2, lego3,3);
 
-        orders = client1.getOrders();
-        orders.add(order2);
-        client1.setOrders(orders);
-
-        orders = client2.getOrders();
-        orders.add(order3);
-        client2.setOrders(orders);
-
-        for (OrderLego orderLego : orderLegos1) {
-            orderLego.setOrder(order1);
-            orderLego.setId(new OrderLegoId(order1.getOrderId(), orderLego.getLego().getLegoId()));
-
-            orderLego = orderLegoRepository.saveAndFlush(orderLego);
-        }
-
-        for (OrderLego orderLego : orderLegos2) {
-            orderLego.setOrder(order2);
-            orderLego.setId(new OrderLegoId(order2.getOrderId(), orderLego.getLego().getLegoId()));
-            orderLego = orderLegoRepository.saveAndFlush(orderLego);
-        }
-
-        for (OrderLego orderLego : orderLegos3) {
-            orderLego.setOrder(order3);
-            orderLego.setId(new OrderLegoId(order3.getOrderId(), orderLego.getLego().getLegoId()));
-            orderLego = orderLegoRepository.saveAndFlush(orderLego);
-        }
+        order1 = buildOrderObject(order1, client1, address1, orderLegos1, 1);
+        order2 = buildOrderObject(order2, client1, address1, orderLegos2, 2);
+        order3 = buildOrderObject(order3, client2, address2, orderLegos3, 3);
 
         orderLegoDTO1 = buildOrderLegoDTO(1l,2l,3l,1);
         orderLegoDTO2 = buildOrderLegoDTO(1l,2l,3l,2);
@@ -176,12 +183,18 @@ public class OrderControllerTestIT {
 
     @AfterEach
     void cleanUp(){
+        em.clear();
         userRepository.deleteAll();
         clientRepository.deleteAll();
         legoRepository.deleteAll();
         orderLegoRepository.deleteAll();
-        addressRepository.deleteAll();
         orderRepository.deleteAll();
+        addressRepository.deleteAll();
+    }
+
+    @AfterAll
+    static void allCleanUp() throws IOException{
+        mockBackEnd.shutdown();
     }
 
     @Test
@@ -349,10 +362,14 @@ public class OrderControllerTestIT {
         .andExpect(status().isBadRequest());
     }
 
-    /*@Test
+    @Test
     void test_MakeOrder_ValidOrderDTO_ReturnsCorrectOrder() throws JsonProcessingException, Exception{
         List<OrderLegoDTO> orderLegoDTOTest = buildOrderLegoDTO(lego1.getLegoId(),lego1.getLegoId(),lego1.getLegoId(),1);
         OrderDTO orderDTOTest = new OrderDTO(order1.getClient().getClientId(), addressDTO1, 2100, orderLegoDTOTest);
+
+        String responseFromEngine = "{\"orderId\" : " + 1 + " }";
+
+        mockBackEnd.enqueue(new MockResponse().setBody(responseFromEngine).setResponseCode(201));
 
         mvc.perform(post("/order")
         .content(objectMapper.writeValueAsString(orderDTOTest))
@@ -362,29 +379,18 @@ public class OrderControllerTestIT {
         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.scheduledTimeOfDelivery", is(orderDTOTest.getScheduledTimeOfDelivery())))
         .andExpect(jsonPath("$.client", is((int) orderDTOTest.getClientId())))
+        .andExpect(jsonPath("$.address", is((int)address1.getAddressId())))
         .andExpect(jsonPath("$.orderLego", hasSize(3)));
-    }*/
+    }
 
-    Order buildAndSaveOrderObject(Client client, Address address, Set<OrderLego> orderLegos, long id){
-
-        Order order = new Order();
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(2020, 6, (int) id);
-        Date date = calendar.getTime();
-
-        double totalPrice = 0;
-
-        for (OrderLego orderLego : orderLegos) {
-            totalPrice += orderLego.getPrice() * orderLego.getQuantity();
-        }
+    Order buildOrderObject(Order order, Client client, Address address, Set<OrderLego> orderLegos, long id){
 
         order.setClient(client);
         order.setAddress(address);
-        order.setDate(date);
         order.setScheduledTimeOfDelivery(2100);
-        order.setRiderName("Paulo " + id);
-        order.setTotalPrice(totalPrice);
+
+        client.getOrders().add(order);
+        address.getOrders().add(order);
 
         return order;
     }
@@ -397,16 +403,12 @@ public class OrderControllerTestIT {
         return lego;
     }
     
-    ArrayList<Object> buildUserAndClientObject(long id){
+    User createUser(long id){
         User user = new User();
-        Client client = new Client();
-        user.setUsername("Person " + id);
-        user.setClient(client);
-        client.setUser(user);
-        ArrayList<Object> array = new ArrayList<>();
-        array.add(user);
-        array.add(client);
-        return array;
+        user.setEmail("user" + id + "@gmail.com");
+        user.setUsername("User " + id);
+        user.setPassword("password" + id);
+        return user;
     }
 
     Address buildAddressObject(long id){
@@ -431,20 +433,45 @@ public class OrderControllerTestIT {
         return address;
     }
 
-    Set<OrderLego> buildOrderLegoList(Lego lego1, Lego lego2, Lego lego3, long id){
+    Set<OrderLego> buildAndSaveOrderLegoList(Order order, Lego lego1, Lego lego2, Lego lego3, long id){
+       
+        double totalPrice = 0;
 
         OrderLego orderLego1 = new OrderLego();
+        orderLego1.setId(new OrderLegoId(order.getOrderId(), lego1.getLegoId()));
+        orderLego1.setOrder(order);
         orderLego1.setLego(lego1);
         orderLego1.setPrice(lego1.getPrice());
         orderLego1.setQuantity(1 + (int) id);
+        orderLego1 = orderLegoRepository.saveAndFlush(orderLego1);
+        lego1.getOrderLego().add(orderLego1);
+        order.getOrderLego().add(orderLego1);
+        totalPrice += orderLego1.getPrice() * orderLego1.getQuantity();
+
+
         OrderLego orderLego2 = new OrderLego();
+        orderLego2.setId(new OrderLegoId(order.getOrderId(), lego2.getLegoId()));
+        orderLego2.setOrder(order);
         orderLego2.setLego(lego2);
         orderLego2.setPrice(lego2.getPrice());
         orderLego2.setQuantity(2 + (int) id);
+        orderLego2 = orderLegoRepository.saveAndFlush(orderLego2);
+        lego2.getOrderLego().add(orderLego2);
+        order.getOrderLego().add(orderLego2);
+        totalPrice += orderLego2.getPrice() * orderLego2.getQuantity();
+
         OrderLego orderLego3 = new OrderLego();
+        orderLego3.setId(new OrderLegoId(order.getOrderId(), lego3.getLegoId()));
+        orderLego3.setOrder(order);
         orderLego3.setLego(lego3);
         orderLego3.setPrice(lego3.getPrice());
         orderLego3.setQuantity(40 + (int) id);
+        orderLego3 = orderLegoRepository.saveAndFlush(orderLego3);
+        lego3.getOrderLego().add(orderLego3);
+        order.getOrderLego().add(orderLego3);
+        totalPrice += orderLego3.getPrice() * orderLego3.getQuantity();
+
+        order.setTotalPrice(totalPrice);
 
         Set<OrderLego> orderLegos = new HashSet<>();
         orderLegos.add(orderLego1);

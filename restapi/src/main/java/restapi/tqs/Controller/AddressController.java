@@ -20,7 +20,6 @@ import restapi.tqs.Exceptions.AddressAlreadyExistsException;
 import restapi.tqs.Models.Address;
 import restapi.tqs.Service.AddressService;
 
-
 @RestController
 @RequestMapping("/address")
 @Validated
@@ -32,24 +31,24 @@ public class AddressController {
     private AddressService addressService;
 
     @GetMapping()
-    public ResponseEntity<List<Address>> getAllStores() {
+    public ResponseEntity<List<Address>> getAllAddresses() {
         log.info("GET Request -> All Stores Data");
 
-        List<Address> stores = addressService.getAllAddresses();
+        List<Address> addresses = addressService.getAllAddresses();
 
-        return new ResponseEntity<>(stores, HttpStatus.OK);
+        return new ResponseEntity<>(addresses, HttpStatus.OK);
     }
 
     @PostMapping()
     public ResponseEntity<Address> insertAddress(@RequestBody AddressDTO addressDTO){
 
-        Address store = null;
+        Address address = null;
         try {
-            store = addressService.insertAddress(addressDTO);
+            address = addressService.insertAddress(addressDTO);
         } catch (AddressAlreadyExistsException e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(store, HttpStatus.CREATED);
+        return new ResponseEntity<>(address, HttpStatus.CREATED);
     }
 }

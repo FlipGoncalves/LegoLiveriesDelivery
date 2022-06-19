@@ -166,8 +166,6 @@ public class OrderService {
 
         double totalPrice = 0;
 
-        Set<OrderLego> setOrderLegos = new HashSet<>();
-
         for (OrderLegoDTO orderLegoDTO : orderDTO.getLegos()) {
             Optional<Lego> lego = legoRepository.findById(orderLegoDTO.getLegoId());
 
@@ -181,19 +179,20 @@ public class OrderService {
             }
 
             OrderLego orderLego = new OrderLego();
-            //orderLego.setId(new OrderLegoId(order.getOrderId(), lego.get().getLegoId()));
+            orderLego.setId(new OrderLegoId(order.getOrderId(), lego.get().getLegoId()));
             orderLego.setLego(lego.get());
             orderLego.setOrder(order);
             orderLego.setQuantity(orderLegoDTO.getQuantity());
             orderLego.setPrice(orderLegoDTO.getLegoPrice());
             orderLegoRepository.saveAndFlush(orderLego);
-            setOrderLegos.add(orderLego);
+
+            order.getOrderLego().add(orderLego);
+            lego.get().getOrderLego().add(orderLego);
 
             totalPrice += orderLegoDTO.getQuantity() * orderLegoDTO.getLegoPrice();
         }
 
         order.setTotalPrice(totalPrice);
-        order.setOrderLego(setOrderLegos);
 
         log.info("BEFORE HTTP CALL");
 

@@ -20,9 +20,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 
 @RestController
 @CrossOrigin
+@Validated
 @RequestMapping("/lego")
 public class LegoController {
     private static final Logger log = LoggerFactory.getLogger(LegoController.class);
@@ -31,7 +33,7 @@ public class LegoController {
     private LegoService legoService;
 
     @GetMapping()
-    public ResponseEntity<List<Lego>> getAllData() {
+    public ResponseEntity<List<Lego>> getAllLegos() {
         log.info("GET Request -> All Lego Data");
         List<Lego> legos = legoService.getLegos();
         return new ResponseEntity<>(legos, HttpStatus.OK);

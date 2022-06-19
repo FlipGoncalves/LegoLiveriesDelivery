@@ -50,12 +50,12 @@ public class ClientService {
         log.info("Registering Client: {}", dto);
 
         Client client = new Client();
-        
-        User user = createOrGetUser(dto);
-
+ 
         if (clientRepository.findByUserEmail(dto.getEmail()).isPresent()) {
             throw new ClientAlreadyExistsException("Client already exists: " + dto.toString());
         }
+
+        User user = createOrGetUser(dto);
 
         client.setUser(user);
 

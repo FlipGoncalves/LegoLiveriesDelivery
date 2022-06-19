@@ -119,15 +119,6 @@ public class LegoServiceTest {
     }
 
     @Test
-    void test_InsertLego_NullLegoName_ThrowsBadLegoDTOException() throws BadLegoDTOException{
-
-        LegoDTO legoDTO = new LegoDTO(null, 30, "A Lego imgUrl");
-        
-        assertThrows(BadLegoDTOException.class, () -> {service.insertLego(legoDTO);});
-
-    }
-
-    @Test
     void test_InsertLego_BlankLegoName_ThrowsBadLegoDTOException() throws BadLegoDTOException{
 
         LegoDTO legoDTO = new LegoDTO(" ", 30, "A Lego imgUrl");
@@ -139,15 +130,6 @@ public class LegoServiceTest {
     void test_InsertLego_LegoPriceLessorEqualToZero_ThrowsBadLegoDTOException() throws BadLegoDTOException{
 
         LegoDTO legoDTO = new LegoDTO("A Lego Name", 0, "A Lego imgUrl");
-        
-        assertThrows(BadLegoDTOException.class, () -> {service.insertLego(legoDTO);});
-
-    }
-
-    @Test
-    void test_InsertLego_NullLegoImgUrl_ThrowsBadLegoDTOException() throws BadLegoDTOException{
-
-        LegoDTO legoDTO = new LegoDTO("A Lego Name", 30, null);
         
         assertThrows(BadLegoDTOException.class, () -> {service.insertLego(legoDTO);});
 
