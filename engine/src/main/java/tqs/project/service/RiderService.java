@@ -58,14 +58,7 @@ public class RiderService {
             rider2 = new Rider(sum, numRev);
         }
 
-<<<<<<< HEAD
-        usr = new User(rider.getUsername(), rider.getEmail(),rider.getPassword());
         rider2.setUser(usr);
-
-        log.info("Created Rider: {}", rider2);
-=======
-        rider2.setUser(usr);
->>>>>>> origin/new/connect_legoriveries_to_engine
 
         return rep.save(rider2);
     }

@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: engine
+        working-directory: restapi
     steps:
       - uses: actions/checkout@v2
         with:
@@ -51,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: restapi
+        working-directory: engine
     steps:
       - uses: actions/checkout@v2
         with:
