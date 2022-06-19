@@ -221,8 +221,11 @@ public class OrderService {
 
         log.info("AFTER CALL");
 
-
-        if (responseSpec != null && responseSpec.getStatusCode().value() != 201){
+        if (responseSpec == null){
+            throw new OrderNotCreatedException("The order was not created in the engine: " + orderDTO);
+        }
+        
+        if (responseSpec.getStatusCode().value() != 201){
             log.info("Order NOT CREATED1");
 
             throw new OrderNotCreatedException("The order was not created in the engine: " + orderDTO);
