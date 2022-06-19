@@ -69,7 +69,7 @@ jobs:
       - name: Start Legoliveries Backend
         run: docker-compose -f ../docker-compose.yml run -p 9001:9001 -d engine
       - name: Build Legoliveries Frontend
-        run: docker-compose -f ../docker-compose.yml uild  engine-app
+        run: docker-compose -f ../docker-compose.yml build  engine-app
       - name: Start Legoliveries Frontend
         run: docker-compose -f ../docker-compose.yml run -p 3001:3001 -d engine-app
       - name: Cache SonarCloud packages
