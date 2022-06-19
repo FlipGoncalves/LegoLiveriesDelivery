@@ -2,7 +2,7 @@ Feature: Legoliveries Register
 
     @positive
     Scenario: Successful
-        Given I am in "http://localhost:3000/register"
+        Given I am in "http://127.0.0.1:3000/register"
         When I register with "<username>", "<email>", "<password>" and "<rep_password>"
         And I click Register
         Then I should be registered
@@ -12,7 +12,7 @@ Feature: Legoliveries Register
 
     # @negative
     # Scenario: Error
-    #     Given I am in "http://localhost:3000/register"
+    #     Given I am in "http://127.0.0.1:3000/register"
     #     When I register with "<username>", "<email>", "<password>" and "<rep_password>"
     #     And I click Register
     #     Then I should not be registered

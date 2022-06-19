@@ -2,7 +2,7 @@ Feature: Legoliveries Login
 
     # @positive
     # Scenario: Successful
-    #     Given I am in "http://localhost:3000/login"
+    #     Given I am in "http://127.0.0.1:3000/login"
     #     When I login with "<email>" and "<password>"
     #     And I click Login
     #     Then I should be logged in
@@ -12,7 +12,7 @@ Feature: Legoliveries Login
 
     @negative
     Scenario: Error
-        Given I am in "http://localhost:3000/login"
+        Given I am in "http://127.0.0.1:3000/login"
         When I login with "<email>" and "<password>"
         And I click Login
         Then I should not be logged in

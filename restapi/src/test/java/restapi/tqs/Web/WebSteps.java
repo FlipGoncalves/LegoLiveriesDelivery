@@ -51,7 +51,7 @@ public class WebSteps {
     }
     @Then("I should not be logged in")
     public void iVerifyNotLogin() {
-        assertTrue(driver.getCurrentUrl().equals("http://localhost:3000/login"));
+        assertTrue(driver.getCurrentUrl().equals("http://127.0.0.1:3000/login"));
         assertEquals(driver.findElement(By.id("error")).getAttribute("innerHTML"), "ERROR during log in");
     }
 
@@ -74,7 +74,7 @@ public class WebSteps {
         System.out.println(driver.getCurrentUrl());
         try {
             WebDriverWait wait = new WebDriverWait(driver, 30);
-            wait.until(ExpectedConditions.urlToBe("http://localhost:3000/"));
+            wait.until(ExpectedConditions.urlToBe("http://127.0.0.1:3000/"));
         } catch(TimeoutException e) {
             System.err.println(e);
             if (driver.findElement(By.id("error")).isDisplayed()) {
@@ -82,7 +82,7 @@ public class WebSteps {
             }
         }
         System.out.println(driver.getCurrentUrl());
-        assertTrue(driver.getCurrentUrl().equals("http://localhost:3000/"));
+        assertTrue(driver.getCurrentUrl().equals("http://127.0.0.1:3000/"));
     }
 
 

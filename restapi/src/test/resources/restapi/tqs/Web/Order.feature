@@ -2,7 +2,7 @@ Feature: Legoliveries Order
 
     @positive
     Scenario: Successful
-        Given I am in "http://localhost:3000"
+        Given I am in "http://127.0.0.1:3000"
         And I add an item to the cart
         When I click on the cart
         And I input the street: "<street>", the city: "<city>", the country: "<country>", the postal code: "<code>", the latitude: "<latit>" and the longitude: "<longit>"
@@ -14,7 +14,7 @@ Feature: Legoliveries Order
 
     @positive
     Scenario: Successful with Time
-        Given I am in "http://localhost:3000"
+        Given I am in "http://127.0.0.1:3000"
         And I add an item to the cart
         When I click on the cart
         And I input the street: "<street>", the city: "<city>", the country: "<country>", the postal code: "<code>", the latitude: "<latit>" and the longitude: "<longit>"
@@ -27,7 +27,7 @@ Feature: Legoliveries Order
 
     @negative
     Scenario: Error
-        Given I am in "http://localhost:3000"
+        Given I am in "http://127.0.0.1:3000"
         When I click on the cart
         And I click Order
         Then I should see an error message
