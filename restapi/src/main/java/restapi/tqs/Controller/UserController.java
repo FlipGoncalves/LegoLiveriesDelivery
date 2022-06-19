@@ -23,7 +23,7 @@ import restapi.tqs.Models.User;
 import restapi.tqs.Service.UserService;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 @Validated
 @CrossOrigin
 public class UserController {

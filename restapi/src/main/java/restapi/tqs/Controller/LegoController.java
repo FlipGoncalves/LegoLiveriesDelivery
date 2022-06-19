@@ -25,7 +25,7 @@ import org.springframework.validation.annotation.Validated;
 @RestController
 @CrossOrigin
 @Validated
-@RequestMapping("/lego")
+@RequestMapping("/legos")
 public class LegoController {
     private static final Logger log = LoggerFactory.getLogger(LegoController.class);
 

@@ -58,7 +58,7 @@ class UserControllerTest {
 
         Mockito.when(service.getAllUsers()).thenReturn(new ArrayList<>(Arrays.asList(user1, user2)));
 
-        mvc.perform(get("/user")
+        mvc.perform(get("/users")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -78,7 +78,7 @@ class UserControllerTest {
 
         Mockito.when(service.login(user3.getEmail())).thenThrow(UserNotFoundException.class);
 
-        mvc.perform(get("/user/login/{email}", user3.getEmail())
+        mvc.perform(get("/users/login/{email}", user3.getEmail())
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
     }
@@ -88,7 +88,7 @@ class UserControllerTest {
 
         Mockito.when(service.login(user1.getEmail())).thenReturn(user1);
 
-        mvc.perform(get("/user/login/{email}", user1.getEmail())
+        mvc.perform(get("/users/login/{email}", user1.getEmail())
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andDo(print())
@@ -104,7 +104,7 @@ class UserControllerTest {
 
         Mockito.when(service.register(dto)).thenThrow(UserAlreadyExistsException.class);
 
-        mvc.perform(post("/user/register")
+        mvc.perform(post("/users/register")
         .content(objectMapper.writeValueAsString(dto))
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
@@ -117,7 +117,7 @@ class UserControllerTest {
 
         Mockito.when(service.register(dto)).thenReturn(user3);
 
-        mvc.perform(post("/user/register")
+        mvc.perform(post("/users/register")
         .content(objectMapper.writeValueAsString(dto))
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isCreated())

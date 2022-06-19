@@ -85,7 +85,7 @@ class ClientControllerTestIT {
     @Test
     void test_GetAllClients_ReturnsCorrectClients() throws Exception{
 
-        mvc.perform(get("/client")
+        mvc.perform(get("/clients")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -103,7 +103,7 @@ class ClientControllerTestIT {
     @Test
     void test_GetClientByEmail_ClientDoesNotExist_ReturnsBadRequestStatus() throws Exception{
 
-        mvc.perform(get("/client/login/{clientEmail}", client3.getUser().getEmail())
+        mvc.perform(get("/clients/login/{clientEmail}", client3.getUser().getEmail())
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
     }
@@ -111,7 +111,7 @@ class ClientControllerTestIT {
     @Test
     void test_GetClientByEmail_ClientExists_ReturnsCorrectClient() throws Exception{
 
-        mvc.perform(get("/client/login/{clientEmail}", client1.getUser().getEmail())
+        mvc.perform(get("/clients/login/{clientEmail}", client1.getUser().getEmail())
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andDo(print())
@@ -125,7 +125,7 @@ class ClientControllerTestIT {
 
         RegisterDTO dto = new RegisterDTO(client1.getUser().getUsername(), client1.getUser().getEmail(), client1.getUser().getPassword());
 
-        mvc.perform(post("/client/register")
+        mvc.perform(post("/clients/register")
         .content(objectMapper.writeValueAsString(dto))
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
@@ -136,7 +136,7 @@ class ClientControllerTestIT {
 
         RegisterDTO dto = new RegisterDTO(client3.getUser().getUsername(), client3.getUser().getEmail(), client3.getUser().getPassword());
 
-        mvc.perform(post("/client/register")
+        mvc.perform(post("/clients/register")
         .content(objectMapper.writeValueAsString(dto))
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isCreated())

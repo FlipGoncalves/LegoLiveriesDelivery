@@ -23,7 +23,7 @@ import restapi.tqs.Service.ClientService;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/client")
+@RequestMapping("/clients")
 public class ClientController {
     private static final Logger log = LoggerFactory.getLogger(ClientController.class);
 

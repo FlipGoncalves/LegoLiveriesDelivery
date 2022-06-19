@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/order")
+@RequestMapping("/orders")
 public class OrderController {
     
     private static final Logger log = LoggerFactory.getLogger(OrderController.class);

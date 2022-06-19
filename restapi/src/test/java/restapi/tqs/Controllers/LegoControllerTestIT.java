@@ -84,7 +84,7 @@ public class LegoControllerTestIT {
     @Test
     void test_GetAllData_ReturnsCorrectLegos() throws Exception{
 
-        mvc.perform(get("/lego")
+        mvc.perform(get("/legos")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -103,7 +103,7 @@ public class LegoControllerTestIT {
     @Test
     void test_GetLegoByName_FullName_ReturnsCorrectLego() throws Exception{
 
-        mvc.perform(get("/lego/name")
+        mvc.perform(get("/legos/name")
         .param("name","Monster Jam Megalodon - 42134")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
@@ -117,7 +117,7 @@ public class LegoControllerTestIT {
     @Test
     void test_GetLegoByName_ParcialName_ReturnsCorrectLegos() throws Exception{
         
-        mvc.perform(get("/lego/name")
+        mvc.perform(get("/legos/name")
         .param("name","Policial")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
@@ -134,7 +134,7 @@ public class LegoControllerTestIT {
     @Test
     void test_GetLegoByName_InvalidName_ReturnsBadRequestStatus() throws Exception{
         
-        mvc.perform(get("/lego/name")
+        mvc.perform(get("/legos/name")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
     }
@@ -142,7 +142,7 @@ public class LegoControllerTestIT {
     @Test
     void test_GetLegoByPrice_ValidPrice_ReturnsCorrectLegos() throws Exception{
         
-        mvc.perform(get("/lego/price")
+        mvc.perform(get("/legos/price")
         .param("price","17.99")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
@@ -159,7 +159,7 @@ public class LegoControllerTestIT {
     @Test
     void test_GetLegoByPrice_InvalidPrice_ReturnsBadRequestStatus() throws Exception{
         
-        mvc.perform(get("/lego/price")
+        mvc.perform(get("/legos/price")
         .param("price","30")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());

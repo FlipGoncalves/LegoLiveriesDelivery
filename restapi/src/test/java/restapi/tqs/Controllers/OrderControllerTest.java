@@ -133,7 +133,7 @@ public class OrderControllerTest {
 
         Mockito.when(service.getAllOrders()).thenReturn(all_Orders);
 
-        mvc.perform(get("/order")
+        mvc.perform(get("/orders")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andDo(print())
@@ -168,7 +168,7 @@ public class OrderControllerTest {
 
         Mockito.when(service.getOrderById(1)).thenReturn(order1);
 
-        mvc.perform(get("/order/{orderId}",1)
+        mvc.perform(get("/orders/{orderId}",1)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andDo(print())
@@ -187,7 +187,7 @@ public class OrderControllerTest {
         
         Mockito.when(service.getOrderById(200)).thenThrow(OrderNotFoundException.class);
 
-        mvc.perform(get("/order/{orderId}",200)
+        mvc.perform(get("/orders/{orderId}",200)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
 
@@ -198,7 +198,7 @@ public class OrderControllerTest {
 
         Mockito.when(service.getClientOrders(1)).thenReturn(new ArrayList<Order>(Arrays.asList(order1,order2)));
 
-        mvc.perform(get("/order/client/{clientId}", 1)
+        mvc.perform(get("/orders/client/{clientId}", 1)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andDo(print())
@@ -225,7 +225,7 @@ public class OrderControllerTest {
         
         Mockito.when(service.getClientOrders(200)).thenThrow(ClientNotFoundException.class);
 
-        mvc.perform(get("/order/client/{clientId}",200)
+        mvc.perform(get("/orders/client/{clientId}",200)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
     }
@@ -237,7 +237,7 @@ public class OrderControllerTest {
 
         Mockito.when(service.makeOrder(any(OrderDTO.class))).thenThrow(new BadScheduledTimeOfDeliveryException(""));
 
-        mvc.perform(post("/order")
+        mvc.perform(post("/orders")
         .content(objectMapper.writeValueAsString(orderDTOTest))
         .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
@@ -251,7 +251,7 @@ public class OrderControllerTest {
 
         Mockito.when(service.makeOrder(any(OrderDTO.class))).thenThrow(new ClientNotFoundException(""));
 
-        mvc.perform(post("/order")
+        mvc.perform(post("/orders")
         .content(objectMapper.writeValueAsString(orderDTOTest))
         .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
@@ -265,7 +265,7 @@ public class OrderControllerTest {
 
         Mockito.when(service.makeOrder(any(OrderDTO.class))).thenThrow(new AddressNotFoundException(""));
 
-        mvc.perform(post("/order")
+        mvc.perform(post("/orders")
         .content(objectMapper.writeValueAsString(orderDTOTest))
         .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
@@ -279,7 +279,7 @@ public class OrderControllerTest {
 
         Mockito.when(service.makeOrder(any(OrderDTO.class))).thenThrow(new LegoNotFoundException(""));
 
-        mvc.perform(post("/order")
+        mvc.perform(post("/orders")
         .content(objectMapper.writeValueAsString(orderDTOTest))
         .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
@@ -294,7 +294,7 @@ public class OrderControllerTest {
 
         Mockito.when(service.makeOrder(any(OrderDTO.class))).thenThrow(new BadOrderLegoDTOException(""));
 
-        mvc.perform(post("/order")
+        mvc.perform(post("/orders")
         .content(objectMapper.writeValueAsString(orderDTOTest))
         .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
@@ -307,7 +307,7 @@ public class OrderControllerTest {
 
         Mockito.when(service.makeOrder(any(OrderDTO.class))).thenThrow(new ClientNotFoundException(""));
 
-        mvc.perform(post("/order")
+        mvc.perform(post("/orders")
         .content(objectMapper.writeValueAsString(orderDTOTest))
         .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
@@ -321,7 +321,7 @@ public class OrderControllerTest {
 
         Mockito.when(service.makeOrder(any(OrderDTO.class))).thenReturn(order1);
 
-        mvc.perform(post("/order")
+        mvc.perform(post("/orders")
         .content(objectMapper.writeValueAsString(orderDTOTest))
         .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())

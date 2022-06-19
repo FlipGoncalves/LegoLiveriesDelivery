@@ -21,7 +21,7 @@ import restapi.tqs.Models.Address;
 import restapi.tqs.Service.AddressService;
 
 @RestController
-@RequestMapping("/address")
+@RequestMapping("/addresses")
 @Validated
 @CrossOrigin
 public class AddressController {

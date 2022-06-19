@@ -57,7 +57,7 @@ class UserControllerTestIT {
     @Test
     void test_GetAllUsers_ReturnsCorrectUsers() throws Exception{
 
-        mvc.perform(get("/user")
+        mvc.perform(get("/users")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -75,7 +75,7 @@ class UserControllerTestIT {
     @Test
     void test_LoginUser_UserDoesNotExist_ReturnsBadRequestStatus() throws Exception{
 
-        mvc.perform(get("/user/login/{email}", user3.getEmail())
+        mvc.perform(get("/users/login/{email}", user3.getEmail())
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
     }
@@ -83,7 +83,7 @@ class UserControllerTestIT {
     @Test
     void test_LoginUser_UserExists_ReturnsCorrectUser() throws Exception{
 
-        mvc.perform(get("/user/login/{email}", user1.getEmail())
+        mvc.perform(get("/users/login/{email}", user1.getEmail())
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andDo(print())
@@ -97,7 +97,7 @@ class UserControllerTestIT {
 
         RegisterDTO dto = new RegisterDTO(user1.getUsername(), user1.getEmail(), user1.getPassword());
 
-        mvc.perform(post("/user/register")
+        mvc.perform(post("/users/register")
         .content(objectMapper.writeValueAsString(dto))
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
@@ -108,7 +108,7 @@ class UserControllerTestIT {
 
         RegisterDTO dto = new RegisterDTO(user3.getUsername(), user3.getEmail(), user3.getPassword());
 
-        mvc.perform(post("/user/register")
+        mvc.perform(post("/users/register")
         .content(objectMapper.writeValueAsString(dto))
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isCreated())

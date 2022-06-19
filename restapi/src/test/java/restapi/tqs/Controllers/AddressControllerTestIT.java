@@ -65,7 +65,7 @@ class AddressControllerTestIT {
     @Test
     void test_getAllAdresses() throws Exception{
 
-        mvc.perform(get("/address")
+        mvc.perform(get("/addresses")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -81,7 +81,7 @@ class AddressControllerTestIT {
     @Test
     void test_insertAddress_AddressExists_ReturnsBadRequestStatus() throws Exception{
 
-        mvc.perform(post("/address")
+        mvc.perform(post("/addresses")
         .content(objectMapper.writeValueAsString(addressDTO1))
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
@@ -90,7 +90,7 @@ class AddressControllerTestIT {
     @Test
     void test_insertAddress_AddressDoesNotExist_ReturnsCorrectAddress() throws Exception{
 
-        mvc.perform(post("/address")
+        mvc.perform(post("/addresses")
         .content(objectMapper.writeValueAsString(addressDTO3))
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isCreated())

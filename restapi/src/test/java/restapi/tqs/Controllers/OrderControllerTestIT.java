@@ -197,7 +197,7 @@ public class OrderControllerTestIT {
     @Test
     void test_GetAllOrders_ReturnsCorrectOrders() throws Exception{
 
-        mvc.perform(get("/order")
+        mvc.perform(get("/orders")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andDo(print())
@@ -230,7 +230,7 @@ public class OrderControllerTestIT {
     @Test
     void test_GetOrderById_ValidId_ReturnsCorrectOrder() throws Exception{
 
-        mvc.perform(get("/order/{orderId}",order1.getOrderId())
+        mvc.perform(get("/orders/{orderId}",order1.getOrderId())
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andDo(print())
@@ -247,7 +247,7 @@ public class OrderControllerTestIT {
     @Test
     void test_GetOrderById_InvalidId_ReturnsBadRequestStatus() throws Exception{
         
-        mvc.perform(get("/order/{orderId}",200)
+        mvc.perform(get("/orders/{orderId}",200)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
 
@@ -256,7 +256,7 @@ public class OrderControllerTestIT {
     @Test
     void test_GetClientOrders_ValidId_ReturnsCorrectOrders() throws Exception{
 
-        mvc.perform(get("/order/client/{clientId}", order1.getClient().getClientId())
+        mvc.perform(get("/orders/client/{clientId}", order1.getClient().getClientId())
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andDo(print())
@@ -281,7 +281,7 @@ public class OrderControllerTestIT {
     @Test
     void test_GetClientOrders_InvalidId_ReturnsBadRequestStatus() throws Exception{
         
-        mvc.perform(get("/order/client/{clientId}",200)
+        mvc.perform(get("/orders/client/{clientId}",200)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
     }
@@ -292,7 +292,7 @@ public class OrderControllerTestIT {
 
         OrderDTO orderDTOTest = new OrderDTO(1l, addressDTO1, 2700, orderLegoDTOTest);
 
-        mvc.perform(post("/order")
+        mvc.perform(post("/orders")
         .content(objectMapper.writeValueAsString(orderDTOTest))
         .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
@@ -304,7 +304,7 @@ public class OrderControllerTestIT {
         List<OrderLegoDTO> orderLegoDTOTest = buildOrderLegoDTO(1l,2l,3l,1);
         OrderDTO orderDTOTest = new OrderDTO(50l, addressDTO1, 2100, orderLegoDTOTest);
 
-        mvc.perform(post("/order")
+        mvc.perform(post("/orders")
         .content(objectMapper.writeValueAsString(orderDTOTest))
         .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
@@ -316,7 +316,7 @@ public class OrderControllerTestIT {
         List<OrderLegoDTO> orderLegoDTOTest = buildOrderLegoDTO(1l,2l,3l,1);
         OrderDTO orderDTOTest = new OrderDTO(1l, addressDTO3, 2100, orderLegoDTOTest);
 
-        mvc.perform(post("/order")
+        mvc.perform(post("/orders")
         .content(objectMapper.writeValueAsString(orderDTOTest))
         .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
@@ -328,7 +328,7 @@ public class OrderControllerTestIT {
         List<OrderLegoDTO> orderLegoDTOTest = buildOrderLegoDTO(50l,2l,3l,1);
         OrderDTO orderDTOTest = new OrderDTO(1l, addressDTO1, 2100, orderLegoDTOTest);
 
-        mvc.perform(post("/order")
+        mvc.perform(post("/orders")
         .content(objectMapper.writeValueAsString(orderDTOTest))
         .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
@@ -341,7 +341,7 @@ public class OrderControllerTestIT {
         orderLegoDTOTest.get(0).setQuantity(-5);
         OrderDTO orderDTOTest = new OrderDTO(1l, addressDTO1, 2100, orderLegoDTOTest);
 
-        mvc.perform(post("/order")
+        mvc.perform(post("/orders")
         .content(objectMapper.writeValueAsString(orderDTOTest))
         .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
@@ -352,7 +352,7 @@ public class OrderControllerTestIT {
     void test_MakeOrder_InvalidOrderDTO_BadOrderLegoList_ReturnsBadRequestStatus() throws JsonProcessingException, Exception{
         OrderDTO orderDTOTest = new OrderDTO(1l, addressDTO1, 2100, new ArrayList<OrderLegoDTO>());
 
-        mvc.perform(post("/order")
+        mvc.perform(post("/orders")
         .content(objectMapper.writeValueAsString(orderDTOTest))
         .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
@@ -368,7 +368,7 @@ public class OrderControllerTestIT {
 
         mockBackEnd.enqueue(new MockResponse().setBody(responseFromEngine).setResponseCode(201));
 
-        mvc.perform(post("/order")
+        mvc.perform(post("/orders")
         .content(objectMapper.writeValueAsString(orderDTOTest))
         .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
