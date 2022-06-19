@@ -1,6 +1,7 @@
 package restapi.tqs.Services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -28,7 +29,7 @@ import restapi.tqs.Repositories.UserRepository;
 import restapi.tqs.Service.ClientService;
 
 @ExtendWith(MockitoExtension.class)
-public class ClientServiceTest {
+class ClientServiceTest {
     
     @Mock(lenient = true)
     private ClientRepository clientRepository;
@@ -90,7 +91,7 @@ public class ClientServiceTest {
 
         Client result = service.login(client1.getUser().getEmail());
 
-        assertTrue(result != null);
+        assertNotNull(result);
         assertEquals(client1, result);
     }
 

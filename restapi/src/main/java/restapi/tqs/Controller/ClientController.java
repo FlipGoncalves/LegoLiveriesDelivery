@@ -25,7 +25,7 @@ import restapi.tqs.Service.ClientService;
 @CrossOrigin
 @RequestMapping("/client")
 public class ClientController {
-    private static final Logger log = LoggerFactory.getLogger(LegoController.class);
+    private static final Logger log = LoggerFactory.getLogger(ClientController.class);
 
     @Autowired
     private ClientService clientService;
@@ -44,7 +44,7 @@ public class ClientController {
         try {
             client = clientService.login(clientEmail);
         } catch (ClientNotFoundException e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(client, HttpStatus.OK);
     }
@@ -57,7 +57,7 @@ public class ClientController {
         try {
             client = clientService.insertClient(clientDTO);
         } catch (ClientAlreadyExistsException e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(client, HttpStatus.CREATED);

@@ -26,7 +26,7 @@ import restapi.tqs.Repositories.LegoRepository;
 import restapi.tqs.Service.LegoService;
 
 @ExtendWith(MockitoExtension.class)
-public class LegoServiceTest {
+class LegoServiceTest {
     
     @Mock(lenient = true)
     private LegoRepository legoRepository;

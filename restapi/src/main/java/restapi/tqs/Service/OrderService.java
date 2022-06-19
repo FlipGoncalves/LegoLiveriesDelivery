@@ -71,8 +71,6 @@ public class OrderService {
     @Autowired
     OrderLegoRepository orderLegoRepository;
 
-    private ObjectMapper objectMapper;
-
     private String engineURL = "engine:9001/api/order";
 
     public List<Order> getAllOrders(){
@@ -234,7 +232,7 @@ public class OrderService {
         String response = responseSpec.getBody();
         log.info(response);
         try {
-            objectMapper = new ObjectMapper();
+            ObjectMapper objectMapper = new ObjectMapper();
             JsonNode map = objectMapper.readTree(response);
             order.setExternalOrderId(map.get("orderId").asLong());
         } catch (JsonProcessingException e) {

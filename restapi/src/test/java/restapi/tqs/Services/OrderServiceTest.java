@@ -58,7 +58,7 @@ import restapi.tqs.Repositories.OrderRepository;
 import restapi.tqs.Service.OrderService;
 
 @ExtendWith(MockitoExtension.class)
-public class OrderServiceTest {
+class OrderServiceTest {
     
     @Mock(lenient = true)
     private LegoRepository legoRepository;

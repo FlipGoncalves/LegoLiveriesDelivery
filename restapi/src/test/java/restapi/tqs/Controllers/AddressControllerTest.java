@@ -29,7 +29,7 @@ import restapi.tqs.Models.Address;
 import restapi.tqs.Service.AddressService;
 
 @WebMvcTest(AddressController.class)
-public class AddressControllerTest {
+class AddressControllerTest {
     
     @Autowired
     private MockMvc mvc;

@@ -15,7 +15,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import restapi.tqs.Models.User;
 
 @DataJpaTest
-public class UserRepoTest {
+class UserRepoTest {
     
     @Autowired
     private TestEntityManager entityManager;

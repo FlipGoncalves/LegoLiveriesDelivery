@@ -46,7 +46,7 @@ public class AddressController {
         try {
             address = addressService.insertAddress(addressDTO);
         } catch (AddressAlreadyExistsException e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(address, HttpStatus.CREATED);

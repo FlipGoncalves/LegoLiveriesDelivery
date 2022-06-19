@@ -30,7 +30,7 @@ import restapi.tqs.Repositories.UserRepository;
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
 @Transactional
-public class UserControllerTestIT {
+class UserControllerTestIT {
     
     @Autowired
     MockMvc mvc;

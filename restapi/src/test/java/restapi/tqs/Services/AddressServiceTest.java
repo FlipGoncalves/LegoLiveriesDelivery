@@ -25,7 +25,7 @@ import restapi.tqs.Repositories.AddressRepository;
 import restapi.tqs.Service.AddressService;
 
 @ExtendWith(MockitoExtension.class)
-public class AddressServiceTest {
+class AddressServiceTest {
     
     @Mock(lenient = true)
     private AddressRepository addressRepository;

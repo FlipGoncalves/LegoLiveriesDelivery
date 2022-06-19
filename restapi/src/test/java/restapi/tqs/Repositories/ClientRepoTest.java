@@ -16,7 +16,7 @@ import restapi.tqs.Models.Client;
 import restapi.tqs.Models.User;
 
 @DataJpaTest
-public class ClientRepoTest {
+class ClientRepoTest {
     
     @Autowired
     private TestEntityManager entityManager;

@@ -32,7 +32,7 @@ import restapi.tqs.Models.User;
 import restapi.tqs.Service.ClientService;
 
 @WebMvcTest(ClientController.class)
-public class ClientControllerTest {
+class ClientControllerTest {
     
     @Autowired
     private MockMvc mvc;

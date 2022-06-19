@@ -1,6 +1,7 @@
 package restapi.tqs.Services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -25,7 +26,7 @@ import restapi.tqs.Repositories.UserRepository;
 import restapi.tqs.Service.UserService;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTest {
+class UserServiceTest {
 
     @Mock(lenient = true)
     private UserRepository userRepository;
@@ -84,7 +85,7 @@ public class UserServiceTest {
 
         User result = service.register(dto);
 
-        assertTrue(result != null);
+        assertNotNull(result);
         assertEquals(user3.getUsername(), result.getUsername());
         assertEquals(user3.getPassword(), result.getPassword());
         assertEquals(user3.getEmail(), result.getEmail());

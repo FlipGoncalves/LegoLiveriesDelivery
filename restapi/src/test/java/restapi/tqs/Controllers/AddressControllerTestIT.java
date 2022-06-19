@@ -29,7 +29,7 @@ import restapi.tqs.Repositories.AddressRepository;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = TqsApplication.class)
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
-public class AddressControllerTestIT {
+class AddressControllerTestIT {
 
     @Autowired
     MockMvc mvc;

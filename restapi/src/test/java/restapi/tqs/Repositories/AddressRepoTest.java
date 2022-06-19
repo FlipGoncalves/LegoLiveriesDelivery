@@ -15,7 +15,7 @@ import restapi.tqs.DataModels.AddressDTO;
 import restapi.tqs.Models.Address;
 
 @DataJpaTest
-public class AddressRepoTest {
+class AddressRepoTest {
 
     @Autowired
     private TestEntityManager entityManager;

@@ -25,9 +25,7 @@ public class UserService {
     public List<User> getAllUsers(){
         log.info("Getting all Users");
 
-        List<User> users = userRepository.findAll();
-
-        return users;
+        return userRepository.findAll();
     }
 
     public User login(String email) throws UserNotFoundException {

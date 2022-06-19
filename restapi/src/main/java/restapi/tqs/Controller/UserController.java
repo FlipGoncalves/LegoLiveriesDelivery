@@ -49,7 +49,7 @@ public class UserController {
         try {
             userLog = userService.login(email);
         } catch (UserNotFoundException e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         log.info("Login -> User logged in");
@@ -66,7 +66,7 @@ public class UserController {
             userReg = userService.register(reg);
         } catch (UserAlreadyExistsException e) {
             log.info("Register -> User already exists");
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         log.info("Register -> User registered");
