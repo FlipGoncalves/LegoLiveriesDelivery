@@ -41,6 +41,8 @@ public class StoreService {
             throw new StoreAlreadyExistsException("Store with name " + storeDTO.getName() + " already exists");
         }
 
+        storeRep.saveAndFlush(store);
+
         store.setName(storeDTO.getName());
 
         Address address = new Address();
@@ -55,7 +57,8 @@ public class StoreService {
         }
 
         store.setAddress(address);
+        address.setStore(store);
 
-        return storeRep.saveAndFlush(store);
+        return store;
     }
 }
