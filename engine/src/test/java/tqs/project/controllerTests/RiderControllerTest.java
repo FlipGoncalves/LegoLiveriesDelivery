@@ -57,7 +57,7 @@ public class RiderControllerTest {
 
     @Test
     void test_getAllRiders_ReturnsCorrectRiders(){
-        given().get("/api/rider")
+        given().get("/api/riders")
                .then().log().body().assertThat()
                .contentType(ContentType.JSON).and()
                .status(HttpStatus.OK).and()
@@ -86,7 +86,7 @@ public class RiderControllerTest {
         when(riderService.insertRider(riderDTO)).thenThrow(UserNotFoundException.class);
         
         given().contentType(ContentType.JSON).body(riderDTO)
-               .post("/api/rider")
+               .post("/api/riders")
                .then().log().body().assertThat()
                .status(HttpStatus.BAD_REQUEST);
     }
@@ -109,7 +109,7 @@ public class RiderControllerTest {
         when(riderService.insertRider(riderDTO)).thenReturn(rider);
         
         given().contentType(ContentType.JSON).body(riderDTO)
-               .post("/api/rider")
+               .post("/api/riders")
                .then().log().body().assertThat()
                .contentType(ContentType.JSON).and()
                .status(HttpStatus.CREATED).and()

@@ -84,9 +84,9 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - name: Assert legoliveries
+      - name: Assert dashboard
         run: curl 127.0.0.1:3001
-      - name: Assert restapi
+      - name: Assert engine
         run: curl 127.0.0.1:9001
       - name: Build and analyze
         env:
