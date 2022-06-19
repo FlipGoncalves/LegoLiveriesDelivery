@@ -21,17 +21,17 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11  
-      - name: Build Engine Backend
-        run: docker-compose -f ../docker-compose.yml build engine
-      - name: Start Engine Backend
-        run: docker-compose -f ../docker-compose.yml run -p 9001:9001 -d engine
-      - name: Build Engine Frontend
-        run: docker-compose -f ../docker-compose.yml build engine-app
-      - name: Start Engine Frontend
-        run: docker-compose -f ../docker-compose.yml run -p 3001:3001 -d engine-app
+      - name: Build Legoliveries Backend
+        run: docker-compose build -f ../docker-compose.yml legoliveries
+      - name: Start Legoliveries Backend
+        run: docker-compose run -d -p 8080:8080 -f ../docker-compose.yml  legoliveries
+      - name: Build Legoliveries Frontend
+        run: docker-compose build -f ../docker-compose.yml legoliveries-app
+      - name: Start Legoliveries Frontend
+        run: docker-compose run -d -p 3000:3000 -f ../docker-compose.yml legoliveries-app
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
-        with: 
+        with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
@@ -41,10 +41,6 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - name: Assert of service running
-        run: curl localhost:3001
-      - name: Assert of service backend running
-        run: curl localhost:9001/api/statistics
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
@@ -64,14 +60,14 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - name: Build Legoliveries Backend
-        run: docker-compose -f ../docker-compose.yml build legoliveries
+      - name: Build Engine Backend
+        run: docker-compose build -f ../docker-compose.yml engine
       - name: Start Legoliveries Backend
-        run: docker-compose -f ../docker-compose.yml run -p 8080:8080 -d legoliveries
+        run: docker-compose run -p 9001:9001 -d -f ../docker-compose.yml engine
       - name: Build Legoliveries Frontend
-        run: docker-compose -f ../docker-compose.yml build legoliveries-app
+        run: docker-compose build -f ../docker-compose.yml engine-app
       - name: Start Legoliveries Frontend
-        run: docker-compose -f ../docker-compose.yml run -p 3000:3000 -d legoliveries-app
+        run: docker-compose run -d -p 3001:3001 -f ../docker-compose.yml engine-app
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
         with:
@@ -84,8 +80,6 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - name: Assert of service running
-        run: curl localhost:3000
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
