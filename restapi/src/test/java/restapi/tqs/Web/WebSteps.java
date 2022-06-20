@@ -105,6 +105,8 @@ public class WebSteps {
     }
     @When("I click Add item to cart")
     public void iClickAddToCart() {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView(true);", driver.findElement(By.id("_submit_cart")));
         driver.findElement(By.id("_submit_cart")).click();
     }
 
