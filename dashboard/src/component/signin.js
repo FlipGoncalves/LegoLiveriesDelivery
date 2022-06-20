@@ -38,7 +38,7 @@ class SignIn extends Component {
 
       console.log("Login")
       
-      axios.get('http://localhost:9001/api/manager/'+email)
+      axios.get('http://localhost:9001/api/managers/'+email)
       .then((response) => {
         console.log(response);
         if (response.data["password"] != pass) {
