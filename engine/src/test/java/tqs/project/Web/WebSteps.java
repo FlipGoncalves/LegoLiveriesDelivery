@@ -83,9 +83,9 @@ public class WebSteps {
             wait.until(ExpectedConditions.numberOfElementsToBe(By.id("riders"), 2));
         } catch(TimeoutException e) {
             System.err.println(e);
-            if (driver.findElement(By.id("error")).isDisplayed()) {
-                System.out.println("Error message: " + driver.findElement(By.id("error")).getAttribute("innerHTML"));
-            }
+            // if (driver.findElement(By.id("error")).isDisplayed()) {
+            //     System.out.println("Error message: " + driver.findElement(By.id("error")).getAttribute("innerHTML"));
+            // }
         }
 
         tableRows = baseTable.findElements(By.tagName("tr"));
