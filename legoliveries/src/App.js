@@ -223,7 +223,7 @@ class App extends Component {
                 return false
             }
 
-            if ((localStorage.getItem("user") === "null" || localStorage.getItem("user") === null) && this.state.testing === "true") {
+            if ((localStorage.getItem("user") === "null" || localStorage.getItem("user") === null) && this.state.testing !== "true") {
                 this.setState({error_message: "Please login in order to create an order "})
                 return false
             }
@@ -275,29 +275,14 @@ class App extends Component {
                 console.log("Success Order")
                 console.log(response.data)
 
-                // create order
-                axios.post('http://localhost:8080/orders', {
-                    address: response["data"],
-                    scheduledTimeOfDelivery: time_of_delivery,
-                    legos: dic
-                })
-                .then((response) => {
-                    console.log("Success Order")
-                    console.log(response)   
-                    this.setState({error_message: ""})
-                    document.getElementById("btn-close").click();
-                    this.setState({cart: []})
-                    this.setState({total_price: 0})
-                    this.setState({total_products: 0})
-                })
-                .catch((error) => {
-                    console.log("ERROR IN ORDER CREATION");
-                    this.setState({error_message: "Could not create the order, please try again"})
-                    return
-                });
+                this.setState({error_message: ""})
+                document.getElementById("btn-close").click();
+                this.setState({cart: []})
+                this.setState({total_price: 0})
+                this.setState({total_products: 0})
             })
             .catch((error) => {
-                console.log("ERROR IN ADDRESS CREATION")
+                console.log("ERROR IN ORDER CREATION");
                 this.setState({error_message: "Could not create the order, please try again"})
                 return
             });
@@ -305,6 +290,7 @@ class App extends Component {
             console.log("here")
 
             if (this.state.testing === "true") {
+                console.log("testing")
                 document.getElementById("btn-close").click();
                 this.setState({cart: []})
                 this.setState({total_price: 0})

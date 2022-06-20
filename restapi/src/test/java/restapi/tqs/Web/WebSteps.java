@@ -146,7 +146,7 @@ public class WebSteps {
     @When("I choose {string}")
     public void iSelectTime(String time) {
         Select sel = new Select(driver.findElement(By.id("hour")));
-        sel.selectByValue(time);
+        sel.selectByVisibleText(time);
     }
 
     @When("I click Order")
