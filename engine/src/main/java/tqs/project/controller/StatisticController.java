@@ -1,5 +1,8 @@
 package tqs.project.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import tqs.project.datamodels.StatisticDTO;
+import tqs.project.model.Rider;
+import tqs.project.model.Store;
 import tqs.project.service.OrderService;
 import tqs.project.service.RiderService;
+import tqs.project.service.StoreService;
 
 @RestController
 @RequestMapping("/api/statistics")
@@ -29,6 +35,9 @@ public class StatisticController {
     @Autowired
     private OrderService orderservice;
 
+    @Autowired
+    private StoreService storeservice;
+
     @GetMapping(value = {"/{storeId}", ""})
     public ResponseEntity<StatisticDTO> getStatistics(@PathVariable(required = false) Long storeId) {
         log.info("GET Request -> Statistic data");
@@ -37,12 +46,37 @@ public class StatisticController {
 
         if (storeId == null){
             stats.setNumOrders(orderservice.getAllOrders().size());
-            stats.setNumRiders(riderservice.getAllRiders().size());
             stats.setCompletedOrders(orderservice.getAllOrdersByStatus(2).size());
+            stats.setNumRiders(riderservice.getAllRiders().size());
+
+            Map<String, Integer> store_orders = new HashMap<>();
+            Map<String, Integer> store_comp_orders = new HashMap<>();
+            Map<String, Double> rider_reviews = new HashMap<>();
+            
+            for (Store store: storeservice.getAllStores()) {
+                store_orders.put(store.getName(), orderservice.getAllOrdersByStoreId(store.getStoreId()).size());
+                store_comp_orders.put(store.getName(), orderservice.getAllOrdersByStoreIdAndStatus(store.getStoreId(), 2).size());
+            }
+            for (Rider rider: riderservice.getAllRiders()) {
+                double sum = rider.getTotalReviews() / rider.getReviewSum() == 0 ? 0 : rider.getTotalReviews() / rider.getReviewSum();
+                rider_reviews.put(rider.getUser().getUsername(), sum);
+            }
+
+            // static testing
+            // store_orders.put("LegoLiveries", 5);
+            // store_comp_orders.put("LegoLiveries", 3);
+            // rider_reviews.put("Rider Name 1", 4.81);
+
+            stats.setCompOrderByStore(store_comp_orders);
+            stats.setOrderByStore(store_orders);
+            stats.setReviewPerRider(rider_reviews);
+
         }else{
             stats.setNumOrders(orderservice.getAllOrdersByStoreId(storeId).size());
             stats.setCompletedOrders(orderservice.getAllOrdersByStoreIdAndStatus(storeId, 2).size());
         }
+
+
         return new ResponseEntity<>(stats, HttpStatus.OK);
     }
 }

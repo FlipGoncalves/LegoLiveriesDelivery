@@ -35,6 +35,11 @@ This project aims to create a viable software product and a Software Quality Env
   <img  src="./deliverables/deployment.png">
 </p>
 
+## Domain Models
+<p align="center">
+  <img  src="./deliverables/domain_models.png">
+</p>
+
 ## How to Run
 Each service and frontend is deployed in a docker, so having _docker_ and _docker-compose_ installed is required.
 

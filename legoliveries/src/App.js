@@ -348,12 +348,14 @@ class App extends Component {
                                         {localStorage.getItem('user') != 'null' && localStorage.getItem('user') != null ? 
                                         <>
                                         <div class="widget-header mr-3">
-                                            <a class="widget-view">
-                                                <div class="icon-area">
-                                                    <i class="fa fa-store"></i> 
-                                                </div>
-                                                <small class="text"> Orders </small>
-                                            </a>
+                                            <Link to="/orders">
+                                                <a class="widget-view">
+                                                    <div class="icon-area">
+                                                        <i class="fa fa-store"></i> 
+                                                    </div>
+                                                    <small class="text"> Orders </small>
+                                                </a>
+                                            </Link>
                                         </div>
                                         <div class="widget-header mr-3">
                                             <a class="widget-view">

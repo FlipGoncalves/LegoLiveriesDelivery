@@ -1,5 +1,7 @@
 package tqs.project.datamodels;
 
+import java.util.Map;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -19,4 +21,10 @@ public class StatisticDTO {
     private int numRiders;
 
     private int completedOrders;
+
+    private Map<String, Integer> orderByStore;
+
+    private Map<String, Integer> compOrderByStore;
+
+    private Map<String, Double> reviewPerRider;
 }
