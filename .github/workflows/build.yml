@@ -7,7 +7,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
-  buildEngine:
+  buildRestApi:
     name: Build restAPI
     runs-on: ubuntu-latest
     defaults:
@@ -50,7 +50,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_ENGINE }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=flipgoncalves_TQSProject_legoliveries
-  buildRestAPI:
+  buildEngine:
     name: Build Engine
     runs-on: ubuntu-latest
     defaults:
@@ -66,11 +66,11 @@ jobs:
           java-version: 11
       - name: Build Engine Backend
         run: docker-compose -f ../docker-compose.yml build engine
-      - name: Start Legoliveries Backend
+      - name: Start Engine Backend
         run: docker-compose -f ../docker-compose.yml run -p 9001:9001 -d engine
-      - name: Build Legoliveries Frontend
+      - name: Build Engine Frontend
         run: docker-compose -f ../docker-compose.yml build  engine-app
-      - name: Start Legoliveries Frontend
+      - name: Start Engine Frontend
         run: docker-compose -f ../docker-compose.yml run -p 3001:3001 -d engine-app
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
@@ -84,9 +84,9 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - name: Assert legoliveries
+      - name: Assert dashboard
         run: curl 127.0.0.1:3001
-      - name: Assert restapi
+      - name: Assert engine
         run: curl 127.0.0.1:9001
       - name: Build and analyze
         env:

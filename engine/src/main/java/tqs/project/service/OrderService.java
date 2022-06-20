@@ -127,7 +127,7 @@ public class OrderService {
             throw new InvalidStatusException("The status " + orderStatus + " is invalid");
         }
 
-        Optional<Order> order = orderRep.findByExternalOrderId(orderId);
+        Optional<Order> order = orderRep.findById(orderId);
 
         if (order.isEmpty()){
             throw new OrderNotFoundException("Order with externalOrderId " + orderId + " was not found");
