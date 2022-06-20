@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import tqs.project.datamodels.OrderDTO;
+import tqs.project.exceptions.StoreNotFoundException;
 import tqs.project.model.Order;
 import tqs.project.service.OrderService;
 
@@ -39,16 +40,16 @@ public class OrderController {
     }
 
     @PostMapping()
-    public ResponseEntity<String> makeOrder(@RequestBody OrderDTO orderDTO){
+    public ResponseEntity<Object> makeOrder(@RequestBody OrderDTO orderDTO){
 
-        long orderId = -1;
+        Order order;
         try {
-            orderId = orderService.makeOrder(orderDTO).getOrderId();
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            order = orderService.makeOrder(orderDTO);
+        } catch (StoreNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        String response = "{\"orderId\" : " + orderId + " }";
+        String response = "{\"orderId\" : " + order.getOrderId() + " }";
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

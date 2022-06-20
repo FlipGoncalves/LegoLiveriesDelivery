@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -78,18 +79,19 @@ class OrderRepositoryTest {
     @Test
     void test_FindByClientName_ClientExists_ReturnsCorrectOrder() {
 
-        Order response = orderRep.findByClientName("Client 1");
+        List<Order> response = orderRep.findByClientName("Client 1");
 
-        assertTrue(response != null);
-        assertEquals(order1, response);
+        assertTrue(!response.isEmpty());
+        assertEquals(1, response.size());
+        assertTrue(response.contains(order1));
     }
 
     @Test
     void test_FindByClientName_ClientDoesNotExists_ReturnsNull(){
         
-        Order response = orderRep.findByClientName("Not a Client");
+        List<Order> response = orderRep.findByClientName("Not a Client");
 
-        assertTrue(response == null);
+        assertTrue(response.isEmpty());
     }
 
     @Test
