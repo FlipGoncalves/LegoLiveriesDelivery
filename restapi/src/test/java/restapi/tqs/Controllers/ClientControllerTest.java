@@ -71,7 +71,7 @@ class ClientControllerTest {
 
         Mockito.when(service.getAllClients()).thenReturn(new ArrayList<>(Arrays.asList(client1, client2)));
 
-        mvc.perform(get("/client")
+        mvc.perform(get("/clients")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -91,7 +91,7 @@ class ClientControllerTest {
 
         Mockito.when(service.login(client3.getUser().getEmail())).thenThrow(ClientNotFoundException.class);
 
-        mvc.perform(get("/client/login/{clientEmail}", client3.getUser().getEmail())
+        mvc.perform(get("/clients/login/{clientEmail}", client3.getUser().getEmail())
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
     }
@@ -101,7 +101,7 @@ class ClientControllerTest {
 
         Mockito.when(service.login(client1.getUser().getEmail())).thenReturn(client1);
 
-        mvc.perform(get("/client/login/{clientEmail}", client1.getUser().getEmail())
+        mvc.perform(get("/clients/login/{clientEmail}", client1.getUser().getEmail())
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andDo(print())
@@ -117,7 +117,7 @@ class ClientControllerTest {
 
         Mockito.when(service.insertClient(dto)).thenThrow(ClientAlreadyExistsException.class);
 
-        mvc.perform(post("/client/register")
+        mvc.perform(post("/clients/register")
         .content(objectMapper.writeValueAsString(dto))
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
@@ -130,7 +130,7 @@ class ClientControllerTest {
 
         Mockito.when(service.insertClient(dto)).thenReturn(client3);
 
-        mvc.perform(post("/client/register")
+        mvc.perform(post("/clients/register")
         .content(objectMapper.writeValueAsString(dto))
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isCreated())

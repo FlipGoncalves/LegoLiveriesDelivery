@@ -59,7 +59,7 @@ class AddressControllerTest {
 
         Mockito.when(service.getAllAddresses()).thenReturn(new ArrayList<>(Arrays.asList(address1, address2)));
 
-        mvc.perform(get("/address")
+        mvc.perform(get("/addresses")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -76,7 +76,7 @@ class AddressControllerTest {
     void test_insertAddress_AddressExists_ReturnsBadRequestStatus() throws Exception{
         Mockito.when(service.insertAddress(addressDTO1)).thenThrow(AddressAlreadyExistsException.class);
 
-        mvc.perform(post("/address")
+        mvc.perform(post("/addresses")
         .content(objectMapper.writeValueAsString(addressDTO1))
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
@@ -86,7 +86,7 @@ class AddressControllerTest {
     void test_insertAddress_AddressDoesNotExist_ReturnsCorrectAddress() throws Exception{
         Mockito.when(service.insertAddress(addressDTO3)).thenReturn(address3);
 
-        mvc.perform(post("/address")
+        mvc.perform(post("/addresses")
         .content(objectMapper.writeValueAsString(addressDTO3))
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isCreated())

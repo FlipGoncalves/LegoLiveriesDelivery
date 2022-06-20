@@ -21,7 +21,7 @@ import tqs.project.model.Address;
 import tqs.project.service.AddressService;
 
 @RestController
-@RequestMapping("/api/address")
+@RequestMapping("/api/addresses")
 @Validated
 @CrossOrigin
 public class AddressController {
@@ -34,21 +34,21 @@ public class AddressController {
     public ResponseEntity<List<Address>> getAllStores() {
         log.info("GET Request -> All Stores Data");
 
-        List<Address> stores = addressService.getAllAddresses();
+        List<Address> addresses = addressService.getAllAddresses();
 
-        return new ResponseEntity<>(stores, HttpStatus.OK);
+        return new ResponseEntity<>(addresses, HttpStatus.OK);
     }
 
     @PostMapping()
     public ResponseEntity<Address> insertAddress(@RequestBody AddressDTO addressDTO){
 
-        Address store = null;
+        Address address = null;
         try {
-            store = addressService.insertAddress(addressDTO);
+            address = addressService.insertAddress(addressDTO);
         } catch (AddressAlreadyExistsException e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(store, HttpStatus.CREATED);
+        return new ResponseEntity<>(address, HttpStatus.CREATED);
     }
 }

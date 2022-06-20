@@ -19,7 +19,7 @@ services:
     networks:
       legoliveries-backend:
         ipv4_address: 172.20.202.10
-      all_backend:
+      all-backend:
     depends_on:
       - mysql-legoliveries
       
@@ -73,7 +73,7 @@ services:
     networks:
       engine-backend:
         ipv4_address: 172.20.200.10
-      all_backend:
+      all-backend:
   mysql-engine:
     image: mysql:5.7
     container_name: mysqldbengine
@@ -118,4 +118,4 @@ networks:
 
 volumes:
   engineData:
-  legoliveriesData:    
+  legoliveriesData:  

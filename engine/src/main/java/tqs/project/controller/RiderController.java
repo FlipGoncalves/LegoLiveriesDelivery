@@ -17,13 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tqs.project.datamodels.RiderDTO;
 import tqs.project.exceptions.RiderAlreadyExistsException;
-import tqs.project.exceptions.RiderNotFoundException;
-import tqs.project.exceptions.UserNotFoundException;
 import tqs.project.model.Rider;
 import tqs.project.service.RiderService;
 
 @RestController
-@RequestMapping("/api/rider")
+@RequestMapping("/api/riders")
 @Validated
 @CrossOrigin
 public class RiderController {

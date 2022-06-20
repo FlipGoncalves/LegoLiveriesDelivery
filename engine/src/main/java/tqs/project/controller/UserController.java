@@ -24,7 +24,7 @@ import tqs.project.model.User;
 import tqs.project.service.UserService;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 @Validated
 @CrossOrigin
 public class UserController {

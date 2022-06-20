@@ -132,7 +132,11 @@ public class Address {
 
     public void setOrders(Set<Order> orders) {
         this.orders = orders;
-    }    
+    }
+
+    public void addOrder(Order order){
+        this.orders.add(order);
+    }
 
     public void convertDTOtoObject(AddressDTO dto){
         this.setCity(dto.getCity());
@@ -140,7 +144,7 @@ public class Address {
         this.setPostalCode(dto.getPostalCode());
         this.setStreet(dto.getStreet());
         this.setLongitude(dto.getLongitude());
-        this.setLatitude(dto.getLongitude());
+        this.setLatitude(dto.getLatitude());
     }
 
 

@@ -20,7 +20,7 @@ import tqs.project.model.Store;
 import tqs.project.service.StoreService;
 
 @RestController
-@RequestMapping("/api/store")
+@RequestMapping("/api/stores")
 @Validated
 @CrossOrigin
 public class StoreController {

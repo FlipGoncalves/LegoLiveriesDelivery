@@ -1,5 +1,7 @@
 package tqs.project.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,7 @@ import tqs.project.model.Manager;
 import tqs.project.service.ManagerService;
 
 @RestController
-@RequestMapping("/api/manager")
+@RequestMapping("/api/managers")
 @Validated
 @CrossOrigin
 public class ManagerController {
@@ -29,6 +31,15 @@ public class ManagerController {
 
     @Autowired
     private ManagerService managerService;
+
+    @GetMapping()
+    public ResponseEntity<List<Manager>> getAllManagers(){
+        log.info("GET Request -> All Managers Data");
+
+        List<Manager> manager = managerService.getAllManagers();
+
+        return new ResponseEntity<>(manager, HttpStatus.OK);
+    }
 
     @GetMapping("/{email}")
     public ResponseEntity<Object> login(@PathVariable String email){

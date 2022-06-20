@@ -1,12 +1,7 @@
-package restapi.tqs.Controllers;
+package tqs.project.controller;
 
-import static org.hamcrest.Matchers.hasSize;
+import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,18 +10,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import restapi.tqs.TqsApplication;
-import restapi.tqs.DataModels.AddressDTO;
-import restapi.tqs.Models.Address;
-import restapi.tqs.Repositories.AddressRepository;
+import io.restassured.http.ContentType;
+import io.restassured.module.mockmvc.RestAssuredMockMvc;
+import tqs.project.ProjectApplication;
+import tqs.project.datamodels.AddressDTO;
+import tqs.project.model.Address;
+import tqs.project.repository.AddressRepository;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = TqsApplication.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = ProjectApplication.class)
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
 class AddressControllerTestIT {
@@ -37,14 +34,14 @@ class AddressControllerTestIT {
     @Autowired
     AddressRepository addressRepository;
 
-    @Autowired
-    ObjectMapper objectMapper;
-
     Address address1, address2, address3;
     AddressDTO addressDTO1, addressDTO2, addressDTO3;
 
     @BeforeEach
     void setUp() throws JsonProcessingException{
+
+        RestAssuredMockMvc.mockMvc( mvc );
+
         address1 = buildAddressObject(1);
         address2 = buildAddressObject(2);
         address3 = buildAddressObject(3);
@@ -65,42 +62,40 @@ class AddressControllerTestIT {
     @Test
     void test_getAllAdresses() throws Exception{
 
-        mvc.perform(get("/addresses")
-        .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk())
-        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$", hasSize(2)))
-        .andExpect(jsonPath("$[0].street", is(address1.getStreet())))
-        .andExpect(jsonPath("$[0].latitude", is(address1.getLatitude())))
-        .andExpect(jsonPath("$[0].longitude", is(address1.getLongitude())))
-        .andExpect(jsonPath("$[1].street", is(address2.getStreet())))
-        .andExpect(jsonPath("$[1].latitude", is(address2.getLatitude())))
-        .andExpect(jsonPath("$[1].longitude", is(address2.getLongitude())));
+        given().get("/api/addresses")
+        .then().log().body().assertThat()
+        .contentType(ContentType.JSON).and()
+        .status(HttpStatus.OK).and()
+        .body("size", is(2)).and()
+        .body("[0].street", is(address1.getStreet())).and()
+        .body("[0].latitude", is((float) address1.getLatitude())).and()
+        .body("[0].longitude", is((float) address1.getLongitude())).and()
+        .body("[1].street", is(address2.getStreet())).and()
+        .body("[1].latitude", is((float) address2.getLatitude())).and()
+        .body("[1].longitude", is((float) address2.getLongitude()));
     }
 
     @Test
     void test_insertAddress_AddressExists_ReturnsBadRequestStatus() throws Exception{
 
-        mvc.perform(post("/addresses")
-        .content(objectMapper.writeValueAsString(addressDTO1))
-        .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isBadRequest());
+        given().contentType(ContentType.JSON).body(addressDTO1)
+               .post("/api/addresses")
+               .then().log().body().assertThat()
+               .status(HttpStatus.BAD_REQUEST);
     }
 
     @Test
     void test_insertAddress_AddressDoesNotExist_ReturnsCorrectAddress() throws Exception{
 
-        mvc.perform(post("/addresses")
-        .content(objectMapper.writeValueAsString(addressDTO3))
-        .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isCreated())
-        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.street", is(address3.getStreet())))
-        .andExpect(jsonPath("$.latitude", is(address3.getLatitude())))
-        .andExpect(jsonPath("$.longitude", is(address3.getLongitude())));
+        given().contentType(ContentType.JSON).body(addressDTO3)
+               .post("/api/addresses")
+               .then().log().body().assertThat()
+               .contentType(ContentType.JSON).and()
+               .status(HttpStatus.CREATED).and()
+               .body("street", is(address3.getStreet())).and()
+               .body("latitude", is((float) address3.getLatitude())).and()
+               .body("longitude", is((float) address3.getLongitude()));
     }
-
-    
 
     Address buildAddressObject(long id){
         Address address = new Address();

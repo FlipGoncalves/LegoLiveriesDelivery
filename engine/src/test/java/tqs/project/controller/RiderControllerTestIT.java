@@ -1,60 +1,83 @@
 package tqs.project.controller;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
+import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import tqs.project.controller.RiderController;
+import io.restassured.parsing.Parser;
+import tqs.project.ProjectApplication;
+import tqs.project.datamodels.AddressDTO;
+import tqs.project.datamodels.OrderDTO;
+import tqs.project.datamodels.RegisterDTO;
 import tqs.project.datamodels.RiderDTO;
+import tqs.project.exceptions.ManagerAlreadyExistsException;
 import tqs.project.exceptions.RiderAlreadyExistsException;
-import tqs.project.exceptions.RiderNotFoundException;
+import tqs.project.exceptions.StoreNotFoundException;
 import tqs.project.exceptions.UserAlreadyExistsException;
-import tqs.project.exceptions.UserNotFoundException;
+import tqs.project.model.Address;
+import tqs.project.model.Manager;
+import tqs.project.model.Order;
 import tqs.project.model.Rider;
+import tqs.project.model.Store;
 import tqs.project.model.User;
-import tqs.project.service.RiderService;
+import tqs.project.repository.AddressRepository;
+import tqs.project.repository.ManagerRepository;
+import tqs.project.repository.OrderRepository;
+import tqs.project.repository.RiderRepository;
+import tqs.project.repository.StoreRepository;
+import tqs.project.repository.UserRepository;
 
-@WebMvcTest(RiderController.class)
-public class RiderControllerTest {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = ProjectApplication.class)
+@AutoConfigureMockMvc
+@AutoConfigureTestDatabase
+@Transactional
+public class RiderControllerTestIT {
     
     @Autowired
-    private MockMvc mvc;
+    MockMvc mvc;
 
-    @MockBean
-    private RiderService riderService;
+    @Autowired
+    private RiderRepository riderRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     Rider rider1, rider2;
     User user1, user2;
-    List<Rider> riders;
 
     @BeforeEach
     void setUp(){
-        RestAssuredMockMvc.mockMvc( mvc );
-        rider1 = new Rider(25, 7);
+        RestAssuredMockMvc.mockMvc( mvc );       
         user1 = new User("User 1", "user1@gmail.com", "password1");
+        userRepository.saveAndFlush(user1);
+        rider1 = new Rider(25, 7);
         rider1.setUser(user1);
-
-        rider2 = new Rider(50, 15);
+        riderRepository.saveAndFlush(rider1);
+        
         user2 = new User("User 2", "user2@gmail.com", "password2");
+        userRepository.saveAndFlush(user2);
+        rider2 = new Rider(50, 15);
         rider2.setUser(user2);
-
-        riders = new ArrayList<Rider>(Arrays.asList(rider1, rider2));
-
-        when(riderService.getAllRiders()).thenReturn(riders);
+        riderRepository.saveAndFlush(rider2);
     }
 
     @Test
@@ -76,15 +99,8 @@ public class RiderControllerTest {
 
     @Test
     void test_addRider_InvalidRiderDTO_ReturnsBadRequestStatus() throws RiderAlreadyExistsException{
-        String username = "User 3";
-        String email = "user3@gmail.com";
-        String password = "password3";
-        int numRev = 7;
-        int sumRev = 25;
 
-        RiderDTO riderDTO = new RiderDTO(username, email, password, numRev, sumRev);
-
-        when(riderService.insertRider(riderDTO)).thenThrow(RiderAlreadyExistsException.class);
+        RiderDTO riderDTO = new RiderDTO(rider1.getUser().getUsername(), rider1.getUser().getEmail(), rider1.getUser().getPassword(), rider1.getTotalReviews(), rider1.getReviewSum());
         
         given().contentType(ContentType.JSON).body(riderDTO)
                .post("/api/riders")
@@ -95,28 +111,22 @@ public class RiderControllerTest {
     
     @Test
     void test_addRider_ValidRiderDTO_ReturnsCorrectRider() throws UserAlreadyExistsException, RiderAlreadyExistsException{
-        String username = "User 1";
-        String email = "user1@gmail.com";
-        String password = "password1";
+        String username = "User 3";
+        String email = "user3@gmail.com";
+        String password = "password3";
         int numRev = 4;
         int sumRev = 17;
 
         RiderDTO riderDTO = new RiderDTO(username, email, password, numRev, sumRev);
-
-        User user = new User(username, email, password);
-        Rider rider = new Rider(sumRev, numRev);
-        rider.setUser(user);
-
-        when(riderService.insertRider(riderDTO)).thenReturn(rider);
         
         given().contentType(ContentType.JSON).body(riderDTO)
                .post("/api/riders")
                .then().log().body().assertThat()
                .contentType(ContentType.JSON).and()
                .status(HttpStatus.CREATED).and()
-               .body("reviewSum", is(rider.getReviewSum())).and()
-               .body("totalReviews", is(rider.getTotalReviews())).and()
-               .body("user.username", is(rider.getUser().getUsername())).and()
-               .body("user.email", is(rider.getUser().getEmail()));
+               .body("reviewSum", is(sumRev)).and()
+               .body("totalReviews", is(numRev)).and()
+               .body("user.username", is(username)).and()
+               .body("user.email", is(email));
     }
 }

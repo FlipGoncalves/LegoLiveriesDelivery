@@ -49,7 +49,7 @@ public class RiderService {
 
         int numRev = rand.nextInt(16);
         int sumRev = 0;
-        if (dto.getNumRev() < 0) {
+        if (dto.getNumRev() > 0) {
             numRev = dto.getNumRev();
             sumRev = dto.getSumRev();
         } else {
