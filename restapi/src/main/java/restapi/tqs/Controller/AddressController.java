@@ -32,7 +32,7 @@ public class AddressController {
 
     @GetMapping()
     public ResponseEntity<List<Address>> getAllAddresses() {
-        log.info("GET Request -> All Stores Data");
+        log.info("GET Request -> All Addresses Data");
 
         List<Address> addresses = addressService.getAllAddresses();
 
@@ -41,14 +41,17 @@ public class AddressController {
 
     @PostMapping()
     public ResponseEntity<Address> insertAddress(@RequestBody AddressDTO addressDTO){
+        log.info("POST Request -> Insert Address Data: {}", addressDTO);
 
         Address address = null;
         try {
             address = addressService.insertAddress(addressDTO);
         } catch (AddressAlreadyExistsException e) {
+            log.info("Address returned bad");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        log.info("Address returned good");
         return new ResponseEntity<>(address, HttpStatus.CREATED);
     }
 }

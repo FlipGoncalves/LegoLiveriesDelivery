@@ -27,9 +27,6 @@ const Login = () => {
         e.preventDefault();
 
         setError("")
-
-        const infouser = { username, password }
-        console.log(infouser);
         
         axios.get('http://localhost:8080/clients/login/'+username)
         .then((response) => {
@@ -42,11 +39,13 @@ const Login = () => {
                     return
                 }
 
+                const infouser = response.data
+                console.log(infouser);
+
                 setError("")
-                localStorage.setItem('username', username)
-                localStorage.setItem('password', password)
                 console.log("HERE")
-                localStorage.setItem('user', infouser);
+                localStorage.setItem('user', "User Logged In");
+                localStorage.setItem('clientId', response.data["clientId"]);
                 navigate("/")
             }
         })

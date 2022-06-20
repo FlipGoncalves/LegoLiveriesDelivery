@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import { BrowserRouter as Router,Routes, Route, Link } from 'react-router-dom';
+import axios from 'axios';
 
 class App extends Component {
 
@@ -13,11 +14,12 @@ class App extends Component {
           total_price: 0,
           total_products: 0,
           order: false,
-          error_message: ""
+          error_message: "",
         };
       }
 
     additemtocart(item) {
+        console.log(item)
 
         this.setState({total_products: this.state.total_products + document.getElementById("qtty"+item["name"].replace(/\s/g, '')).value * 1})
         this.setState({total_price: this.state.total_price + document.getElementById("qtty"+item["name"].replace(/\s/g, '')).value * item["price"]})
@@ -32,11 +34,13 @@ class App extends Component {
                 <span class="d-block font-size-1" id={this.state.cart.length}>{item["name"]}</span>
                 <span class="d-block text-primary font-weight-semi-bold" id={this.state.cart.length+"price"}>{item["price"]*document.getElementById("qtty"+item["name"].replace(/\s/g, '')).value}</span>
                 <small class="d-block text-muted"  id={this.state.cart.length+"qtty"}>{document.getElementById("qtty"+item["name"].replace(/\s/g, '')).value}</small>
+                <small id={this.state.cart.length+"IDlego"} hidden>{item["legoId"]}</small>
             </div>
         )
     }
 
     additemtoarray(item) {
+        console.log(item)
         return (
             <div>
                 <div class="col-xl-2 col-lg-3 col-md-4 col-6">
@@ -53,7 +57,6 @@ class App extends Component {
                 <div class="modal fade" id={item["name"].replace(/\s/g, '')}>
                     <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
-                    
                         <div class="modal-header">
                         <h4 class="modal-title">{item["name"]}</h4>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -96,10 +99,11 @@ class App extends Component {
                                 </div>
                             </div>
                             </div>
-                            
+                            {localStorage.getItem('user') != 'null' && localStorage.getItem('user') != null ? 
                             <div class="modal-footer">
                                 <button type="button" id="_submit_cart" class="btn" onClick={() => this.setState(prevState => ({cart: [...prevState.cart, this.additemtocart(item)]}))} data-toggle="modal" data-target={"#"+item["name"].replace(/\s/g, '')}>Add to cart</button>
                             </div>
+                            : <></>}
                             
                         </div>
                     </div>
@@ -133,7 +137,7 @@ class App extends Component {
                     }); 
 
                     if (list.length === 0) {
-                        newArray.push(this.additemtoarray({name: 'Lego Test', price: '9.99', imageUrl: 'assets/images/items/1.jpg'}))
+                        newArray.push(this.additemtoarray({name: 'Lego Test', price: '9.99', imageUrl: 'assets/images/items/1.jpg', legoId: 1}))
                     }
                     this.setState({ items: newArray})
                 });
@@ -226,80 +230,80 @@ class App extends Component {
             }
 
             let time_of_delivery = document.getElementById("hour").value
-            let address = null
-
-            // create address
-            let resp = fetch('http://localhost:8080/addresses', {
-                method: 'POST',
-                body: {
-                    street: street,
-                    city: city,
-                    country: country,
-                    postalCode: postal,
-                    latitude: latit,
-                    longitude: longit
-                }
-            }).then((data) => {
-                console.log("Success address")
-                console.log(data)                                   // needs to save address
-                address = data
-            }).catch((error) => {
-                console.log("ERROR IN ADDRESS CREATION")
-                this.setState({error_message: "Could not create the order, please try again"})
-                // return
-            })
 
             let count = 0
 
             let dic = []
             this.state.cart.forEach((item) => {
                 dic.push({
-                            name: document.getElementById(count).textContent,
+                            legoId: document.getElementById(count+"IDlego").textContent * 1,
                             legoPrice: document.getElementById(count+'price').textContent / document.getElementById(count+'qtty').textContent,
                             quantity: document.getElementById(count+'qtty').textContent
                         });
                 count++;
             })
 
-            console.log("Address: ")
-            console.log({
-                street: street,
-                city: city,
-                country: country,
-                postalCode: postal,
-                latitude: latit,
-                longitude: longit
-            })
-
             console.log("Order: ")
             console.log({
-                address: address,
-                scheduledTimeOfDelivery: time_of_delivery,
+                clientId: localStorage.getItem('clientId')*1,
+                address: {
+                            street: street,
+                            city: city,
+                            country: country,
+                            postalCode: postal,
+                            latitude: latit*1,
+                            longitude: longit*1
+                        },
+                scheduledTimeOfDelivery: time_of_delivery*1,
                 legos: dic
             });
 
-            // create order
-            resp = fetch('http://localhost:8080/orders', {
-                method: 'POST',
-                body: {
-                    address: address,
+            // create address
+            axios.post('http://localhost:8080/orders', {
+                clientId: localStorage.getItem('clientId')*1,
+                address: {
+                            street: street,
+                            city: city,
+                            country: country,
+                            postalCode: postal,
+                            latitude: latit*1,
+                            longitude: longit*1
+                        },
+                scheduledTimeOfDelivery: time_of_delivery*1,
+                legos: dic
+            })
+            .then((response) => {
+                console.log("Success Order")
+                console.log(response.data)
+
+                // create order
+                axios.post('http://localhost:8080/orders', {
+                    address: response["data"],
                     scheduledTimeOfDelivery: time_of_delivery,
                     legos: dic
-                }
-            }).then((data) => {
-                this.setState({error_message: ""})
-                document.getElementById("btn-close").click();
-                
-            }).catch((error) => {
-                console.log("ERROR IN ORDER CREATION");
-                this.setState({error_message: "Could not create the order, please try again"})
-                // return
+                })
+                .then((response) => {
+                    console.log("Success Order")
+                    console.log(response)   
+                    this.setState({error_message: ""})
+                    document.getElementById("btn-close").click();
+                    this.setState({cart: []})
+                    this.setState({total_price: 0})
+                    this.setState({total_products: 0})
+                })
+                .catch((error) => {
+                    console.log("ERROR IN ORDER CREATION");
+                    this.setState({error_message: "Could not create the order, please try again"})
+                    return
+                });
             })
+            .catch((error) => {
+                console.log("ERROR IN ADDRESS CREATION")
+                this.setState({error_message: "Could not create the order, please try again"})
+                return
+            });
 
             console.log("here")
-            this.setState({cart: []})
-            this.setState({total_price: 0})
-            this.setState({total_products: 0})
 
         }
 
@@ -340,6 +344,8 @@ class App extends Component {
 
                                 <div class="col-xl-4 col-lg-4 col-md-6">
                                     <div class="widgets-wrap float-md-right">
+                                        {localStorage.getItem('user') != 'null' && localStorage.getItem('user') != null ? 
+                                        <>
                                         <div class="widget-header mr-3">
                                             <button data-toggle="modal" data-target="#cart" style={{outline: 'none', backgroundColor: 'transparent', border: 'none'}} id="cart_open">
                                                 <div class="icon-area">
@@ -349,9 +355,6 @@ class App extends Component {
                                                 <small class="text"> Cart </small>
                                             </button>
                                         </div>
-
-                                        {localStorage.getItem('user') != 'null' && localStorage.getItem('user') != null ? 
-                                        <>
                                         <div class="widget-header mr-3">
                                             <a class="widget-view">
                                                 <div class="icon-area">
@@ -478,10 +481,12 @@ class App extends Component {
                                     <div className="form-group">
                                         <b><label htmlFor="city">Delivery Time</label></b>
                                         <select class="custom-select border-right" name="hour" id="hour">
-                                            <option value="Whenever">Whenever</option>
-                                            <option value="Today">Today</option>
-                                            <option value="Tomorrow">Tomorrow</option>
-                                            <option value="Next Week">Next Week</option>
+                                            <option value="0">Whenever</option>
+                                            <option value="1">Next hour</option>
+                                            <option value="2">Next 2 hours</option>
+                                            <option value="4">Next 4 hours</option>
+                                            <option value="10">Next 10 hours</option>
+                                            <option value="20">Next 20 hours</option>
                                         </select>
                                     </div>
 

@@ -26,7 +26,7 @@ public class AddressService {
     }
 
     public Address insertAddress(AddressDTO addressDTO) throws AddressAlreadyExistsException{
-        log.info("Inserting Store");
+        log.info("Inserting Address");
 
         if (addressRep.findByLatitudeAndLongitude(addressDTO.getLatitude(), addressDTO.getLongitude()).isPresent()){
             throw new AddressAlreadyExistsException("Address already exists: " + addressDTO);

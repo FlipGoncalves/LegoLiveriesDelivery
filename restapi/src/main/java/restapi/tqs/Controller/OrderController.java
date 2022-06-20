@@ -84,9 +84,11 @@ public class OrderController {
             order = service.makeOrder(orderDTO);
         } catch (BadScheduledTimeOfDeliveryException | ClientNotFoundException | AddressNotFoundException
                 | LegoNotFoundException | BadOrderLegoDTOException | BadOrderLegoListException | OrderNotCreatedException e) {
+            log.info("Error Creating Order");
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
         
+        log.info("Order Created");
         return new ResponseEntity<>(order, HttpStatus.CREATED);
     }
 }
