@@ -13,7 +13,8 @@ class Management extends Component {
     this.state = {
       orders: [],
       count: 1,
-      riders: []
+      riders: [],
+      error_message: ""
     };
   }
 
@@ -150,7 +151,7 @@ class Management extends Component {
       })
       .catch((error) => {
         console.log(error);
-        this.setState({error_message: "ERROR during rider add"})
+        this.setState({error_message: "ERROR during rider add: " + error})
         return false;
       });
     }
@@ -253,6 +254,11 @@ class Management extends Component {
                 </div>
             </div>
             </form>
+            {this.state.error_message !== "" ? <>
+              <div>
+                <label class="form-check-label mb-0 ms-2" style={{color: 'red'}} id="error">{this.state.error_message}</label>
+              </div>
+            </> : null}
             </div>
           </div>
         </main>
