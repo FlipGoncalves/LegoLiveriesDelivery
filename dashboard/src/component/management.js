@@ -62,13 +62,6 @@ class Management extends Component {
               </div>
             </div>
           </td>
-          <td>
-            <p class="text-xs font-weight-bold mb-0">Aveiro</p>
-          </td>
-          <td class="align-middle text-center text-sm">
-            <span class="badge badge-sm bg-gradient-success">Online</span>
-            <span class="badge badge-sm bg-gradient-secondary">Offline</span>
-          </td>
           <td class="align-middle text-center">
             <span class="text-secondary text-xs font-weight-bold">{item["totalReviews"] === 0 ? 0 : Math.round(item["reviewSum"] / item["totalReviews"] * 100) / 100}</span>
           </td>
@@ -214,8 +207,6 @@ class Management extends Component {
                     <thead>
                       <tr>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Rider</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Location</th>
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Review</th>
                         <th class="text-secondary opacity-7"></th>
                       </tr>

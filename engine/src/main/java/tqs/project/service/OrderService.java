@@ -114,8 +114,6 @@ public class OrderService {
 
         Order order = orderRep.getById(orderId);
 
-        order = orderRep.saveAndFlush(order);
-
         // set rider
         Rider rider = new Rider();
 
