@@ -23,7 +23,7 @@ Feature: Legoliveries Order
         Then I should see the Cart with "<num>" items
         Examples:
             | street  | city     | country    | code     | num | time     | latit   | longit |
-            | Rua 1   | Aveiro   | Portugal   | 3800-510 |  0  | Tomorrow | 82.0499 | 107.35 | 
+            | Rua 1   | Aveiro   | Portugal   | 3800-510 |  0  | Next 2 hours | 82.0499 | 107.35 | 
 
     @negative
     Scenario: Error

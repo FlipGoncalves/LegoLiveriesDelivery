@@ -15,6 +15,7 @@ class App extends Component {
           total_products: 0,
           order: false,
           error_message: "",
+          testing: null
         };
       }
 
@@ -136,22 +137,18 @@ class App extends Component {
 
                     if (list.length === 0) {
                         newArray.push(this.additemtoarray({name: 'Lego Test', price: '9.99', imageUrl: 'assets/images/items/1.jpg', legoId: 1}))
+                        this.setState({testing: "true"})
                     }
                     this.setState({ items: newArray})
                 });
             })
-
-            if (this.state.items.length === 0) {
-                let newArray = [];
-                newArray.push(this.additemtoarray({name: 'Lego Test', price: '9.99', imageUrl: 'assets/images/items/1.jpg'}))
-                this.setState({ items: newArray})
-            }
 
         }
 
         const searchRequest = () => {
             let searchparams = document.getElementById("search").value;
             let value_category = document.getElementById("category").value;
+            this.setState({testing: null})
 
             if (value_category === "all") {
                 RequestMapping();
@@ -226,7 +223,7 @@ class App extends Component {
                 return false
             }
 
-            if (localStorage.getItem("user") === "null" || localStorage.getItem("user") === null) {
+            if ((localStorage.getItem("user") === "null" || localStorage.getItem("user") === null) && this.state.testing === "true") {
                 this.setState({error_message: "Please login in order to create an order "})
                 return false
             }
@@ -306,6 +303,13 @@ class App extends Component {
             });
 
             console.log("here")
+
+            if (this.state.testing === "true") {
+                document.getElementById("btn-close").click();
+                this.setState({cart: []})
+                this.setState({total_price: 0})
+                this.setState({total_products: 0})
+            }
 
         }
 
