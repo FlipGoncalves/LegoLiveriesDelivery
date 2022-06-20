@@ -12,8 +12,8 @@ import tqs.project.datamodels.StoreDTO;
 import tqs.project.exceptions.StoreAlreadyExistsException;
 import tqs.project.model.Address;
 import tqs.project.model.Store;
-import tqs.project.repositories.AddressRepository;
-import tqs.project.repositories.StoreRepository;
+import tqs.project.repository.AddressRepository;
+import tqs.project.repository.StoreRepository;
 
 @Service
 public class StoreService {
@@ -41,6 +41,8 @@ public class StoreService {
             throw new StoreAlreadyExistsException("Store with name " + storeDTO.getName() + " already exists");
         }
 
+        storeRep.saveAndFlush(store);
+
         store.setName(storeDTO.getName());
 
         Address address = new Address();
@@ -55,7 +57,8 @@ public class StoreService {
         }
 
         store.setAddress(address);
+        address.setStore(store);
 
-        return storeRep.saveAndFlush(store);
+        return store;
     }
 }

@@ -43,7 +43,7 @@ public class OrderController {
 
         long orderId = -1;
         try {
-            orderId = orderService.makeOrder(orderDTO);
+            orderId = orderService.makeOrder(orderDTO).getOrderId();
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }

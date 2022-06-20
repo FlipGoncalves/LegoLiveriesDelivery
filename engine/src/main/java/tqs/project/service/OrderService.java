@@ -2,15 +2,16 @@ package tqs.project.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import tqs.project.datamodels.OrderDTO;
 import tqs.project.exceptions.StoreNotFoundException;
 import tqs.project.model.Address;
 import tqs.project.model.Order;
 import tqs.project.model.Store;
-import tqs.project.repositories.AddressRepository;
-import tqs.project.repositories.OrderRepository;
-import tqs.project.repositories.StoreRepository;
+import tqs.project.repository.AddressRepository;
+import tqs.project.repository.OrderRepository;
+import tqs.project.repository.StoreRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -63,9 +64,12 @@ public class OrderService {
         return orders;
     }
 
-    public Long makeOrder(OrderDTO orderDTO) throws StoreNotFoundException{
+    @Transactional(rollbackFor = {StoreNotFoundException.class})
+    public Order makeOrder(OrderDTO orderDTO) throws StoreNotFoundException{
 
         Order order = new Order();
+
+        order = orderRep.saveAndFlush(order);
 
         Optional<Store> store = storeRep.findByName(orderDTO.getStoreName());
 
@@ -74,6 +78,8 @@ public class OrderService {
         }
 
         order.setStore(store.get());
+        store.get().getOrders().add(order);
+
         Address address = new Address();
 
         Optional<Address> addressOptional = addressRep.findByLatitudeAndLongitude(orderDTO.getAddress().getLatitude(), orderDTO.getAddress().getLongitude());
@@ -86,13 +92,14 @@ public class OrderService {
         }
 
         order.setAddress(address);
+        address.getOrders().add(order);
 
         order.setClientName(orderDTO.getClientName());
+        
+        order.setStatus(0);
 
         order.setTimeOfDelivery(orderDTO.getTimeOfDelivery());
 
-        order = orderRep.saveAndFlush(order);
-
-        return order.getOrderId();
+        return order;
     }
 }

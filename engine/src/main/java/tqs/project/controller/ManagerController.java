@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import tqs.project.datamodels.RegisterDTO;
-import tqs.project.exceptions.UserAlreadyExistsException;
+import tqs.project.exceptions.ManagerAlreadyExistsException;
+import tqs.project.exceptions.ManagerNotFoundException;
 import tqs.project.model.Manager;
 import tqs.project.service.ManagerService;
 
@@ -33,18 +34,19 @@ public class ManagerController {
     public ResponseEntity<Object> login(@PathVariable String email){
         log.info("GET Request -> Manager Data for login email");
 
-        Manager userLog = managerService.getUser(email);
-
-        if (userLog == null) {
+        Manager manager;
+        try {
+            manager = managerService.login(email);
+        } catch (ManagerNotFoundException e) {
             log.info("Login ->  Manager does not exist");
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         log.info("Login -> Manager logged in");
-        return new ResponseEntity<>(userLog, HttpStatus.OK);
+        return new ResponseEntity<>(manager, HttpStatus.OK);
     }
 
-    @PostMapping("")
+    @PostMapping()
     public ResponseEntity<Object> register(@RequestBody RegisterDTO reg){
 
         log.info("POST Request -> Manager Data for register");
@@ -52,7 +54,7 @@ public class ManagerController {
         Manager manager;
         try {
             manager = managerService.register(reg);
-        } catch (UserAlreadyExistsException e) {
+        } catch (ManagerAlreadyExistsException e) {
             log.info("Register -> Manager already exists");
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }

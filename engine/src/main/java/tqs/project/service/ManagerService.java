@@ -4,11 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tqs.project.datamodels.RegisterDTO;
+import tqs.project.exceptions.ManagerAlreadyExistsException;
+import tqs.project.exceptions.ManagerNotFoundException;
 import tqs.project.exceptions.UserAlreadyExistsException;
 import tqs.project.model.Manager;
 import tqs.project.model.User;
-import tqs.project.repositories.ManagerRepository;
-import tqs.project.repositories.UserRepository;
+import tqs.project.repository.ManagerRepository;
+import tqs.project.repository.UserRepository;
+
+import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,36 +23,63 @@ public class ManagerService {
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
-    private ManagerRepository rep;
+    private ManagerRepository managerRepository;
 
-    public Manager getUser(String email) {
-        log.info("Getting User with email: {}", email);
+    @Autowired
+    private UserRepository userRepository;
 
-        Manager user = rep.findByUserEmail(email);
+    public List<Manager> getAllManagers(){
+        log.info("Getting All Managers");
 
-        log.info("Got User: {}", user);
-        return user;
+        return managerRepository.findAll();
     }
 
-    public Manager register(RegisterDTO user) throws UserAlreadyExistsException {
-        log.info("Registering User: {}", user);
+    public Manager login(String email) throws ManagerNotFoundException {
+        log.info("Getting Manager with email: {}", email);
 
-        Manager registerManager = new Manager();
+        Optional<Manager> manager = managerRepository.findByUserEmail(email);
 
-        if (rep.findByUserEmail(user.getEmail()) != null) {
-            throw new UserAlreadyExistsException("User already exists: " + user.toString());
+        if (manager.isEmpty()){
+            throw new ManagerNotFoundException("Manager with email " + email + " was not found");
         }
 
-        User registerUser = new User();
+        return manager.get();
+    }
 
-        registerUser.setEmail(user.getEmail());
-        registerUser.setPassword(user.getPassword());
-        registerUser.setUsername(user.getUsername());
+    public Manager register(RegisterDTO dto) throws ManagerAlreadyExistsException {
+        log.info("Registering User: {}", dto);
 
-        registerManager.setUser(registerUser);
-        registerManager = rep.save(registerManager);
-        log.info("User Registered: {}", registerManager);
+        Manager manager = new Manager();
 
-        return registerManager;
+        if (managerRepository.findByUserEmail(dto.getEmail()).isPresent()) {
+            throw new ManagerAlreadyExistsException("Manager already exists: " + dto.toString());
+        }
+
+        User user = createOrGetUser(dto);
+
+        manager.setUser(user);
+
+        manager = managerRepository.saveAndFlush(manager);
+
+        user.setManager(manager);
+
+        return manager;
+    }
+
+    public User createOrGetUser(RegisterDTO dto){
+        Optional<User> userOptional = userRepository.findByEmail(dto.getEmail());
+        
+        User user = new User();
+        
+        if (userOptional.isEmpty()) {
+            user.setEmail(dto.getEmail());
+            user.setUsername(dto.getUsername());
+            user.setPassword(dto.getPassword());
+            user = userRepository.saveAndFlush(user);
+        } else{
+            user = userOptional.get();
+        }
+
+        return user;
     }
 }

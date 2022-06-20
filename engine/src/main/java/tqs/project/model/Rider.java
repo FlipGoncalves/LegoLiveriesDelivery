@@ -81,6 +81,14 @@ public class Rider {
         this.user = user;
     }
 
+    public Set<Order> getOrders() {
+        return this.orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
+    }
+
     @Override
     public String toString() {
         return "{" +

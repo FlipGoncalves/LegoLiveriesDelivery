@@ -1,4 +1,4 @@
-package tqs.project.controllerTests;
+package tqs.project.controller;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.hamcrest.Matchers.is;
@@ -112,4 +112,4 @@ public class RiderControllerTest {
                .body("user.username", is(rider.getUser().getUsername())).and()
                .body("user.email", is(rider.getUser().getEmail()));
     }*/
-}   
+}

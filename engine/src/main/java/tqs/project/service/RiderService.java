@@ -15,8 +15,8 @@ import tqs.project.exceptions.RiderNotFoundException;
 import tqs.project.exceptions.UserNotFoundException;
 import tqs.project.model.Rider;
 import tqs.project.model.User;
-import tqs.project.repositories.RiderRepository;
-import tqs.project.repositories.UserRepository;
+import tqs.project.repository.RiderRepository;
+import tqs.project.repository.UserRepository;
 
 @Service
 public class RiderService {    
@@ -68,6 +68,23 @@ public class RiderService {
         user.setRider(rider);
 
         return rider;
+    }
+
+    public User createOrGetUser(RiderDTO dto){
+        Optional<User> userOptional = userRepository.findByEmail(dto.getEmail());
+        
+        User user = new User();
+        
+        if (userOptional.isEmpty()) {
+            user.setEmail(dto.getEmail());
+            user.setUsername(dto.getUsername());
+            user.setPassword(dto.getPassword());
+            user = userRepository.saveAndFlush(user);
+        } else{
+            user = userOptional.get();
+        }
+
+        return user;
     }
 
     public User createOrGetUser(RiderDTO dto){
