@@ -45,6 +45,7 @@ public class OrderController {
         Order order;
         try {
             order = orderService.makeOrder(orderDTO);
+            order = orderService.setRider(order.getOrderId());
         } catch (StoreNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
