@@ -33,39 +33,42 @@ public class ClientService {
     }
 
     public Client login(String email) throws ClientNotFoundException{
-        log.info("Login Client: {}", email);
+        log.info("Login in Client");
 
         Optional<Client> client = clientRepository.findByUserEmail(email);
 
         if (client.isEmpty()){
+            log.info("Client with email {} was not found", email);
             throw new ClientNotFoundException("Client with email " + email + "was not found");
         }
 
+        log.info("Returning Client");
         return client.get();
 
     }
 
     public Client insertClient(RegisterDTO dto) throws ClientAlreadyExistsException {
-        log.info("Registering Client: {}", dto);
+        log.info("Registering Client");
 
         Client client = new Client();
  
         if (clientRepository.findByUserEmail(dto.getEmail()).isPresent()) {
+            log.info("Client already exists: {}", dto.toString());
             throw new ClientAlreadyExistsException("Client already exists: " + dto.toString());
         }
 
         User user = createOrGetUser(dto);
 
         client.setUser(user);
-
         client = clientRepository.saveAndFlush(client);
-
         user.setClient(client);
 
+        log.info("Saving Client");
         return client;
     }
 
     public User createOrGetUser(RegisterDTO dto){
+        log.info("Creating or getting user");
         Optional<User> userOptional = userRepository.findByEmail(dto.getEmail());
         
         User user = new User();

@@ -43,33 +43,33 @@ public class UserController {
 
     @GetMapping("/login/{email}")
     public ResponseEntity<User> loginUser(@PathVariable String email){
-        log.info("GET Request -> User Data for login email");
+        log.info("GET Request -> User Data for email: {}", email);
 
         User userLog;
         try {
             userLog = userService.login(email);
         } catch (UserNotFoundException e) {
+            log.info("ERROR: User not found");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        log.info("Login -> User logged in");
+        log.info("SUCCESS: User logged in");
         return new ResponseEntity<>(userLog, HttpStatus.OK);
     }
 
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@RequestBody RegisterDTO reg){
-
-        log.info("POST Request -> User Data for register");
+        log.info("POST Request -> User Data for register: {}", reg);
 
         User userReg;
         try {
             userReg = userService.register(reg);
         } catch (UserAlreadyExistsException e) {
-            log.info("Register -> User already exists");
+            log.info("ERROR: User already exists");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        log.info("Register -> User registered");
+        log.info("SUCCESS: User registered");
         return new ResponseEntity<>(userReg, HttpStatus.CREATED);
     }
 }

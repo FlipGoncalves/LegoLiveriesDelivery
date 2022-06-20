@@ -49,6 +49,7 @@ public class LegoService {
         log.info("Inserting Lego");
 
         if (legoDTO.getImgUrl().isBlank()|| legoDTO.getName().isBlank()|| legoDTO.getPrice() <= 0){
+            log.info("The LegoDTO is invalid: {}", legoDTO.toString());
             throw new BadLegoDTOException("The LegoDTO is invalid: " + legoDTO.toString());
         }
 
@@ -57,6 +58,7 @@ public class LegoService {
         lego.setImageUrl(legoDTO.getImgUrl());
         lego.setPrice(legoDTO.getPrice());
 
+        log.info("Saving Lego");
         return legorep.save(lego);
     }
 }

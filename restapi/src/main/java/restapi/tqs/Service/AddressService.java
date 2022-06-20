@@ -29,11 +29,13 @@ public class AddressService {
         log.info("Inserting Address");
 
         if (addressRep.findByLatitudeAndLongitude(addressDTO.getLatitude(), addressDTO.getLongitude()).isPresent()){
+            log.info("Address already exists: {}",addressDTO);
             throw new AddressAlreadyExistsException("Address already exists: " + addressDTO);
         }
 
         Address address = new Address();
         address.convertDTOtoObject(addressDTO);
+        log.info("Saving Address");
         return addressRep.saveAndFlush(address);
     }
 }

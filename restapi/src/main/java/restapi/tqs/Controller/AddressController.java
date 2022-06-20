@@ -47,11 +47,11 @@ public class AddressController {
         try {
             address = addressService.insertAddress(addressDTO);
         } catch (AddressAlreadyExistsException e) {
-            log.info("Address returned bad");
+            log.info("ERROR: Address already Exists");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        log.info("Address returned good");
+        log.info("SUCCESS: Address Created");
         return new ResponseEntity<>(address, HttpStatus.CREATED);
     }
 }

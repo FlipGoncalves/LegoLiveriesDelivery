@@ -82,14 +82,16 @@ public class OrderService {
     }
 
     public Order getOrderById(long orderId) throws OrderNotFoundException{
-        log.info("Getting order by id " + orderId);
+        log.info("Getting order by id {}", orderId);
 
         Optional<Order> order = orderRepository.findById(orderId);
 
         if (order.isEmpty()){
+            log.info("The order was not found. ID: {}", orderId);
             throw new OrderNotFoundException("The order was not found. ID: " + orderId);
         }
 
+        log.info("Returning Order");
         return order.get();
     }
 
@@ -99,12 +101,14 @@ public class OrderService {
         Optional<Client> client = clientRepository.findById(clientId);
 
         if (client.isEmpty()){
+            log.info("The client was not found. ID: {}", clientId);
             throw new ClientNotFoundException("The client was not found. ID: " + clientId);
         }
 
         //The Pageable here can be used later on for filtering and sorting by date, name, etc.
         List<Order> orders = orderRepository.findAllByClient(client.get(), Pageable.unpaged());
 
+        log.info("Returning Orders");
         return orders;
     }
     

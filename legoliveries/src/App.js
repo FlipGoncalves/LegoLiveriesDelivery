@@ -99,11 +99,9 @@ class App extends Component {
                                 </div>
                             </div>
                             </div>
-                            {localStorage.getItem('user') != 'null' && localStorage.getItem('user') != null ? 
                             <div class="modal-footer">
                                 <button type="button" id="_submit_cart" class="btn" onClick={() => this.setState(prevState => ({cart: [...prevState.cart, this.additemtocart(item)]}))} data-toggle="modal" data-target={"#"+item["name"].replace(/\s/g, '')}>Add to cart</button>
                             </div>
-                            : <></>}
                             
                         </div>
                     </div>
@@ -195,7 +193,6 @@ class App extends Component {
                 return false
             }
 
-
             let street = document.getElementById("street").value;
             let city = document.getElementById("city").value;
             let country = document.getElementById("country").value;
@@ -226,6 +223,11 @@ class App extends Component {
                 return false
             } else if (longit < -180 || longit > 180) {
                 this.setState({error_message: "Please insert valid longitude values"})
+                return false
+            }
+
+            if (localStorage.getItem("user") === "null" || localStorage.getItem("user") === null) {
+                this.setState({error_message: "Please login in order to create an order "})
                 return false
             }
 
@@ -344,8 +346,6 @@ class App extends Component {
 
                                 <div class="col-xl-4 col-lg-4 col-md-6">
                                     <div class="widgets-wrap float-md-right">
-                                        {localStorage.getItem('user') != 'null' && localStorage.getItem('user') != null ? 
-                                        <>
                                         <div class="widget-header mr-3">
                                             <button data-toggle="modal" data-target="#cart" style={{outline: 'none', backgroundColor: 'transparent', border: 'none'}} id="cart_open">
                                                 <div class="icon-area">
@@ -355,6 +355,8 @@ class App extends Component {
                                                 <small class="text"> Cart </small>
                                             </button>
                                         </div>
+                                        {localStorage.getItem('user') != 'null' && localStorage.getItem('user') != null ? 
+                                        <>
                                         <div class="widget-header mr-3">
                                             <a class="widget-view">
                                                 <div class="icon-area">

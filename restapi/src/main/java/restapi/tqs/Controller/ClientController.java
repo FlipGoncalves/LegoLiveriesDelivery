@@ -39,27 +39,32 @@ public class ClientController {
 
     @GetMapping("/login/{clientEmail}")
     public ResponseEntity<Client> getClientByEmail(@PathVariable String clientEmail) {
-        log.info("GET Request -> Login Email ");
+        log.info("GET Request -> Login Email: {}", clientEmail);
         Client client;
         try {
             client = clientService.login(clientEmail);
         } catch (ClientNotFoundException e) {
+            log.info("ERROR: Client not found");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
+        log.info("SUCCESS: Client Log In");
         return new ResponseEntity<>(client, HttpStatus.OK);
     }
 
     @PostMapping("/register")
     public ResponseEntity<Client> insertClient(@RequestBody RegisterDTO clientDTO) {
-        log.info("Post Request -> Insert Client: {}", clientDTO);
+        log.info("POST Request -> Insert Client: {}", clientDTO);
 
         Client client;
         try {
             client = clientService.insertClient(clientDTO);
         } catch (ClientAlreadyExistsException e) {
+            log.info("ERROR: Client already exists");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        log.info("SUCCESS: Client Registered");
         return new ResponseEntity<>(client, HttpStatus.CREATED);
     }
 }
