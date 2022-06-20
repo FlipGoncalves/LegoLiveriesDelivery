@@ -19,8 +19,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.github.dockerjava.api.model.Service;
-
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;

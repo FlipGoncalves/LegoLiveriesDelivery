@@ -22,7 +22,7 @@ class Management extends Component {
     console.log(item)
     let store = item["store"]
     let addr = item["address"]
-    let addr_total = addr["city"] + ", " + addr["country"] + ", " + addr["postalCode"] + ", " + addr["street"]
+    let addr_total = addr["country"] + ", " + addr["city"] + ", " + addr["street"] + ", " + addr["postalCode"]
 
     return (
       <tr>
@@ -40,8 +40,7 @@ class Management extends Component {
           <span class="text-secondary text-xs font-weight-bold">{item["clientName"]}</span>
         </td>
         <td class="align-middle text-center text-sm">
-          <span class="badge badge-sm bg-gradient-success">Done</span>
-          <span class="badge badge-sm bg-gradient-secondary">In Progress</span>
+          {item["status"] === 2 ? <span class="badge badge-sm bg-gradient-success">Done</span> : <span class="badge badge-sm bg-gradient-secondary">In Progress</span>}
         </td>
       </tr>
     )
