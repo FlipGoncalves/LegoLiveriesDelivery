@@ -23,7 +23,7 @@ import tqs.project.model.Rider;
 import tqs.project.service.RiderService;
 
 @RestController
-@RequestMapping("/api/  ")
+@RequestMapping("/api/riders")
 @Validated
 @CrossOrigin
 public class RiderController {
