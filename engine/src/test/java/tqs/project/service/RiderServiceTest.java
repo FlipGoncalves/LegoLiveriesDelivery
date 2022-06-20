@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,9 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import tqs.project.datamodels.RiderDTO;
 import tqs.project.exceptions.RiderAlreadyExistsException;
-import tqs.project.exceptions.RiderNotFoundException;
 import tqs.project.exceptions.UserAlreadyExistsException;
-import tqs.project.exceptions.UserNotFoundException;
 import tqs.project.model.Rider;
 import tqs.project.model.User;
 import tqs.project.repository.RiderRepository;

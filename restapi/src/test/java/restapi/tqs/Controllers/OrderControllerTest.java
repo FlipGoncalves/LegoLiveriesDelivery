@@ -38,6 +38,7 @@ import restapi.tqs.Exceptions.AddressNotFoundException;
 import restapi.tqs.Exceptions.BadOrderLegoDTOException;
 import restapi.tqs.Exceptions.BadScheduledTimeOfDeliveryException;
 import restapi.tqs.Exceptions.ClientNotFoundException;
+import restapi.tqs.Exceptions.InvalidStatusException;
 import restapi.tqs.Exceptions.LegoNotFoundException;
 import restapi.tqs.Exceptions.OrderNotFoundException;
 import restapi.tqs.Models.Address;
@@ -333,6 +334,28 @@ public class OrderControllerTest {
         .andExpect(jsonPath("$.totalPrice", is(order1.getTotalPrice())))
         .andExpect(jsonPath("$.client", is((int) order1.getClient().getClientId())))
         .andExpect(jsonPath("$.orderLego", hasSize(3)));
+    }
+
+    @Test
+    void test_UpdateOrderStatus_InvalidArg_ReturnsBadRequestStatus() throws Exception{
+
+        Mockito.when(service.updateOrderStatus(1, 4)).thenThrow(InvalidStatusException.class);
+
+        mvc.perform(post("/orders/1/4")
+        .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void test_UpdateOrderStatus_ValidArgs_ReturnsOkStatus() throws Exception{
+
+        Mockito.when(service.updateOrderStatus(1, 2)).thenReturn(order1);
+
+        mvc.perform(post("/orders/1/2")
+        .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isOk());
     }
 
     Order buildAndSaveOrderObject(Client client, Address address, Set<OrderLego> orderLegos, long id){

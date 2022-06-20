@@ -18,16 +18,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import tqs.project.datamodels.AddressDTO;
-import tqs.project.datamodels.RegisterDTO;
 import tqs.project.datamodels.StoreDTO;
 import tqs.project.exceptions.StoreAlreadyExistsException;
-import tqs.project.exceptions.UserAlreadyExistsException;
-import tqs.project.exceptions.UserNotFoundException;
 import tqs.project.model.Address;
 import tqs.project.model.Store;
-import tqs.project.model.User;
 import tqs.project.service.StoreService;
-import tqs.project.service.UserService;
 
 @WebMvcTest(StoreController.class)
 public class StoreControllerTest {

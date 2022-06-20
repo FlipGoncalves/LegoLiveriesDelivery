@@ -40,6 +40,8 @@ public class Order {
     private String riderName;
     @Column(name = "total_price")
     private double totalPrice;
+    @Column(name = "order_status")
+    private int orderStatus; //0 = Not done, 1 = In Progress, 2 = Done
 
     @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)
@@ -53,6 +55,7 @@ public class Order {
     private Set<OrderLego> orderLego = new HashSet<>();
 
     public Order() {
+        this.orderStatus = 0;
         this.scheduledTimeOfDelivery = -1;
     }
     
@@ -126,6 +129,14 @@ public class Order {
 
     public void setExternalOrderId(long externalOrderId) {
         this.externalOrderId = externalOrderId;
+    }
+
+    public int getOrderStatus() {
+        return this.orderStatus;
+    }
+
+    public void setOrderStatus(int orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
     @Override

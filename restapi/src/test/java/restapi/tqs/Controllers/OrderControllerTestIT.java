@@ -380,11 +380,30 @@ public class OrderControllerTestIT {
         .andExpect(jsonPath("$.orderLego", hasSize(3)));
     }
 
+    @Test
+    void test_UpdateOrderStatus_InvalidArg_ReturnsBadRequestStatus() throws Exception{
+
+        mvc.perform(post("/orders/1/4")
+        .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void test_UpdateOrderStatus_ValidArgs_ReturnsOkStatus() throws Exception{
+
+        mvc.perform(post("/orders/" + order1.getExternalOrderId() + "/2")
+        .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isOk());
+    }
+
     Order buildOrderObject(Order order, Client client, Address address, Set<OrderLego> orderLegos, long id){
 
         order.setClient(client);
         order.setAddress(address);
         order.setScheduledTimeOfDelivery(2100);
+        order.setExternalOrderId(id);
 
         client.getOrders().add(order);
         address.getOrders().add(order);

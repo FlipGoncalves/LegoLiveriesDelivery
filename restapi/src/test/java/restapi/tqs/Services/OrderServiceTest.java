@@ -40,6 +40,7 @@ import restapi.tqs.Exceptions.BadOrderLegoListException;
 import restapi.tqs.Exceptions.BadOrderLegoDTOException;
 import restapi.tqs.Exceptions.BadScheduledTimeOfDeliveryException;
 import restapi.tqs.Exceptions.ClientNotFoundException;
+import restapi.tqs.Exceptions.InvalidStatusException;
 import restapi.tqs.Exceptions.LegoNotFoundException;
 import restapi.tqs.Exceptions.OrderNotCreatedException;
 import restapi.tqs.Exceptions.OrderNotFoundException;
@@ -307,6 +308,33 @@ class OrderServiceTest {
         assertEquals(client1, order.getClient());
         assertEquals(orderLegos1.size(), order.getOrderLego().size());
         assertEquals(1, order.getExternalOrderId());
+    }
+
+    @Test
+    void test_UpdateOrderStatus_InvalidStatus_ThrowsInvalidStatusException(){
+
+        assertThrows(InvalidStatusException.class, () -> {service.updateOrderStatus(1, 4);});
+
+    }
+
+    @Test
+    void test_UpdateOrderStatus_InvalidExternalOrderId_ThrowsOrderNotFoundException(){
+
+        Mockito.when(orderRepository.findByExternalOrderId(4)).thenReturn(Optional.empty());
+
+        assertThrows(OrderNotFoundException.class, () -> {service.updateOrderStatus(4, 2);});
+
+    }
+
+    @Test
+    void test_UpdateOrderStatus_ValidArguments_ReturnsCorrectOrder() throws InvalidStatusException, OrderNotFoundException{
+
+        Mockito.when(orderRepository.findByExternalOrderId(1)).thenReturn(Optional.of(order1));
+
+        Order result = service.updateOrderStatus(1, 2);
+
+        assertEquals(order1.getOrderStatus(), result.getOrderStatus());
+
     }
 
     Order buildAndSaveOrderObject(Client client, Address address, List<OrderLego> orderLegos, long id){

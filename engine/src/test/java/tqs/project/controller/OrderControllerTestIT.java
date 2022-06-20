@@ -4,9 +4,11 @@ import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 
+import java.io.IOException;
 import java.util.Date;
 
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,22 +23,22 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.restassured.parsing.Parser;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
 import tqs.project.ProjectApplication;
 import tqs.project.datamodels.AddressDTO;
 import tqs.project.datamodels.OrderDTO;
-import tqs.project.datamodels.RegisterDTO;
-import tqs.project.exceptions.ManagerAlreadyExistsException;
+import tqs.project.exceptions.InvalidStatusException;
+import tqs.project.exceptions.OrderNotFoundException;
+import tqs.project.exceptions.OrderNotUpdatedException;
 import tqs.project.exceptions.StoreNotFoundException;
 import tqs.project.model.Address;
-import tqs.project.model.Manager;
 import tqs.project.model.Order;
 import tqs.project.model.Store;
-import tqs.project.model.User;
 import tqs.project.repository.AddressRepository;
-import tqs.project.repository.ManagerRepository;
 import tqs.project.repository.OrderRepository;
 import tqs.project.repository.StoreRepository;
-import tqs.project.repository.UserRepository;
+import tqs.project.service.OrderService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = ProjectApplication.class)
 @AutoConfigureMockMvc
@@ -56,15 +58,29 @@ public class OrderControllerTestIT {
     @Autowired
     private AddressRepository addressRepository;
 
+    @Autowired
+    private OrderService orderService;
+
+    public static MockWebServer mockBackEnd;
+
     Order order1, order2, order3;
     Store store1, store2; 
     Address address1, address2;
     AddressDTO addressDTO1, addressDTO2;
     OrderDTO orderDTO1, orderDTO2, orderDTO3;
 
+    @BeforeAll
+    static void allSetUp() throws IOException{
+        mockBackEnd = new MockWebServer();
+        mockBackEnd.start();
+    }
+
     @BeforeEach
     void setUp(){
         RestAssuredMockMvc.mockMvc( mvc );
+
+        String baseUrl = String.format("http://localhost:%s", mockBackEnd.getPort());
+        orderService.setEngineURL(baseUrl);
         
         address1 = buildAddressObject(1);
         address2 = buildAddressObject(2);
@@ -119,6 +135,11 @@ public class OrderControllerTestIT {
         orderDTO1 = new OrderDTO("Client X", order1.getTimeOfDelivery(), order1.getStore().getName(), addressDTO1);
 
     }
+   
+    @AfterAll
+    static void cleanUp() throws IOException{
+        mockBackEnd.shutdown();
+    }
 
     @Test
     void test_GetAllOrders_ReturnsCorrectOrders(){
@@ -155,6 +176,26 @@ public class OrderControllerTestIT {
                .status(HttpStatus.CREATED).and()
                .contentType(ContentType.TEXT).and()
                .body(containsString("\"orderId\" : " + orderRepository.findByClientName("Client X").get(0).getOrderId()));
+    }
+
+    @Test
+    void test_UpdateOrderStatus_InvalidStatus_ReturnsBadRequestStatus() throws InvalidStatusException, OrderNotFoundException, OrderNotUpdatedException{
+        
+        given().post("/api/orders/1/4")
+               .then().log().body().assertThat()
+               .status(HttpStatus.BAD_REQUEST);
+
+    }
+
+    @Test
+    void test_UpdateOrderStatus_ValidPathVariables_ReturnsCorrectOrder() throws InvalidStatusException, OrderNotFoundException, OrderNotUpdatedException{
+        
+        mockBackEnd.enqueue(new MockResponse().setResponseCode(200));
+
+        given().post("/api/orders/" + order1.getOrderId() + "/2")
+               .then().log().body().assertThat()
+               .status(HttpStatus.OK);
+
     }
     
     Address buildAddressObject(long id){

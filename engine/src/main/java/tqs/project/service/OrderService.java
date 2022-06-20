@@ -1,10 +1,29 @@
 package tqs.project.service;
 
+import java.time.Duration;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
 
+import io.netty.channel.ChannelOption;
+import io.netty.handler.timeout.ReadTimeoutHandler;
+import io.netty.handler.timeout.WriteTimeoutHandler;
+import reactor.core.publisher.Mono;
+import reactor.netty.http.client.HttpClient;
 import tqs.project.datamodels.OrderDTO;
+import tqs.project.exceptions.InvalidStatusException;
+import tqs.project.exceptions.OrderNotFoundException;
+import tqs.project.exceptions.OrderNotUpdatedException;
 import tqs.project.exceptions.StoreNotFoundException;
 import tqs.project.model.Address;
 import tqs.project.model.Order;
@@ -12,12 +31,6 @@ import tqs.project.model.Store;
 import tqs.project.repository.AddressRepository;
 import tqs.project.repository.OrderRepository;
 import tqs.project.repository.StoreRepository;
-
-import java.util.List;
-import java.util.Optional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Service
 public class OrderService {    
@@ -31,6 +44,8 @@ public class OrderService {
 
     @Autowired
     private AddressRepository addressRep;
+
+    private String engineURL = "legoliveries:8080/order";
 
     public List<Order> getAllOrders() {
         log.info("Getting All Orders Data");
@@ -102,4 +117,65 @@ public class OrderService {
 
         return order;
     }
+
+    @Transactional(rollbackFor = {InvalidStatusException.class, OrderNotFoundException.class})
+    public Order updateOrderStatus(long orderId, int orderStatus) throws InvalidStatusException, OrderNotFoundException, OrderNotUpdatedException{
+
+        if (orderStatus < 1 || orderStatus > 2){
+            throw new InvalidStatusException("The status " + orderStatus + " is invalid");
+        }
+
+        Optional<Order> order = orderRep.findById(orderId);
+
+        if (order.isEmpty()){
+            throw new OrderNotFoundException("Order with externalOrderId " + orderId + " was not found");
+        }
+
+        Order orderUpdated = order.get();
+
+        orderUpdated.setStatus(orderStatus);
+
+        HttpClient httpClient = HttpClient.create()
+        .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000)
+        .responseTimeout(Duration.ofMillis(5000))
+        .doOnConnected(conn -> 
+            conn.addHandlerLast(new ReadTimeoutHandler(101000, TimeUnit.MILLISECONDS))
+            .addHandlerLast(new WriteTimeoutHandler(10000, TimeUnit.MILLISECONDS)));
+
+        WebClient webClient = WebClient.builder()
+        .clientConnector(new ReactorClientHttpConnector(httpClient))
+        .build();
+
+        ResponseEntity<String> responseSpec = webClient.post()
+            .uri(this.engineURL + "/" + orderId + "/" + orderStatus)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .retrieve()
+            .onStatus(
+                status -> status.value() == 400,
+                clientResponse -> Mono.empty()
+            )
+            .toEntity(String.class)
+            .block();
+
+        if (responseSpec == null){
+            throw new OrderNotUpdatedException("The order was not updated in the engine: ");
+        }
+        
+        if (responseSpec.getStatusCode().value() != 200){
+
+            throw new OrderNotUpdatedException("The order was not updated in the engine: ");
+        }
+
+        return orderUpdated;
+    }
+
+    public String getEngineURL() {
+        return this.engineURL;
+    }
+
+    public void setEngineURL(String engineURL) {
+        this.engineURL = engineURL;
+    }
+
 }

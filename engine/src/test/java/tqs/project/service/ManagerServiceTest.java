@@ -5,10 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,13 +22,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import tqs.project.datamodels.RegisterDTO;
 import tqs.project.exceptions.ManagerAlreadyExistsException;
 import tqs.project.exceptions.ManagerNotFoundException;
-import tqs.project.exceptions.UserAlreadyExistsException;
 import tqs.project.model.Manager;
 import tqs.project.model.User;
 import tqs.project.repository.ManagerRepository;
 import tqs.project.repository.UserRepository;
-import tqs.project.service.ManagerService;
-import tqs.project.service.UserService;
 
 @ExtendWith(MockitoExtension.class)
 class ManagerServiceTest {

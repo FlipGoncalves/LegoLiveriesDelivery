@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,8 +15,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import tqs.project.model.Order;
 import tqs.project.model.Store;
-import tqs.project.repository.OrderRepository;
-import tqs.project.repository.StoreRepository;
 
 @DataJpaTest
 class OrderRepositoryTest {
