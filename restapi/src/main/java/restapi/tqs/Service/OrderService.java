@@ -247,7 +247,7 @@ public class OrderService {
 
     public Order updateOrderStatus(long externalOrderId, int status) throws InvalidStatusException, OrderNotFoundException{
 
-        if (status != 1 || status != 2){
+        if (status < 1 || status > 2){
             throw new InvalidStatusException("The status " + status + " is invalid");
         }
 
