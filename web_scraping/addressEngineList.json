@@ -1,0 +1,19 @@
+[
+    {
+        "street":"Street 1",
+        "postalCode":"3810-240",
+        "city":"Aveiro",
+        "country":"Portugal",
+        "latitude":69.420,
+        "longitude":42.069
+    },
+    
+    {
+        "street":"Street 2",
+        "postalCode":"3810-241",
+        "city":"Aveiro",
+        "country":"Portugal",
+        "latitude":40,
+        "longitude":100
+    }
+]

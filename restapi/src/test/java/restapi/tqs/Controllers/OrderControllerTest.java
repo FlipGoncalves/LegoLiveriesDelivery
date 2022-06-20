@@ -1,5 +1,15 @@
 package restapi.tqs.Controllers;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -8,25 +18,24 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import restapi.tqs.Controller.OrderController;
+import restapi.tqs.DataModels.AddressDTO;
 import restapi.tqs.DataModels.OrderDTO;
 import restapi.tqs.DataModels.OrderLegoDTO;
 import restapi.tqs.Exceptions.AddressNotFoundException;
 import restapi.tqs.Exceptions.BadOrderLegoDTOException;
-import restapi.tqs.Exceptions.BadOrderLegoListException;
 import restapi.tqs.Exceptions.BadScheduledTimeOfDeliveryException;
 import restapi.tqs.Exceptions.ClientNotFoundException;
 import restapi.tqs.Exceptions.LegoNotFoundException;
@@ -38,16 +47,6 @@ import restapi.tqs.Models.Order;
 import restapi.tqs.Models.OrderLego;
 import restapi.tqs.Models.User;
 import restapi.tqs.Service.OrderService;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.any;
 
 
 @WebMvcTest(OrderController.class)
@@ -71,7 +70,7 @@ public class OrderControllerTest {
     Lego lego1, lego2, lego3;
     List<OrderLegoDTO> orderLegoDTO1, orderLegoDTO2, orderLegoDTO3;
     ArrayList<Order> all_Orders;
-
+    AddressDTO addressDTO1, addressDTO2, addressDTO3;
 
     @BeforeEach
     void setUp(){
@@ -120,9 +119,13 @@ public class OrderControllerTest {
         orderLegoDTO2 = buildOrderLegoDTO(1l,2l,3l,2);
         orderLegoDTO3 = buildOrderLegoDTO(1l,2l,3l,3);
 
-        orderDTO1 = new OrderDTO(1l, 1l, 2100, orderLegoDTO1);
-        orderDTO2 = new OrderDTO(1l, 1l, 1500, orderLegoDTO2);
-        orderDTO3 = new OrderDTO(2l, 2l, 2000, orderLegoDTO3);
+        addressDTO1 = buildAddressDTO(1);
+        addressDTO2 = buildAddressDTO(2);
+        addressDTO3 = buildAddressDTO(3);
+
+        orderDTO1 = new OrderDTO(1l, addressDTO1, 2100, orderLegoDTO1);
+        orderDTO2 = new OrderDTO(1l, addressDTO1, 1500, orderLegoDTO2);
+        orderDTO3 = new OrderDTO(2l, addressDTO2, 2000, orderLegoDTO3);
     }
 
     @Test
@@ -130,14 +133,13 @@ public class OrderControllerTest {
 
         Mockito.when(service.getAllOrders()).thenReturn(all_Orders);
 
-        mvc.perform(get("/order")
+        mvc.perform(get("/orders")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andDo(print())
         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$", hasSize(3)))
         .andExpect(jsonPath("$[0].orderId", is((int) order1.getOrderId())))
-        .andExpect(jsonPath("$[0].timeOfDelivery", is(order1.getTimeOfDelivery())))
         .andExpect(jsonPath("$[0].scheduledTimeOfDelivery", is(order1.getScheduledTimeOfDelivery())))
         .andExpect(jsonPath("$[0].riderName", is(order1.getRiderName())))
         .andExpect(jsonPath("$[0].totalPrice", is(order1.getTotalPrice())))
@@ -145,7 +147,6 @@ public class OrderControllerTest {
         .andExpect(jsonPath("$[0].client", is((int) order1.getClient().getClientId())))
         .andExpect(jsonPath("$[0].orderLego", hasSize(3)))
         .andExpect(jsonPath("$[1].orderId", is((int) order2.getOrderId())))
-        .andExpect(jsonPath("$[1].timeOfDelivery", is(order2.getTimeOfDelivery())))
         .andExpect(jsonPath("$[1].scheduledTimeOfDelivery", is(order2.getScheduledTimeOfDelivery())))
         .andExpect(jsonPath("$[1].riderName", is(order2.getRiderName())))
         .andExpect(jsonPath("$[1].totalPrice", is(order2.getTotalPrice())))
@@ -153,7 +154,6 @@ public class OrderControllerTest {
         .andExpect(jsonPath("$[1].client", is((int) order2.getClient().getClientId())))
         .andExpect(jsonPath("$[1].orderLego", hasSize(3)))
         .andExpect(jsonPath("$[2].orderId", is((int) order3.getOrderId())))
-        .andExpect(jsonPath("$[2].timeOfDelivery", is(order3.getTimeOfDelivery())))
         .andExpect(jsonPath("$[2].scheduledTimeOfDelivery", is(order3.getScheduledTimeOfDelivery())))
         .andExpect(jsonPath("$[2].riderName", is(order3.getRiderName())))
         .andExpect(jsonPath("$[2].totalPrice", is(order3.getTotalPrice())))
@@ -168,13 +168,12 @@ public class OrderControllerTest {
 
         Mockito.when(service.getOrderById(1)).thenReturn(order1);
 
-        mvc.perform(get("/order/{orderId}",1)
+        mvc.perform(get("/orders/{orderId}",1)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andDo(print())
         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.orderId", is((int) order1.getOrderId())))
-        .andExpect(jsonPath("$.timeOfDelivery", is(order1.getTimeOfDelivery())))
         .andExpect(jsonPath("$.scheduledTimeOfDelivery", is(order1.getScheduledTimeOfDelivery())))
         .andExpect(jsonPath("$.riderName", is(order1.getRiderName())))
         .andExpect(jsonPath("$.totalPrice", is(order1.getTotalPrice())))
@@ -188,7 +187,7 @@ public class OrderControllerTest {
         
         Mockito.when(service.getOrderById(200)).thenThrow(OrderNotFoundException.class);
 
-        mvc.perform(get("/order/{orderId}",200)
+        mvc.perform(get("/orders/{orderId}",200)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
 
@@ -199,14 +198,13 @@ public class OrderControllerTest {
 
         Mockito.when(service.getClientOrders(1)).thenReturn(new ArrayList<Order>(Arrays.asList(order1,order2)));
 
-        mvc.perform(get("/order/client/{clientId}", 1)
+        mvc.perform(get("/orders/client/{clientId}", 1)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andDo(print())
         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$", hasSize(2)))
         .andExpect(jsonPath("$[0].orderId", is((int) order1.getOrderId())))
-        .andExpect(jsonPath("$[0].timeOfDelivery", is(order1.getTimeOfDelivery())))
         .andExpect(jsonPath("$[0].scheduledTimeOfDelivery", is(order1.getScheduledTimeOfDelivery())))
         .andExpect(jsonPath("$[0].riderName", is(order1.getRiderName())))
         .andExpect(jsonPath("$[0].totalPrice", is(order1.getTotalPrice())))
@@ -214,7 +212,6 @@ public class OrderControllerTest {
         .andExpect(jsonPath("$[0].client", is((int) order1.getClient().getClientId())))
         .andExpect(jsonPath("$[0].orderLego", hasSize(3)))
         .andExpect(jsonPath("$[1].orderId", is((int) order2.getOrderId())))
-        .andExpect(jsonPath("$[1].timeOfDelivery", is(order2.getTimeOfDelivery())))
         .andExpect(jsonPath("$[1].scheduledTimeOfDelivery", is(order2.getScheduledTimeOfDelivery())))
         .andExpect(jsonPath("$[1].riderName", is(order2.getRiderName())))
         .andExpect(jsonPath("$[1].totalPrice", is(order2.getTotalPrice())))
@@ -228,7 +225,7 @@ public class OrderControllerTest {
         
         Mockito.when(service.getClientOrders(200)).thenThrow(ClientNotFoundException.class);
 
-        mvc.perform(get("/order/client/{clientId}",200)
+        mvc.perform(get("/orders/client/{clientId}",200)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
     }
@@ -236,11 +233,11 @@ public class OrderControllerTest {
     @Test
     void test_MakeOrder_InvalidOrderDTO_BadScheduledTimeOfDelivery_ReturnsBadRequestStatus() throws Exception{
         List<OrderLegoDTO> orderLegoDTOTest = buildOrderLegoDTO(1l,2l,3l,1);
-        OrderDTO orderDTOTest = new OrderDTO(1l, 1l, 2700, orderLegoDTOTest);
+        OrderDTO orderDTOTest = new OrderDTO(1l, addressDTO1, 2700, orderLegoDTOTest);
 
         Mockito.when(service.makeOrder(any(OrderDTO.class))).thenThrow(new BadScheduledTimeOfDeliveryException(""));
 
-        mvc.perform(post("/order")
+        mvc.perform(post("/orders")
         .content(objectMapper.writeValueAsString(orderDTOTest))
         .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
@@ -250,11 +247,11 @@ public class OrderControllerTest {
     @Test
     void test_MakeOrder_InvalidOrderDTO_BadClientId_ReturnsBadRequestStatus() throws Exception{
         List<OrderLegoDTO> orderLegoDTOTest = buildOrderLegoDTO(1l,2l,3l,1);
-        OrderDTO orderDTOTest = new OrderDTO(50l, 1l, 2100, orderLegoDTOTest);
+        OrderDTO orderDTOTest = new OrderDTO(50l, addressDTO1, 2100, orderLegoDTOTest);
 
         Mockito.when(service.makeOrder(any(OrderDTO.class))).thenThrow(new ClientNotFoundException(""));
 
-        mvc.perform(post("/order")
+        mvc.perform(post("/orders")
         .content(objectMapper.writeValueAsString(orderDTOTest))
         .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
@@ -264,11 +261,11 @@ public class OrderControllerTest {
     @Test
     void test_MakeOrder_InvalidOrderDTO_BadAddressId_ReturnsBadRequestStatus() throws JsonProcessingException, Exception{
         List<OrderLegoDTO> orderLegoDTOTest = buildOrderLegoDTO(1l,2l,3l,1);
-        OrderDTO orderDTOTest = new OrderDTO(1l, 50l, 2100, orderLegoDTOTest);
+        OrderDTO orderDTOTest = new OrderDTO(1l, addressDTO3, 2100, orderLegoDTOTest);
 
         Mockito.when(service.makeOrder(any(OrderDTO.class))).thenThrow(new AddressNotFoundException(""));
 
-        mvc.perform(post("/order")
+        mvc.perform(post("/orders")
         .content(objectMapper.writeValueAsString(orderDTOTest))
         .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
@@ -278,11 +275,11 @@ public class OrderControllerTest {
     @Test
     void test_MakeOrder_InvalidOrderDTO_BadLegoId_ReturnsBadRequestStatus() throws JsonProcessingException, Exception{
         List<OrderLegoDTO> orderLegoDTOTest = buildOrderLegoDTO(50l,2l,3l,1);
-        OrderDTO orderDTOTest = new OrderDTO(1l, 1l, 2100, orderLegoDTOTest);
+        OrderDTO orderDTOTest = new OrderDTO(1l, addressDTO1, 2100, orderLegoDTOTest);
 
         Mockito.when(service.makeOrder(any(OrderDTO.class))).thenThrow(new LegoNotFoundException(""));
 
-        mvc.perform(post("/order")
+        mvc.perform(post("/orders")
         .content(objectMapper.writeValueAsString(orderDTOTest))
         .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
@@ -293,11 +290,11 @@ public class OrderControllerTest {
     void test_MakeOrder_InvalidOrderDTO_BadOrderLegoDTO_ReturnsBadRequestStatus() throws JsonProcessingException, Exception{
         List<OrderLegoDTO> orderLegoDTOTest = buildOrderLegoDTO(1l,2l,3l,1);
         orderLegoDTOTest.get(0).setQuantity(-5);
-        OrderDTO orderDTOTest = new OrderDTO(1l, 1l, 2100, orderLegoDTOTest);
+        OrderDTO orderDTOTest = new OrderDTO(1l, addressDTO1, 2100, orderLegoDTOTest);
 
         Mockito.when(service.makeOrder(any(OrderDTO.class))).thenThrow(new BadOrderLegoDTOException(""));
 
-        mvc.perform(post("/order")
+        mvc.perform(post("/orders")
         .content(objectMapper.writeValueAsString(orderDTOTest))
         .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
@@ -306,11 +303,11 @@ public class OrderControllerTest {
 
     @Test
     void test_MakeOrder_InvalidOrderDTO_BadOrderLegoList_ReturnsBadRequestStatus() throws JsonProcessingException, Exception{
-        OrderDTO orderDTOTest = new OrderDTO(1l, 1l, 2100, new ArrayList<OrderLegoDTO>());
+        OrderDTO orderDTOTest = new OrderDTO(1l, addressDTO1, 2100, new ArrayList<OrderLegoDTO>());
 
         Mockito.when(service.makeOrder(any(OrderDTO.class))).thenThrow(new ClientNotFoundException(""));
 
-        mvc.perform(post("/order")
+        mvc.perform(post("/orders")
         .content(objectMapper.writeValueAsString(orderDTOTest))
         .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
@@ -320,22 +317,20 @@ public class OrderControllerTest {
     @Test
     void test_MakeOrder_ValidOrderDTO_ReturnsCorrectOrder() throws JsonProcessingException, Exception{
         List<OrderLegoDTO> orderLegoDTOTest = buildOrderLegoDTO(1l,2l,3l,1);
-        OrderDTO orderDTOTest = new OrderDTO(1l, 1l, 2100, orderLegoDTOTest);
+        OrderDTO orderDTOTest = new OrderDTO(1l, addressDTO1, 2100, orderLegoDTOTest);
 
         Mockito.when(service.makeOrder(any(OrderDTO.class))).thenReturn(order1);
 
-        mvc.perform(post("/order")
+        mvc.perform(post("/orders")
         .content(objectMapper.writeValueAsString(orderDTOTest))
         .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
         .andExpect(status().isCreated())
         .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.orderId", is((int) order1.getOrderId())))
-        .andExpect(jsonPath("$.timeOfDelivery", is(order1.getTimeOfDelivery())))
         .andExpect(jsonPath("$.scheduledTimeOfDelivery", is(order1.getScheduledTimeOfDelivery())))
         .andExpect(jsonPath("$.riderName", is(order1.getRiderName())))
         .andExpect(jsonPath("$.totalPrice", is(order1.getTotalPrice())))
-        .andExpect(jsonPath("$.address", is((int) order1.getAddress().getAddressId())))
         .andExpect(jsonPath("$.client", is((int) order1.getClient().getClientId())))
         .andExpect(jsonPath("$.orderLego", hasSize(3)));
     }
@@ -359,7 +354,6 @@ public class OrderControllerTest {
         order.setAddress(address);
         order.setDate(date);
         order.setScheduledTimeOfDelivery(2100);
-        order.setTimeOfDelivery(2110);
         order.setRiderName("Paulo " + id);
         order.setTotalPrice(totalPrice);
 
@@ -394,6 +388,22 @@ public class OrderControllerTest {
 
     Address buildAddressObject(long id){
         Address address = new Address();
+        address.setLongitude(100 + id);
+        address.setLatitude(50 + id);
+        address.setStreet("Street " + id);
+        address.setPostalCode("3810-24" + id);
+        address.setCity("city " + id);
+        address.setCountry("Country " + id);
+        return address;
+    }
+
+    AddressDTO buildAddressDTO(long id){
+        AddressDTO address = new AddressDTO();
+        address.setLongitude(100 + id);
+        address.setLatitude(50 + id);
+        address.setStreet("Street " + id);
+        address.setPostalCode("3810-24" + id);
+        address.setCity("city " + id);
         address.setCountry("Country " + id);
         return address;
     }

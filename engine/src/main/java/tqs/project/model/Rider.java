@@ -13,9 +13,14 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 
 @Entity
 @Table(name = "rider")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "riderId")
 public class Rider {
     
     @Id
@@ -28,11 +33,11 @@ public class Rider {
     private int totalReviews;
 
     @OneToOne
-    @JoinColumn(referencedColumnName = "user_id")
     @MapsId
     private User user;
 
     @OneToMany(mappedBy = "rider")
+    @JsonIdentityReference(alwaysAsId = true)
     private Set<Order> orders = new HashSet<>();
 
     public Rider() {
@@ -74,6 +79,14 @@ public class Rider {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Set<Order> getOrders() {
+        return this.orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
     }
 
     @Override

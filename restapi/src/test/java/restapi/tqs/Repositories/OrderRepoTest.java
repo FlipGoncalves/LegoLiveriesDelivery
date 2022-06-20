@@ -140,7 +140,6 @@ class OrderRepoTest {
         order.setAddress(address);
         order.setDate(date);
         order.setScheduledTimeOfDelivery(2100);
-        order.setTimeOfDelivery(2110);
         order.setRiderName("Paulo " + id);
         order.setOrderLego(orderLegos);
         order.setTotalPrice(totalPrice);

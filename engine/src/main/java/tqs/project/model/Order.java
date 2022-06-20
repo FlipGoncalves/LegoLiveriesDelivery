@@ -13,16 +13,19 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
 @Table(name = "`order`")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "orderId")
 public class Order {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
     private long orderId;
-    @Column(name = "external_order_id")
-    private long externalOrderId;
     @Column(name = "clientName")
     private String clientName;
     @Column(name = "`date`")
@@ -36,22 +39,21 @@ public class Order {
     private int status; //0 = Not done 1 = In Transit 2 = Done
 
     @ManyToOne
-    @JoinColumn(name = "store_id", referencedColumnName = "store_id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Store store;
 
     @ManyToOne
-    //@JoinColumn(name = "rider_id", referencedColumnName = "rider_id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Rider rider;
 
     @ManyToOne
-    @JoinColumn(name = "address_id", referencedColumnName = "address_id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Address address;
 
     public Order() {
     }
 
-    public Order(long externalOrderId, String clientName, Date date, int timeOfDelivery, int review) {
-        this.externalOrderId = externalOrderId;
+    public Order(String clientName, Date date, int timeOfDelivery, int review) {
         this.clientName = clientName;
         this.date = date;
         this.timeOfDelivery = timeOfDelivery;
@@ -65,14 +67,6 @@ public class Order {
 
     public void setOrderId(long orderId) {
         this.orderId = orderId;
-    }
-
-    public long getExternalOrderId() {
-        return this.externalOrderId;
-    }
-
-    public void setExternalOrderId(long externalOrderId) {
-        this.externalOrderId = externalOrderId;
     }
 
     public String getClientName() {
@@ -137,13 +131,12 @@ public class Order {
 
     public void setStatus(int status) {
         this.status = status;
-    }
+    }    
 
     @Override
     public String toString() {
         return "{" +
             " orderId='" + getOrderId() + "'" +
-            ", externalOrderId='" + getExternalOrderId() + "'" +
             ", clientName='" + getClientName() + "'" +
             ", date='" + getDate() + "'" +
             ", timeOfDelivery='" + getTimeOfDelivery() + "'" +

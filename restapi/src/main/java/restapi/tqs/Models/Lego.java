@@ -3,6 +3,7 @@ package restapi.tqs.Models;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -31,14 +31,8 @@ public class Lego {
     private double price;
     @Column(name = "imageUrl")
     private String imageUrl;
-
     
-    @OneToMany(mappedBy = "lego")
-    @JsonIdentityReference(alwaysAsId = true)
-    private Set<Favorites> favorites = new HashSet<>();
-
-    
-    @OneToMany(mappedBy = "lego")
+    @OneToMany(mappedBy = "lego", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIdentityReference(alwaysAsId = true)
     private Set<OrderLego> orderLego = new HashSet<>();
 
@@ -76,14 +70,6 @@ public class Lego {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-
-    public Set<Favorites> getFavorites() {
-        return this.favorites;
-    }
-
-    public void setFavorites(Set<Favorites> favorites) {
-        this.favorites = favorites;
     }
 
     public Set<OrderLego> getOrderLego() {
