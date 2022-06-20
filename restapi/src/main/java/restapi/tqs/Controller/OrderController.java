@@ -92,18 +92,16 @@ public class OrderController {
     }
 
     @PostMapping("/{externalOrderId}/{status}")
-    public ResponseEntity<Order> updateOrderStatus(@PathVariable long externalOrderId, @PathVariable int status){
+    public ResponseEntity<Object> updateOrderStatus(@PathVariable long externalOrderId, @PathVariable int status){
         log.info("Updating order status");
 
-        Order order = null;
-
         try {
-            order = service.updateOrderStatus(externalOrderId, status);
+            service.updateOrderStatus(externalOrderId, status);
         } catch (InvalidStatusException | OrderNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
 
-        return new ResponseEntity<>(order, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

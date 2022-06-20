@@ -35,7 +35,7 @@ public class Order {
     private int timeOfDelivery;
     @Column(name = "review")
     private int review;
-    @Column(name = "status")
+    @Column(name = "order_status")
     private int status; //0 = Not done 1 = In Transit 2 = Done
 
     @ManyToOne
