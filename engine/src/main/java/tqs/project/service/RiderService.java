@@ -86,21 +86,4 @@ public class RiderService {
 
         return user;
     }
-
-    public User createOrGetUser(RiderDTO dto){
-        Optional<User> userOptional = userRepository.findByEmail(dto.getEmail());
-        
-        User user = new User();
-        
-        if (userOptional.isEmpty()) {
-            user.setEmail(dto.getEmail());
-            user.setUsername(dto.getUsername());
-            user.setPassword(dto.getPassword());
-            user = userRepository.saveAndFlush(user);
-        } else{
-            user = userOptional.get();
-        }
-
-        return user;
-    }
 }
