@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "riderId")
 public class Rider {
     
-    @Id
+    @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "rider_id")
     private long riderId;
