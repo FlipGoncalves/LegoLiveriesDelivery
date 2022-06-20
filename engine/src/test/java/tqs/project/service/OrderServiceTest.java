@@ -1,19 +1,35 @@
 package tqs.project.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.internal.verification.VerificationModeFactory.times;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
 import tqs.project.datamodels.AddressDTO;
 import tqs.project.datamodels.OrderDTO;
+import tqs.project.exceptions.InvalidStatusException;
+import tqs.project.exceptions.OrderNotFoundException;
+import tqs.project.exceptions.OrderNotUpdatedException;
 import tqs.project.exceptions.StoreNotFoundException;
 import tqs.project.model.Address;
 import tqs.project.model.Order;
@@ -21,15 +37,6 @@ import tqs.project.model.Store;
 import tqs.project.repository.AddressRepository;
 import tqs.project.repository.OrderRepository;
 import tqs.project.repository.StoreRepository;
-import tqs.project.service.OrderService;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class OrderServiceTest {
@@ -46,13 +53,24 @@ class OrderServiceTest {
     @Mock
     private StoreRepository storeRepository;
 
+    public static MockWebServer mockBackEnd;
+
     Order order1, order2, order3;
     Store store1, store2; 
     Address address1, address2;
     AddressDTO addressDTO1, addressDTO2;
 
+    @BeforeAll
+    static void allSetUp() throws IOException{
+        mockBackEnd = new MockWebServer();
+        mockBackEnd.start();
+    }
+
     @BeforeEach
     void setUp() {
+
+        String baseUrl = String.format("http://localhost:%s", mockBackEnd.getPort());
+        service.setEngineURL(baseUrl);
 
         address1 = buildAddressObject(1);
         address2 = buildAddressObject(2);
@@ -90,6 +108,11 @@ class OrderServiceTest {
         order1.setStore(store1);
         order2.setStore(store1);
         order3.setStore(store2);
+    }
+
+    @AfterAll
+    static void cleanUp() throws IOException{
+        mockBackEnd.shutdown();
     }
 
     @Test
@@ -234,6 +257,35 @@ class OrderServiceTest {
         assertEquals(address1, result.getAddress());
         assertEquals(store1, result.getStore());
         assertEquals(0, result.getStatus());
+    }
+
+    @Test
+    void test_UpdatedOrderStatus_InvalidStatus_ThrowsInvalidStatusException() throws InvalidStatusException, OrderNotFoundException, OrderNotUpdatedException{
+
+        assertThrows(InvalidStatusException.class, () -> {service.updateOrderStatus(1, 3);});
+
+    }
+
+    @Test
+    void test_UpdatedOrderStatus_OrderDoesNotExist_ThrowsOrderNotFoundException() throws InvalidStatusException, OrderNotFoundException, OrderNotUpdatedException{
+
+        when(orderRepository.findById(6L)).thenReturn(Optional.empty());
+
+        assertThrows(OrderNotFoundException.class, () -> {service.updateOrderStatus(6, 2);});
+
+    }
+
+    @Test
+    void test_UpdateOrderStatus_ValidArguments_ReturnsCorrectOrder() throws InvalidStatusException, OrderNotFoundException, OrderNotUpdatedException{
+
+        when(orderRepository.findById(1l)).thenReturn(Optional.of(order1));
+
+        mockBackEnd.enqueue(new MockResponse().setResponseCode(200));
+
+        Order order = service.updateOrderStatus(1, 2);
+
+        assertNotNull(order);
+        assertEquals(2, order.getStatus());
     }
 
     Address buildAddressObject(long id){

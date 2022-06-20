@@ -61,15 +61,13 @@ public class OrderController {
     public ResponseEntity<Order> updateOrderStatus(@PathVariable long orderId, @PathVariable int status){
         log.info("Updating order status");
 
-        Order order = null;
-
         try {
-            order = orderService.updateOrderStatus(orderId, status);
+            orderService.updateOrderStatus(orderId, status);
         } catch (InvalidStatusException | OrderNotFoundException | OrderNotUpdatedException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
 
-        return new ResponseEntity<>(order, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

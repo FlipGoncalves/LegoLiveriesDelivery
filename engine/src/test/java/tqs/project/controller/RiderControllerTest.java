@@ -18,12 +18,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import tqs.project.controller.RiderController;
 import tqs.project.datamodels.RiderDTO;
 import tqs.project.exceptions.RiderAlreadyExistsException;
-import tqs.project.exceptions.RiderNotFoundException;
 import tqs.project.exceptions.UserAlreadyExistsException;
-import tqs.project.exceptions.UserNotFoundException;
 import tqs.project.model.Rider;
 import tqs.project.model.User;
 import tqs.project.service.RiderService;

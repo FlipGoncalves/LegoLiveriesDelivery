@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import io.netty.channel.ChannelOption;
@@ -23,8 +22,8 @@ import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 import tqs.project.datamodels.OrderDTO;
 import tqs.project.exceptions.InvalidStatusException;
-import tqs.project.exceptions.OrderNotUpdatedException;
 import tqs.project.exceptions.OrderNotFoundException;
+import tqs.project.exceptions.OrderNotUpdatedException;
 import tqs.project.exceptions.StoreNotFoundException;
 import tqs.project.model.Address;
 import tqs.project.model.Order;
@@ -47,7 +46,6 @@ public class OrderService {
     private AddressRepository addressRep;
 
     private String engineURL = "legoliveries:8080/order";
-
 
     public List<Order> getAllOrders() {
         log.info("Getting All Orders Data");
@@ -123,7 +121,7 @@ public class OrderService {
     @Transactional(rollbackFor = {InvalidStatusException.class, OrderNotFoundException.class})
     public Order updateOrderStatus(long orderId, int orderStatus) throws InvalidStatusException, OrderNotFoundException, OrderNotUpdatedException{
 
-        if (orderStatus != 1 || orderStatus != 2){
+        if (orderStatus < 1 || orderStatus > 2){
             throw new InvalidStatusException("The status " + orderStatus + " is invalid");
         }
 
