@@ -36,6 +36,7 @@ import restapi.tqs.Exceptions.BadOrderLegoDTOException;
 import restapi.tqs.Exceptions.BadOrderLegoListException;
 import restapi.tqs.Exceptions.BadScheduledTimeOfDeliveryException;
 import restapi.tqs.Exceptions.ClientNotFoundException;
+import restapi.tqs.Exceptions.InvalidStatusException;
 import restapi.tqs.Exceptions.LegoNotFoundException;
 import restapi.tqs.Exceptions.OrderNotCreatedException;
 import restapi.tqs.Exceptions.OrderNotFoundException;
@@ -242,6 +243,25 @@ public class OrderService {
         order.setDate(new Date());
         
         return order;
+    }
+
+    public Order updateOrderStatus(long externalOrderId, int status) throws InvalidStatusException, OrderNotFoundException{
+
+        if (status != 1 || status != 2){
+            throw new InvalidStatusException("The status " + status + " is invalid");
+        }
+
+        Optional<Order> order = orderRepository.findByExternalOrderId(externalOrderId);
+
+        if (order.isEmpty()){
+            throw new OrderNotFoundException("Order with externalOrderId " + externalOrderId + " was not found");
+        }
+
+        Order orderUpdated = order.get();
+
+        orderUpdated.setOrderStatus(status);
+
+        return orderUpdated;
     }
 
     public void setEngineURL(String url){

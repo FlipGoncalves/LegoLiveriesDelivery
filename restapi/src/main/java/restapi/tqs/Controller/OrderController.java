@@ -17,6 +17,7 @@ import restapi.tqs.Exceptions.BadOrderLegoListException;
 import restapi.tqs.Exceptions.BadOrderLegoDTOException;
 import restapi.tqs.Exceptions.BadScheduledTimeOfDeliveryException;
 import restapi.tqs.Exceptions.ClientNotFoundException;
+import restapi.tqs.Exceptions.InvalidStatusException;
 import restapi.tqs.Exceptions.LegoNotFoundException;
 import restapi.tqs.Exceptions.OrderNotCreatedException;
 import restapi.tqs.Exceptions.OrderNotFoundException;
@@ -55,7 +56,7 @@ public class OrderController {
         try {
             order = service.getOrderById(orderId);
         } catch (OrderNotFoundException e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(order, HttpStatus.OK);
@@ -69,7 +70,7 @@ public class OrderController {
         try {
             order = service.getClientOrders(clientId);
         } catch (ClientNotFoundException e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(order, HttpStatus.OK);
@@ -84,9 +85,25 @@ public class OrderController {
             order = service.makeOrder(orderDTO);
         } catch (BadScheduledTimeOfDeliveryException | ClientNotFoundException | AddressNotFoundException
                 | LegoNotFoundException | BadOrderLegoDTOException | BadOrderLegoListException | OrderNotCreatedException e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        
+
         return new ResponseEntity<>(order, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/{externalOrderId}/{status}")
+    public ResponseEntity<Order> updateOrderStatus(@PathVariable long externalOrderId, @PathVariable int status){
+        log.info("Updating order status");
+
+        Order order = null;
+
+        try {
+            order = service.updateOrderStatus(externalOrderId, status);
+        } catch (InvalidStatusException | OrderNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+
+        return new ResponseEntity<>(order, HttpStatus.OK);
     }
 }
