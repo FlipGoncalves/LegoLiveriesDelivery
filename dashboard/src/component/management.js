@@ -136,8 +136,8 @@ class Management extends Component {
         "username": name,
         "email": email,
         "password": password,
-        "totalReviews": 0,
-        "reviewSum": 0
+        "numRev": 0,
+        "sumRev": 0
       })
       .then((response) => {
         console.log(response);
