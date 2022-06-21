@@ -36,6 +36,8 @@ const AllOrders = () => {
 
         console.log(item)
 
+        handleSubmit
+
         return (
         <div class="container">
             <h6>Order No: {item["orderId"]}</h6>

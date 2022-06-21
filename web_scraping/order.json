@@ -1,6 +1,6 @@
 [
     {
-        "clientId":"1",
+        "clientId":1,
         "address":{
             "street":"Street 6",
             "postalCode":"3810-246",
