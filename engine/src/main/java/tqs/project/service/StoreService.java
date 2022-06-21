@@ -38,17 +38,22 @@ public class StoreService {
         Store store = new Store();
 
         if(storeRep.findByName(storeDTO.getName()).isPresent()){
+            log.info("Inserting Store ERROR");
             throw new StoreAlreadyExistsException("Store with name " + storeDTO.getName() + " already exists");
         }
 
+        log.info("Inserting Store SAVE");
         store = storeRep.saveAndFlush(store);
 
+        log.info("Inserting Store NAME");
         store.setName(storeDTO.getName());
 
         Address address = new Address();
 
+        log.info("Inserting Store GET ADDRESS");
         Optional<Address> addressOptional = addressRep.findByLatitudeAndLongitude(storeDTO.getAddress().getLatitude(), storeDTO.getAddress().getLongitude());
 
+        log.info("Inserting Store ADDRESS");
         if (addressOptional.isPresent()){
             address = addressOptional.get();
         } else{
@@ -56,8 +61,12 @@ public class StoreService {
             address = addressRep.saveAndFlush(address);
         }
 
+        log.info("Inserting Store SET ADDRESS");
         store.setAddress(address);
         address.setStore(store);
+
+        log.info("Inserting Store SAVE AGAIN");
+        store = storeRep.saveAndFlush(store);
 
         return store;
     }
