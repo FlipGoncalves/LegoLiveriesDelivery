@@ -61,7 +61,6 @@ public class OrderControllerTest {
         order1.setStatus(0);
         order1.setStore(store1);
         order1.setAddress(address1);
-        order1.setOrderId(1);
 
         store1.getOrders().add(order1);
         address1.getOrders().add(order1);
@@ -129,6 +128,8 @@ public class OrderControllerTest {
         RestAssured.registerParser("text/plain", Parser.TEXT);
 
         Mockito.when(orderService.makeOrder(orderDTO1)).thenReturn(order1);
+
+        order1.setOrderId(1);
 
         given().contentType(ContentType.JSON).body(orderDTO1)
                .post("/api/orders")
