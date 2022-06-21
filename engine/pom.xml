@@ -10,13 +10,14 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	
-	<groupId>project</groupId>
-	<artifactId>tqs</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<groupId>tqs</groupId>
+	<artifactId>project</artifactId>
+	<version>1.0</version>
 	<name>project</name>
 	<description>Project for quality assurance class</description>
 	
 	<properties>
+		<!-- <spring-hateoas.version>0.17.0.RELEASE</spring-hateoas.version> -->
 		<java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
