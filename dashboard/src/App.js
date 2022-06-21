@@ -230,9 +230,7 @@ class App extends Component {
                                           datasets: [
                                             {
                                               label: 'Average Review',
-                                              data: this.state.data[2].map(function(each_element){
-                                                return Number(each_element.toFixed(2));
-                                              }),
+                                              data: this.state.data[2],
                                               borderColor: 'rgb(255, 99, 132)',
                                               backgroundColor: 'rgba(255, 99, 132, 0.7)',
                                               color: 'white',
