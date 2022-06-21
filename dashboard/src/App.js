@@ -241,7 +241,7 @@ class App extends Component {
               </div>
             </div>
             <div class="card-body">
-              <h6 class="mb-0 ">Completed Tasks</h6>
+              <h6 class="mb-0 "> Average Review per Rider </h6>
               <p class="text-sm "></p>
               <hr class="dark horizontal" />
             </div>
