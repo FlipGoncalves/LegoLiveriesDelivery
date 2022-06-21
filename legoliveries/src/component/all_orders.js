@@ -12,6 +12,8 @@ const AllOrders = () => {
     const handleSubmit = async e => {
         e.preventDefault();
         
+        console.log("here")
+
         axios.get('http://localhost:8080/orders/client/'+localStorage.getItem("clientId"))
         .then((response) => {
             console.log(response.data);
@@ -36,8 +38,6 @@ const AllOrders = () => {
 
         console.log(item)
 
-        handleSubmit
-
         return (
         <div class="container">
             <h6>Order No: {item["orderId"]}</h6>
@@ -53,6 +53,8 @@ const AllOrders = () => {
         </div>
         )
     }
+
+    const submit = handleSubmit
 
     return (
     <div>
