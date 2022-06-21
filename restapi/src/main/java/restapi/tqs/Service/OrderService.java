@@ -72,7 +72,7 @@ public class OrderService {
     @Autowired
     OrderLegoRepository orderLegoRepository;
 
-    private String engineURL = "engine:9001/api/order";
+    private String engineURL = "http://engine:9001/api/order";
 
     public List<Order> getAllOrders(){
         log.info("Getting all orders");
