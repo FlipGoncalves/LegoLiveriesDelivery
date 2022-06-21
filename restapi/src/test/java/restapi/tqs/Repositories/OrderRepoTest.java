@@ -50,8 +50,11 @@ class OrderRepoTest {
         client2 = (Client) array2.get(1);
 
         order1 = buildAndSaveOrderObject(client1, 1);
+        order1.setExternalOrderId(1);
         order2 = buildAndSaveOrderObject(client1, 1);
+        order2.setExternalOrderId(2);
         order3 = buildAndSaveOrderObject(client2, 2);
+        order3.setExternalOrderId(3);
 
         Set<Order> orders = client1.getOrders();
         orders.add(order1);
@@ -117,6 +120,23 @@ class OrderRepoTest {
         assertTrue(orders.isEmpty());
     }
 
+    @Test
+    void test_FindByExternalOrderId_ValidExternalOrderId_ReturnsCorrectOrder(){
+
+        Optional<Order> result = orderRepository.findByExternalOrderId(order1.getExternalOrderId());
+
+        assertTrue(result.isPresent());
+        assertEquals(order1, result.get());
+    }
+
+    @Test
+    void test_FindByExternalOrderId_InvalidExternalOrderId_ReturnsEmptyOptional(){
+
+        Optional<Order> result = orderRepository.findByExternalOrderId(300);
+
+        assertTrue(result.isEmpty());
+    }
+
     Order buildAndSaveOrderObject(Client client, long id){
 
         Order order = new Order();
@@ -140,7 +160,6 @@ class OrderRepoTest {
         order.setAddress(address);
         order.setDate(date);
         order.setScheduledTimeOfDelivery(2100);
-        order.setTimeOfDelivery(2110);
         order.setRiderName("Paulo " + id);
         order.setOrderLego(orderLegos);
         order.setTotalPrice(totalPrice);

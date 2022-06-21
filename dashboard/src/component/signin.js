@@ -38,22 +38,19 @@ class SignIn extends Component {
 
       console.log("Login")
       
-      axios.get('http://localhost:8080/api/login/'+email)
+      axios.get('http://localhost:9001/api/managers/'+email)
       .then((response) => {
         console.log(response);
-        if (response.status === 200 || response.status === 201) {
-
-          if (response.data["password"] != pass) {
-            this.setState({error_message: "Wrong Credentials"})
-            return
-          }
-
-          this.setState({error_message: ""})
-          localStorage.setItem('email', email)
-          localStorage.setItem('password', pass)
-          console.log("HERE")
-          navigation("/")
+        if (response.data["password"] != pass) {
+          this.setState({error_message: "Wrong Credentials"})
+          return
         }
+
+        this.setState({error_message: ""})
+        localStorage.setItem('email', email)
+        localStorage.setItem('password', pass)
+        console.log("HERE")
+        navigation("/")
       })
       .catch((error) => {
         console.log(error);
@@ -112,13 +109,13 @@ class SignIn extends Component {
 
                         {this.state.error_message !== "" ? <>
                           <div>
-                            <label class="form-check-label mb-0 ms-2" style={{color: 'red'}}>{this.state.error_message}</label>
+                            <label class="form-check-label mb-0 ms-2" style={{color: 'red'}} id="error">{this.state.error_message}</label>
                           </div>
                         </> : null}
 
                         <div class="text-center">
                           {/* <Link to="/"> */}
-                            <button type="button" class="btn bg-gradient-primary w-100 my-4 mb-2" onClick={signin}>Sign in</button>
+                            <button type="button" class="btn bg-gradient-primary w-100 my-4 mb-2" onClick={signin} id="signin">Sign in</button>
                           {/* </Link> */}
                         </div>
                         <p class="mt-4 text-sm text-center">

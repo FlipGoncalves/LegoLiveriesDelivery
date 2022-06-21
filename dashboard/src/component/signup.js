@@ -1,11 +1,6 @@
 import React, {Component} from 'react';
 import logo from '../assets/../assets/img/favicon.png';
 import '../App.css';
-import '../assets/css/material-dashboard.css';
-import '../assets/css/material-dashboard.css.map';
-import '../assets/css/material-dashboard.min.css';
-import '../assets/css/nucleo-svg.css';
-import '../assets/css/nucleo-icons.css';
 import { Link, useNavigate } from 'react-router-dom';
 import Aside from './aside';
 import axios from 'axios';
@@ -44,23 +39,20 @@ class SignUp extends Component {
 
       console.log("Register")
       
-      axios.post('http://localhost:8080/api/register', {
-        "email": email,
+      axios.post('http://localhost:9001/api/managers', {
         "username": name,
+        "email": email,
         "password": pass
       })
       .then((response) => {
         console.log(response);
-        if (response.status === 200 || response.status === 201) {
-          this.setState({error_message: ""})
-          this.setState({items: []})
-          console.log("HERE")
-          navigation("/")
-        }
+        this.setState({error_message: ""})
+        console.log("HERE")
+        navigation("/")
       })
       .catch((error) => {
         console.log(error);
-        this.setState({error_message: "ERROR during sign up"})
+        this.setState({error_message: "ERROR during sign up : " + error})
       });
 
     }
@@ -98,12 +90,12 @@ class SignUp extends Component {
 
                         {this.state.error_message !== "" ? <>
                           <div>
-                            <label class="form-check-label mb-0 ms-2" style={{color: 'red'}}>{this.state.error_message}</label>
+                            <label class="form-check-label mb-0 ms-2" style={{color: 'red'}} id="error">{this.state.error_message}</label>
                           </div>
                         </> : null}
 
                         <div class="text-center">
-                        <button type="submit" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Sign Up</button>
+                          <button type="submit" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0" onClick={signup} id="_submit">Sign Up</button>
                         </div>
                     </form>
                     </div>

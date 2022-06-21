@@ -2,17 +2,17 @@ name: Build
 on:
   push:
     branches:
-      - master
+      - main
       - dev
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
-  buildEngine:
-    name: Build Engine
+  buildRestApi:
+    name: Build restAPI
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: engine
+        working-directory: restapi
     steps:
       - uses: actions/checkout@v2
         with:
@@ -22,13 +22,13 @@ jobs:
         with:
           java-version: 11  
       - name: Build Legoliveries Backend
-        run: docker-compose build -f ../docker-compose.yml legoliveries
+        run: docker-compose -f ../docker-compose.yml build  legoliveries
       - name: Start Legoliveries Backend
-        run: docker-compose run -d -f ../docker-compose.yml legoliveries
+        run: docker-compose  -f ../docker-compose.yml run -p 8080:8080 -d legoliveries
       - name: Build Legoliveries Frontend
-        run: docker-compose build -f ../docker-compose.yml legoliveries-app
+        run: docker-compose -f ../docker-compose.yml build  legoliveries-app
       - name: Start Legoliveries Frontend
-        run: docker-compose run -d -p 3000:80 -d -f ../docker-compose.yml legoliveries-app
+        run: docker-compose  -f ../docker-compose.yml run -p 3000:3000 -d legoliveries-app
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
         with:
@@ -45,13 +45,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_ENGINE }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=flipgoncalves_TQSProject_engine
-  buildRestAPI:
-    name: Build restAPI
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=flipgoncalves_TQSProject_legoliveries
+  buildEngine:
+    name: Build Engine
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: restapi
+        working-directory: engine
     steps:
       - uses: actions/checkout@v2
         with:
@@ -60,14 +60,14 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - name: Build Deliverio Backend
-        run: docker-compose build -f ../docker-compose.yml engine
-      - name: Start Legoliveries Backend
-        run: docker-compose run -d -f ../docker-compose.yml engine
-      - name: Build Legoliveries Frontend
-        run: docker-compose build -f ../docker-compose.yml engine-app
-      - name: Start Legoliveries Frontend
-        run: docker-compose run -d -p 3001:80 -d -f ../docker-compose.yml engine-app
+      - name: Build Engine Backend
+        run: docker-compose -f ../docker-compose.yml build engine
+      - name: Start Engine Backend
+        run: docker-compose -f ../docker-compose.yml run -p 9001:9001 -d engine
+      - name: Build Engine Frontend
+        run: docker-compose -f ../docker-compose.yml build  engine-app
+      - name: Start Engine Frontend
+        run: docker-compose -f ../docker-compose.yml run -p 3001:3001 -d engine-app
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
         with:
@@ -84,4 +84,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_LEGOLIVERIES }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=flipgoncalves_TQSProject_legoliveries
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=flipgoncalves_TQSProject_engine

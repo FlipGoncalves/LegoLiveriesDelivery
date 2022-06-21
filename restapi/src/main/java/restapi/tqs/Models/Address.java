@@ -6,7 +6,6 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,6 +16,8 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import restapi.tqs.DataModels.AddressDTO;
 
 @Entity
 @Table(name = "address")
@@ -35,16 +36,16 @@ public class Address {
     private String city;
     @Column(name = "country")
     private String country;
+    @Column(name = "latitude", precision = 8, scale = 6)
+    private double latitude;
+    @Column(name = "longitude", precision = 9, scale = 6)
+    private double longitude;
 
-    @OneToOne(mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "address", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIdentityReference(alwaysAsId = true)
     private Client client;
 
-    @OneToOne(mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIdentityReference(alwaysAsId = true)
-    private Order order;
-
-    @OneToMany(mappedBy = "address")
+    @OneToMany(mappedBy = "address", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIdentityReference(alwaysAsId = true)
     private Set<Order> orders = new HashSet<>();
 
@@ -53,6 +54,10 @@ public class Address {
 
     public long getAddressId() {
         return this.addressId;
+    }
+
+    public void setAddressId(long addressId) {
+        this.addressId = addressId;
     }
 
     public String getStreet() {
@@ -95,13 +100,22 @@ public class Address {
         this.client = client;
     }
 
-    public Order getOrder() {
-        return this.order;
+    public double getLatitude() {
+        return this.latitude;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
+
+    public double getLongitude() {
+        return this.longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
 
     public Set<Order> getOrders() {
         return this.orders;
@@ -110,8 +124,16 @@ public class Address {
     public void setOrders(Set<Order> orders) {
         this.orders = orders;
     }
-    
 
+    public void convertDTOtoObject(AddressDTO dto){
+        this.setCity(dto.getCity());
+        this.setCountry(dto.getCountry());
+        this.setPostalCode(dto.getPostalCode());
+        this.setStreet(dto.getStreet());
+        this.setLongitude(dto.getLongitude());
+        this.setLatitude(dto.getLatitude());
+    }
+    
     @Override
     public String toString() {
         return "{" +

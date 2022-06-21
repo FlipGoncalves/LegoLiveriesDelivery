@@ -19,40 +19,44 @@ import axios from 'axios';
 
 const Login = () => {
     const navigate = useNavigate();
-    const [username, setUserName] = useState();
+    const [username, setUserName] = useState(); // its the email
     const [password, setPassword] = useState();
+    const [error_message, setError] = useState("");
 
     const handleSubmit = async e => {
         e.preventDefault();
 
-        const infouser = { username, password }
-        console.log(infouser);
+        setError("")
         
-        axios.get('http://localhost:8080/lego/login/'+username)
+        axios.get('http://localhost:8080/clients/login/'+username)
         .then((response) => {
             console.log(response);
             if (response.status === 200 || response.status === 201) {
+                console.log(response.data);
+                let user = response.data["user"]
+                if (user["password"] != password) {
+                    setError("Wrong credential")
+                    return
+                }
 
-            if (response.data["password"] != password) {
-                this.setState({error_message: "Wrong Credentials"})
-                return
-            }
+                const infouser = response.data
+                console.log(infouser);
 
-            this.setState({error_message: ""})
-            localStorage.setItem('username', username)
-            localStorage.setItem('password', password)
-            console.log("HERE")
-            localStorage.setItem('user', infouser);
-            navigate("/")
+                setError("")
+                console.log("HERE")
+                localStorage.setItem('user', "User Logged In");
+                localStorage.setItem('clientId', response.data["clientId"]);
+                navigate("/")
             }
         })
         .catch((error) => {
             console.log(error);
-            this.setState({error_message: "ERROR during sign in"})
+            setError("ERROR during log in")
+            return
         });
 
-        localStorage.setItem('user', infouser);
-        navigate("/")
+        setError("ERROR during log in")
+        return
     }
 
     return (
@@ -66,9 +70,9 @@ const Login = () => {
                     <div class="card-body">
                         <form accept-charset="utf-8" onSubmit={handleSubmit}>
                             <div className="form-group">
-                                <b><label htmlFor="name" >User Name or Email</label></b>
+                                <b><label htmlFor="name" >Email</label></b>
                                 <input className="form-control input-filled-valid" id="name" name="name" required
-                                       type="text" value={username} onChange={(e) => setUserName(e.target.value)}/>
+                                       type="email" value={username} onChange={(e) => setUserName(e.target.value)}/>
                             </div>
                             <div className="form-group">
                                 <b><label htmlFor="password">Password</label></b>
@@ -82,6 +86,7 @@ const Login = () => {
                                 </div>
                             </div>
                         </form>
+                        {error_message !== "" ? <p id="error">{error_message}</p> : <></>}
                         <p class="mb-2 text-sm mx-auto">
                             Don't have an account ?
                             <Link to="/register">

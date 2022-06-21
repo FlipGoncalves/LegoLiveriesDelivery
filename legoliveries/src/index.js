@@ -7,6 +7,7 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './component/login'
 import Register from './component/Register'
+import AllOrders from './component/all_orders';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -16,6 +17,7 @@ root.render(
         <Route path="/" element={ < App /> }></Route>
         <Route exact path='/login' element={< Login />}></Route>
         <Route exact path='/register' element={< Register />}></Route>
+        <Route exact path='/orders' element={< AllOrders />}></Route>
       </Routes>
     </Router>
   </React.StrictMode>,

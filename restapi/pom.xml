@@ -30,8 +30,8 @@
 
 		<junit-platform-suite.version>1.8.2</junit-platform-suite.version>
 		<cucumber.version>7.2.3</cucumber.version>
-		<selenium-java.version>4.1.2</selenium-java.version>
-		<webdrivermanager.version>5.1.0</webdrivermanager.version>
+		<selenium-java.version>3.11.0</selenium-java.version>
+		<webdrivermanager.version>4.3.1</webdrivermanager.version>
 
 		<project.encondig>UTF-8</project.encondig>
 		<project.build.sourceEncoding>${project.encondig}</project.build.sourceEncoding>
@@ -154,18 +154,20 @@
             <version>${cucumber.version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>3.11.0</version>
-            <scope>test</scope>
-        </dependency>
+
+		
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
             <version>${webdrivermanager.version}</version>
             <scope>test</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>${selenium-java.version}</version>
+		</dependency>
 
 		<dependency>
             <groupId>org.junit.platform</groupId>
@@ -178,6 +180,34 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.6.4</version>
+		</dependency>
+
+
+
+
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>3.9.1</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>mockwebserver</artifactId>
+			<version>3.9.1</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

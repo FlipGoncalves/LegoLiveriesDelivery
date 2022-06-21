@@ -9,26 +9,33 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+
 @Entity
 @Table(name = "store")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "storeId")
 public class Store {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "store_id")
     private long storeId;
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
+
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "address_id", referencedColumnName = "address_id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Address address;
 
     @OneToMany(mappedBy = "store")
+    @JsonIdentityReference(alwaysAsId = true)
     private Set<Order> orders = new HashSet<>();
 
     public Store(){
@@ -71,6 +78,10 @@ public class Store {
         this.orders = orders;
     }
 
+    public void addOrder(Order order){
+        this.orders.add(order);
+    }
+    
     @Override
     public String toString() {
         return "{" +

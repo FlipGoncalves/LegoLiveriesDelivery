@@ -13,8 +13,37 @@ class Management extends Component {
     this.state = {
       orders: [],
       count: 1,
-      riders: []
+      riders: [],
+      error_message: ""
     };
+  }
+
+  addOrderToArray(item) {
+    console.log(item)
+    let store = item["store"]
+    let addr = item["address"]
+    let addr_total = addr["country"] + ", " + addr["city"] + ", " + addr["street"] + ", " + addr["postalCode"]
+
+    return (
+      <tr>
+        <td class="align-middle text-center">
+          <div>
+            <div class="d-flex flex-column justify-content-center">
+              <h6 class="mb-0 text-sm">{addr_total}</h6>
+            </div>
+          </div>
+        </td>
+        <td>
+          <p class="text-xs font-weight-bold mb-0">{store["name"]}</p>
+        </td>
+        <td class="align-middle text-center">
+          <span class="text-secondary text-xs font-weight-bold">{item["clientName"]}</span>
+        </td>
+        <td class="align-middle text-center text-sm">
+          {item["status"] === 2 ? <span class="badge badge-sm bg-gradient-success">Done</span> : <span class="badge badge-sm bg-gradient-secondary">In Progress</span>}
+        </td>
+      </tr>
+    )
   }
 
   addRiderToArray(item) {
@@ -33,46 +62,10 @@ class Management extends Component {
               </div>
             </div>
           </td>
-          <td>
-            <p class="text-xs font-weight-bold mb-0">Aveiro</p>
-          </td>
-          <td class="align-middle text-center text-sm">
-            <span class="badge badge-sm bg-gradient-success">Online</span>
-            <span class="badge badge-sm bg-gradient-secondary">Offline</span>
-          </td>
           <td class="align-middle text-center">
             <span class="text-secondary text-xs font-weight-bold">{item["totalReviews"] === 0 ? 0 : Math.round(item["reviewSum"] / item["totalReviews"] * 100) / 100}</span>
           </td>
         </tr>
-    )
-  }
-
-  addOrderToArray(item) {
-    console.log(item)
-    let store = item["store"]
-    let addr = item["address"]
-    let addr_total = addr["city"] + ", " + addr["country"] + ", " + addr["postalCode"] + ", " + addr["street"]
-
-    return (
-      <tr>
-        <td class="align-middle text-center">
-          <div>
-            <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{addr_total}</h6>
-            </div>
-          </div>
-        </td>
-        <td>
-          <p class="text-xs font-weight-bold mb-0">{store["name"]}</p>
-        </td>
-        <td class="align-middle text-center">
-          <span class="text-secondary text-xs font-weight-bold">{item["clientName"]}</span>
-        </td>
-        <td class="align-middle text-center text-sm">
-          <span class="badge badge-sm bg-gradient-success">Done</span>
-          <span class="badge badge-sm bg-gradient-secondary">In Progress</span>
-        </td>
-      </tr>
     )
   }
   
@@ -80,13 +73,13 @@ class Management extends Component {
 
     const RequestMapping = () => {
 
-        let resp_rider = fetch('http://localhost:8080/api/riders', {  
+        let resp_rider = fetch('http://localhost:9001/api/riders', {  
             method: 'GET'
         }).then((data) => {
             this.setState({riders: []})
             data.json().then((list) => {
                 let newArray = []
-                list = list["riders"]
+                // list["riders"]
                 list.forEach((item) => {
                     newArray.push(
                         this.addRiderToArray(item)
@@ -96,13 +89,13 @@ class Management extends Component {
             });
         })
 
-        let resp_order = fetch('http://localhost:8080/api/orders', {
+        let resp_order = fetch('http://localhost:9001/api/orders', {
             method: 'GET'
         }).then((data) => {
             this.setState({orders: []})
             data.json().then((list) => {
                 let newArray = []
-                list = list["orders"]
+                // list["orders"]
                 list.forEach((item) => {
                     newArray.push(
                         this.addOrderToArray(item)
@@ -132,27 +125,25 @@ class Management extends Component {
           return false
       }
 
-      axios.post('http://localhost:8080/api/addrider', {
+      axios.post('http://localhost:9001/api/riders', {
+        "username": name,
         "email": email,
-        "name": name,
-        "password": password
+        "password": password,
+        "numRev": 0,
+        "sumRev": 0
       })
       .then((response) => {
         console.log(response);
-        if (response.status === 200 || response.status === 201) {
-          this.setState({error_message: ""})
-          this.setState({items: []})
-          console.log("HERE")
-          RequestMapping()
-          document.getElementById("name").value = "";
-          document.getElementById("password").value = "";
-          document.getElementById("email").value = "";
-          // info notification of success
-        }
+        this.setState({error_message: ""})
+        console.log("HERE")
+        RequestMapping()
+        document.getElementById("name").value = "";
+        document.getElementById("password").value = "";
+        document.getElementById("email").value = "";
       })
       .catch((error) => {
         console.log(error);
-        this.setState({error_message: "ERROR during rider add"})
+        this.setState({error_message: "ERROR during rider add: " + error})
         return false;
       });
     }
@@ -181,7 +172,7 @@ class Management extends Component {
               </div>
               <div class="card-body px-0 pb-2">
                 <div class="table-responsive p-0">
-                  <table class="table align-items-center mb-0">
+                  <table class="table align-items-center mb-0" id="orders">
                     <thead>
                       <tr>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Address</th>
@@ -212,12 +203,10 @@ class Management extends Component {
               </div>
               <div class="card-body px-0 pb-2">
                 <div class="table-responsive p-0">
-                  <table class="table align-items-center mb-0">
+                  <table class="table align-items-center mb-0" id="riders">
                     <thead>
                       <tr>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Rider</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Location</th>
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Review</th>
                         <th class="text-secondary opacity-7"></th>
                       </tr>
@@ -248,13 +237,18 @@ class Management extends Component {
                           </div>
 
                           <div class="text-center">
-                              <button type="button" class="btn bg-gradient-secondary w-100 my-4 mb-2" onClick={addrider}>Add a Rider</button>
+                              <button type="button" class="btn bg-gradient-secondary w-100 my-4 mb-2" onClick={addrider} id="add_rider">Add a Rider</button>
                           </div>
                     </div>
                 </div>
                 </div>
             </div>
             </form>
+            {this.state.error_message !== "" ? <>
+              <div>
+                <label class="form-check-label mb-0 ms-2" style={{color: 'red'}} id="error">{this.state.error_message}</label>
+              </div>
+            </> : null}
             </div>
           </div>
         </main>
