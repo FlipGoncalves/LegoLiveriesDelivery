@@ -6,7 +6,7 @@ services:
     hostname: legoliveriesBackend
     image: ghcr.io/flipgoncalves/tqsproject/legoliveries_backend:latest
     build:
-      context: restapi
+      context: projLegoliveries/restapi
       dockerfile: Dockerfile
     ports:
       - 8080:8080
@@ -42,7 +42,7 @@ services:
   legoliveries-app:
     image: ghcr.io/flipgoncalves/tqsproject/legoliveries_frontend:latest
     build:
-      context: legoliveries
+      context: projLegoliveries/legoliveries
       dockerfile: Dockerfile
     container_name: legoliveriesApp
     hostname: legoliveriesApp
@@ -58,7 +58,7 @@ services:
     hostname: engineBackend
     image: ghcr.io/flipgoncalves/tqsproject/deliverio_backend:latest
     build:
-      context: engine
+      context: projEngine/engine
       dockerfile: Dockerfile
     ports:
       - 9001:9001
@@ -94,7 +94,7 @@ services:
     #image: engine-web-app
     image: ghcr.io/flipgoncalves/tqsproject/deliverio_frontend:latest
     build:
-      context: dashboard
+      context: projEngine/dashboard
       dockerfile: Dockerfile
     container_name: engineApp
     hostname: engineApp
