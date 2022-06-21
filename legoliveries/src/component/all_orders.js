@@ -54,8 +54,6 @@ const AllOrders = () => {
         )
     }
 
-    const submit = handleSubmit
-
     return (
     <div>
     <div class="container">
@@ -68,6 +66,7 @@ const AllOrders = () => {
                         <h3>Orders Details</h3>
                         {orders}
                     </div>
+                    <button onClick={handleSubmit}>See Orders</button>
                 </main>
             </section>
         </div>

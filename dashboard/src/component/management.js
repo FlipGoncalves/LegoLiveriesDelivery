@@ -19,20 +19,12 @@ class Management extends Component {
   }
 
   addOrderToArray(item) {
+
     console.log(item)
     let store = item["store"]
-    let addr = item["address"]
-    let addr_total = addr["country"] + ", " + addr["city"] + ", " + addr["street"] + ", " + addr["postalCode"]
 
     return (
       <tr>
-        <td class="align-middle text-center">
-          <div>
-            <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{addr_total}</h6>
-            </div>
-          </div>
-        </td>
         <td>
           <p class="text-xs font-weight-bold mb-0">{store["name"]}</p>
         </td>
@@ -42,38 +34,10 @@ class Management extends Component {
         <td class="align-middle text-center text-sm">
           {item["status"] === 2 ? <span class="badge badge-sm bg-gradient-success">Done</span> : <>
           <span class="badge badge-sm bg-gradient-secondary">In Progress</span>
-          <button id={item["orderId"]} onClick={this.setCompleted(item)}>Set as Completed</button>
           </>}
         </td>
       </tr>
     )
-  }
-
-  setCompleted(item) {
-    let order_status = fetch('http://localhost:9001/api/orders/'+item["orderId"]+"/2", {  
-        method: 'POST'
-    }).then((data) => {
-      console.log("successful")
-    }).catch((error) => {
-      console.log(error)
-    })
-
-    let resp_order = fetch('http://localhost:9001/api/orders', {
-        method: 'GET'
-    }).then((data) => {
-        this.setState({orders: []})
-        data.json().then((list) => {
-            let newArray = []
-            // list["orders"]
-            list.forEach((item) => {
-                newArray.push(
-                    this.addOrderToArray(item)
-                )
-            }); 
-            this.setState({ orders: newArray})
-        });
-    })
-    
   }
 
   addRiderToArray(item) {
@@ -205,7 +169,6 @@ class Management extends Component {
                   <table class="table align-items-center mb-0" id="orders">
                     <thead>
                       <tr>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Address</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Store</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Client Name</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Completion</th>
