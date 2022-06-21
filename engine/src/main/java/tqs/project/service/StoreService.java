@@ -41,7 +41,7 @@ public class StoreService {
             throw new StoreAlreadyExistsException("Store with name " + storeDTO.getName() + " already exists");
         }
 
-        storeRep.saveAndFlush(store);
+        store = storeRep.saveAndFlush(store);
 
         store.setName(storeDTO.getName());
 

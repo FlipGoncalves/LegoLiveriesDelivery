@@ -41,7 +41,8 @@ class SignIn extends Component {
       axios.get('http://localhost:9001/api/managers/'+email)
       .then((response) => {
         console.log(response);
-        if (response.data["password"] != pass) {
+        let user = response.data["user"]
+        if (user["password"] != pass) {
           this.setState({error_message: "Wrong Credentials"})
           return
         }
