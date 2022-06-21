@@ -109,6 +109,8 @@ public class StoreServiceTest {
     @Test
     void test_InsertStore_AddressExists_ReturnsCorrectStore() throws StoreAlreadyExistsException{
         
+        Mockito.when(storeRepository.saveAndFlush(any())).thenReturn(store3);
+
         Store result = service.insertStore(storeDTO3);
 
         assertEquals(store3.getName(), result.getName());
@@ -118,6 +120,7 @@ public class StoreServiceTest {
     @Test
     void test_InsertStore_AddressDoesNotExist_ReturnsCorrectStore() throws StoreAlreadyExistsException{
 
+        Mockito.when(storeRepository.saveAndFlush(any())).thenReturn(store4);
         Mockito.when(addressRepository.saveAndFlush(any(Address.class))).thenReturn(address4);
 
         Store result = service.insertStore(storeDTO4);
