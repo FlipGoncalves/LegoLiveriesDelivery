@@ -56,6 +56,7 @@ In the folder of the project:
     ```
     $ docker-compose up
     ```
+    
 
 The **Client Web application** will be available at: [localhost:3000](http://localhost:3000)
 
