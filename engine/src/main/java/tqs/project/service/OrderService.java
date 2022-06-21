@@ -53,7 +53,7 @@ public class OrderService {
     @Autowired
     private RiderRepository riderRep;
     
-    private String engineURL = "legoliveries:8080/order";
+    private String engineURL = "http://legoliveries:8080/order";
 
     public List<Order> getAllOrders() {
         log.info("Getting All Orders Data");

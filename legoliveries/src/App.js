@@ -237,7 +237,7 @@ class App extends Component {
                 dic.push({
                             legoId: document.getElementById(count+"IDlego").textContent * 1,
                             legoPrice: document.getElementById(count+'price').textContent / document.getElementById(count+'qtty').textContent,
-                            quantity: document.getElementById(count+'qtty').textContent
+                            quantity: document.getElementById(count+'qtty').textContent * 1 
                         });
                 count++;
             })
