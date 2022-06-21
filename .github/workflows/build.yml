@@ -26,7 +26,7 @@ jobs:
       - name: Start Legoliveries Backend
         run: docker-compose  -f ../docker-compose.yml run -p 8080:8080 -d legoliveries
       - name: Build Legoliveries Frontend
-        run: docker-compose -f ../docker-compose.yml build  legoliveries-app
+        run: docker-compose -f ../docker-compose.yml build --build-arg API_HOSTNAME=172.20.202.10  legoliveries-app
       - name: Start Legoliveries Frontend
         run: docker-compose  -f ../docker-compose.yml run -p 3000:3000 -d legoliveries-app
       - name: Cache SonarCloud packages
@@ -69,7 +69,7 @@ jobs:
       - name: Start Engine Backend
         run: docker-compose -f ../docker-compose.yml run -p 9001:9001 -d engine
       - name: Build Engine Frontend
-        run: docker-compose -f ../docker-compose.yml build  engine-app
+        run: docker-compose -f ../docker-compose.yml build --build-arg API_HOSTNAME=172.20.200.10  engine-app
       - name: Start Engine Frontend
         run: docker-compose -f ../docker-compose.yml run -p 3001:3001 -d engine-app
       - name: Cache SonarCloud packages
