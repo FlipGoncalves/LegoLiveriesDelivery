@@ -230,7 +230,9 @@ class App extends Component {
                                           datasets: [
                                             {
                                               label: 'Average Review',
-                                              data: this.state.data[2],
+                                              data: this.state.data[2].map(function(each_element){
+                                                return Number(each_element.toFixed(2));
+                                              }),
                                               borderColor: 'rgb(255, 99, 132)',
                                               backgroundColor: 'rgba(255, 99, 132, 0.7)',
                                               color: 'white',
@@ -241,7 +243,7 @@ class App extends Component {
               </div>
             </div>
             <div class="card-body">
-              <h6 class="mb-0 ">Completed Tasks</h6>
+              <h6 class="mb-0 "> Average Review per Rider </h6>
               <p class="text-sm "></p>
               <hr class="dark horizontal" />
             </div>
