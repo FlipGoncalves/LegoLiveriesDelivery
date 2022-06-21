@@ -58,14 +58,9 @@ public class StatisticController {
                 store_comp_orders.put(store.getName(), orderservice.getAllOrdersByStoreIdAndStatus(store.getStoreId(), 2).size());
             }
             for (Rider rider: riderservice.getAllRiders()) {
-                double sum = rider.getTotalReviews() / rider.getReviewSum() == 0 ? 0 : rider.getTotalReviews() / rider.getReviewSum();
+                double sum = rider.getTotalReviews() == 0 ? 0 : (double) rider.getReviewSum() /  rider.getTotalReviews();
                 rider_reviews.put(rider.getUser().getUsername(), sum);
             }
-
-            // static testing
-            // store_orders.put("LegoLiveries", 5);
-            // store_comp_orders.put("LegoLiveries", 3);
-            // rider_reviews.put("Rider Name 1", 4.81);
 
             stats.setCompOrderByStore(store_comp_orders);
             stats.setOrderByStore(store_orders);
