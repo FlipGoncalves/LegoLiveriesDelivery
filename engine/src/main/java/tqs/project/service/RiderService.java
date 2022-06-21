@@ -11,8 +11,6 @@ import org.springframework.stereotype.Service;
 
 import tqs.project.datamodels.RiderDTO;
 import tqs.project.exceptions.RiderAlreadyExistsException;
-import tqs.project.exceptions.RiderNotFoundException;
-import tqs.project.exceptions.UserNotFoundException;
 import tqs.project.model.Rider;
 import tqs.project.model.User;
 import tqs.project.repository.RiderRepository;

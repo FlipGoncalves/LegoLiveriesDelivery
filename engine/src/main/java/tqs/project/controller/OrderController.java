@@ -10,12 +10,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import tqs.project.datamodels.OrderDTO;
+import tqs.project.exceptions.InvalidStatusException;
+import tqs.project.exceptions.OrderNotFoundException;
+import tqs.project.exceptions.OrderNotUpdatedException;
 import tqs.project.exceptions.StoreNotFoundException;
 import tqs.project.model.Order;
 import tqs.project.service.OrderService;
@@ -52,5 +56,19 @@ public class OrderController {
 
         String response = "{\"orderId\" : " + order.getOrderId() + " }";
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/{orderId}/{status}")
+    public ResponseEntity<Order> updateOrderStatus(@PathVariable long orderId, @PathVariable int status){
+        log.info("Updating order status");
+
+        try {
+            orderService.updateOrderStatus(orderId, status);
+        } catch (InvalidStatusException | OrderNotFoundException | OrderNotUpdatedException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

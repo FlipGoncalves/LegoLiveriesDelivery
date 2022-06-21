@@ -1,14 +1,12 @@
 package tqs.project.controller;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.containsString;
-import static org.mockito.Mockito.when;
+import static org.hamcrest.Matchers.is;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,9 +21,11 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.restassured.parsing.Parser;
-import tqs.project.controller.OrderController;
 import tqs.project.datamodels.AddressDTO;
 import tqs.project.datamodels.OrderDTO;
+import tqs.project.exceptions.InvalidStatusException;
+import tqs.project.exceptions.OrderNotFoundException;
+import tqs.project.exceptions.OrderNotUpdatedException;
 import tqs.project.exceptions.StoreNotFoundException;
 import tqs.project.model.Address;
 import tqs.project.model.Order;
@@ -137,6 +137,30 @@ public class OrderControllerTest {
                .contentType(ContentType.TEXT).and()
                .body(containsString("\"orderId\" : 1"));
     }
+
+    @Test
+    void test_UpdateOrderStatus_InvalidStatus_ReturnsBadRequestStatus() throws InvalidStatusException, OrderNotFoundException, OrderNotUpdatedException{
+        Mockito.when(orderService.updateOrderStatus(1, 4)).thenThrow(InvalidStatusException.class);
+
+        given().post("/api/orders/1/4")
+               .then().log().body().assertThat()
+               .status(HttpStatus.BAD_REQUEST);
+
+    }
+
+    @Test
+    void test_UpdateOrderStatus_ValidPathVariables_ReturnsCorrectOrder() throws InvalidStatusException, OrderNotFoundException, OrderNotUpdatedException{
+        
+        order1.setStatus(2);
+        
+        Mockito.when(orderService.updateOrderStatus(1, 2)).thenReturn(order1);
+
+        given().post("/api/orders/1/2")
+               .then().log().body().assertThat()
+               .status(HttpStatus.OK);
+
+    }
+
 
     Address buildAddressObject(long id){
         Address address = new Address();

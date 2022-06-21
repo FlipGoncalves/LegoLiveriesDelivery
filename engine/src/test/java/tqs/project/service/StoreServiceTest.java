@@ -20,7 +20,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import tqs.project.datamodels.AddressDTO;
 import tqs.project.datamodels.StoreDTO;
-import tqs.project.exceptions.AddressAlreadyExistsException;
 import tqs.project.exceptions.StoreAlreadyExistsException;
 import tqs.project.model.Address;
 import tqs.project.model.Store;

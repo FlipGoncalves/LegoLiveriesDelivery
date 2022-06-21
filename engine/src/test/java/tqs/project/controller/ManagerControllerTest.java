@@ -2,7 +2,6 @@ package tqs.project.controller;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 
@@ -17,11 +16,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import io.swagger.v3.oas.annotations.media.Content;
 import tqs.project.datamodels.RegisterDTO;
 import tqs.project.exceptions.ManagerAlreadyExistsException;
 import tqs.project.exceptions.ManagerNotFoundException;
-import tqs.project.exceptions.UserAlreadyExistsException;
 import tqs.project.model.Manager;
 import tqs.project.model.User;
 import tqs.project.service.ManagerService;

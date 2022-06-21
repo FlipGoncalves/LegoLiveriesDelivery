@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -35,7 +34,7 @@ public class Order {
     private int timeOfDelivery;
     @Column(name = "review")
     private int review;
-    @Column(name = "status")
+    @Column(name = "order_status")
     private int status; //0 = Not done 1 = In Transit 2 = Done
 
     @ManyToOne

@@ -1,22 +1,20 @@
 package tqs.project.service;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tqs.project.datamodels.RegisterDTO;
 import tqs.project.exceptions.ManagerAlreadyExistsException;
 import tqs.project.exceptions.ManagerNotFoundException;
-import tqs.project.exceptions.UserAlreadyExistsException;
 import tqs.project.model.Manager;
 import tqs.project.model.User;
 import tqs.project.repository.ManagerRepository;
 import tqs.project.repository.UserRepository;
-
-import java.util.List;
-import java.util.Optional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Service
 public class ManagerService {    
