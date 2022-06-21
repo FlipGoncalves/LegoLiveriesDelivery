@@ -34,16 +34,8 @@ import tqs.project.repository.OrderRepository;
 import tqs.project.repository.RiderRepository;
 import tqs.project.repository.StoreRepository;
 
-<<<<<<< HEAD
 import java.security.SecureRandom;
-import java.util.List;
-import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-=======
->>>>>>> origin/dev
 @Service
 public class OrderService {    
     private static final Logger log = LoggerFactory.getLogger(OrderService.class);
@@ -58,12 +50,10 @@ public class OrderService {
     @Autowired
     private AddressRepository addressRep;
 
-<<<<<<< HEAD
     @Autowired
     private RiderRepository riderRep;
-=======
+    
     private String engineURL = "legoliveries:8080/order";
->>>>>>> origin/dev
 
     public List<Order> getAllOrders() {
         log.info("Getting All Orders Data");
