@@ -34,10 +34,11 @@ public class UserService {
         Optional<User> user = userRepository.findByEmail(email);
 
         if (user.isEmpty()){
+            log.info("User with email {} was not found", email);
             throw new UserNotFoundException("User with email " + email + " was not found");
         }
 
-        log.info("Got User: {}", user);
+        log.info("User found: {}", user);
         return user.get();
     }
 
@@ -47,6 +48,7 @@ public class UserService {
         User registerUser = new User();
 
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            log.info("User already exists: {}", user.toString());
             throw new UserAlreadyExistsException("User already exists: " + user.toString());
         }
 

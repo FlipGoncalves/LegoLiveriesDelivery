@@ -20,7 +20,7 @@ for j in addressesEngine:
 print("ADDRESSES LEGOLIVERIES")
 for j in addressesLegoliveries:
     print(j)
-    r = requests.post(url="http://localhost:8080/address", json=j)
+    r = requests.post(url="http://localhost:8080/addresses", json=j)
     print(r.status_code)
 
 print("USERS ENGINE")
@@ -32,7 +32,7 @@ for j in usersEngine:
 print("USERS LEGOLIVERIES")
 for j in usersLegoliveries:
     print(j)
-    r = requests.post(url="http://localhost:8080/user/register", json=j)
+    r = requests.post(url="http://localhost:8080/users/register", json=j)
     print(r.status_code)
 
 print("STORES ENGINE")
@@ -50,15 +50,17 @@ for j in riders:
 print("CLIENT LEGOLIVERIES")
 for j in clients:
     print(j)
-    r = requests.post(url="http://localhost:8080/client", json=j)
+    r = requests.post(url="http://localhost:8080/clients/register", json=j)
     print(r.status_code)
 
+print("LEGOS LEGOLIVERIES")
 for j in legos:
     print(j)
-    r = requests.post(url="http://localhost:8080/lego", json=j)
+    r = requests.post(url="http://localhost:8080/legos", json=j)
     print(r.status_code)
 
+print("ORDERS LEGOLIVERIES")
 for j in order:
     print(j)
-    r = requests.post(url="http://localhost:8080/order", json=j)
+    r = requests.post(url="http://localhost:8080/orders", json=j)
     print(r.status_code)

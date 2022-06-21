@@ -1,6 +1,11 @@
 import React, {Component} from 'react';
 import logo from './assets//img/favicon.png';
 import './App.css';
+import './assets/css/material-dashboard.css';
+import './assets/css/material-dashboard.css.map';
+import './assets/css/material-dashboard.min.css';
+import './assets/css/nucleo-svg.css';
+import './assets/css/nucleo-icons.css';
 import Aside from './component/aside'
 import { Link } from 'react-router-dom';
 import {
@@ -36,10 +41,11 @@ class App extends Component {
     super(props);
     this.state = {
       count: 1,
-      sales: 0,
       orders: 0,
       riders: 0,
-      comp_orders: 0
+      comp_orders: 0,
+      labels: [],
+      data: []
     };
   }
   
@@ -48,11 +54,16 @@ class App extends Component {
 
     const RequestMapping = () => {
 
-        let resp_rider = fetch('http://localhost:8080/api/statistics', {  
+        let resp_rider = fetch('http://localhost:9001/api/statistics', {  
             method: 'GET'
         }).then((data) => {
             data.json().then((obj) => {
-              this.setState({sales: obj["sales"], orders: obj["numorders"], riders: obj["numriders"], comp_orders: obj["completedorders"]})
+              console.log(obj)
+              this.setState({
+                  orders: obj["numOrders"], riders: obj["numRiders"], comp_orders: obj["completedOrders"], 
+                  labels: [Object.keys(obj["orderByStore"]), Object.keys(obj["compOrderByStore"]), Object.keys(obj["reviewPerRider"])],
+                  data: [Object.values(obj["orderByStore"]), Object.values(obj["compOrderByStore"]), Object.values(obj["reviewPerRider"])]
+              })
             });
         })
 
@@ -75,24 +86,7 @@ class App extends Component {
 
         <div class="container-fluid py-4" style={{marginTop: 100 }}>
       <div class="row">
-        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-          <div class="card">
-            <div class="card-header p-3 pt-2">
-              <div class="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
-                <i class="material-icons opacity-10">weekend</i>
-              </div>
-              <div class="text-end pt-1">
-                <p class="text-sm mb-0 text-capitalize">Sales</p>
-                <h4 class="mb-0">{this.state.sales}</h4>
-              </div>
-            </div>
-            <hr class="dark horizontal my-0" />
-            <div class="card-footer p-3">
-              <p class="mb-0"></p>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+        <div class="col-xl-4 col-sm-6 mb-xl-0 mb-4">
           <div class="card">
             <div class="card-header p-3 pt-2">
               <div class="icon icon-lg icon-shape bg-gradient-primary shadow-primary text-center border-radius-xl mt-n4 position-absolute">
@@ -100,7 +94,7 @@ class App extends Component {
               </div>
               <div class="text-end pt-1">
                 <p class="text-sm mb-0 text-capitalize">Total Orders</p>
-                <h4 class="mb-0">{this.state.orders}</h4>
+                <h4 class="mb-0" id="orders">{this.state.orders}</h4>
               </div>
             </div>
             <hr class="dark horizontal my-0" />
@@ -109,15 +103,15 @@ class App extends Component {
             </div>
           </div>
         </div>
-        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+        <div class="col-xl-4 col-sm-6 mb-xl-0 mb-4">
           <div class="card">
             <div class="card-header p-3 pt-2">
               <div class="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
                 <i class="material-icons opacity-10">person</i>
               </div>
               <div class="text-end pt-1">
-                <p class="text-sm mb-0 text-capitalize">Today's Riders</p>
-                <h4 class="mb-0">{this.state.riders}</h4>
+                <p class="text-sm mb-0 text-capitalize">Total Riders</p>
+                <h4 class="mb-0" id="riders">{this.state.riders}</h4>
               </div>
             </div>
             <hr class="dark horizontal my-0" />
@@ -126,7 +120,7 @@ class App extends Component {
             </div>
           </div>
         </div>
-        <div class="col-xl-3 col-sm-6">
+        <div class="col-xl-4 col-sm-6">
           <div class="card">
             <div class="card-header p-3 pt-2">
               <div class="icon icon-lg icon-shape bg-gradient-info shadow-info text-center border-radius-xl mt-n4 position-absolute">
@@ -134,7 +128,7 @@ class App extends Component {
               </div>
               <div class="text-end pt-1">
                 <p class="text-sm mb-0 text-capitalize">Completed Orders</p>
-                <h4 class="mb-0">{this.state.comp_orders}</h4>
+                <h4 class="mb-0" id="compl">{this.state.comp_orders}</h4>
               </div>
             </div>
             <hr class="dark horizontal my-0" />
@@ -157,14 +151,14 @@ class App extends Component {
                                     },
                                     title: {
                                       display: true,
-                                      text: 'Sales by month',
+                                      text: 'Number of Orders By Store',
                                     }
                                   },
-                                }} data={{labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                                }} data={{labels: this.state.labels[0],
                                           datasets: [
                                             {
-                                              label: 'Number of sales',
-                                              data: [1,2,3,4,5,6,7,8,9,10,11,12],
+                                              label: 'Number of Orders',
+                                              data: this.state.data[0],
                                               borderColor: 'rgb(53, 162, 235)',
                                               backgroundColor: 'rgba(53, 162, 235, 0.7)',
                                               color: 'white',
@@ -175,7 +169,7 @@ class App extends Component {
               </div>
             </div>
             <div class="card-body">
-              <h6 class="mb-0 ">Sales by Month</h6>
+              <h6 class="mb-0 "> Number of Orders By Store </h6>
               <p class="text-sm "></p>
               <hr class="dark horizontal" />
             </div>
@@ -186,21 +180,21 @@ class App extends Component {
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
               <div class="bg-gradient-success shadow-success border-radius-lg py-3 pe-1">
                 <div class="chart">
-                <Line options={{ responsive: true,
+                <Bar options={{ responsive: true,
                                   plugins: {
                                     legend: {
                                       position: 'top',
                                     },
                                     title: {
                                       display: true,
-                                      text: 'Sales by month',
+                                      text: 'Number of Completed Orders by Store',
                                     }
                                   },
-                                }} data={{labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                                }} data={{labels: this.state.labels[1],
                                           datasets: [
                                             {
-                                              label: 'Number of sales',
-                                              data: [1,2,3,4,5,6,7,8,9,10,11,12],
+                                              label: 'Number of Completed Orders',
+                                              data: this.state.data[1],
                                               borderColor: 'rgb(0, 0, 0)',
                                               backgroundColor: 'rgba(0, 0, 0, 0.7)',
                                               color: 'white',
@@ -211,7 +205,7 @@ class App extends Component {
               </div>
             </div>
             <div class="card-body">
-              <h6 class="mb-0 "> Number of Orders </h6>
+              <h6 class="mb-0 "> Number of Completed Orders by Store </h6>
               <p class="text-sm "></p>
               <hr class="dark horizontal" />
             </div>
@@ -222,21 +216,21 @@ class App extends Component {
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
               <div class="bg-gradient-dark shadow-dark border-radius-lg py-3 pe-1">
                 <div class="chart">
-                <Line options={{ responsive: true,
+                <Bar options={{ responsive: true,
                                   plugins: {
                                     legend: {
                                       position: 'top',
                                     },
                                     title: {
                                       display: true,
-                                      text: 'Sales by month',
+                                      text: 'Average Review per Rider',
                                     }
                                   },
-                                }} data={{labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                                }} data={{labels: this.state.labels[2],
                                           datasets: [
                                             {
-                                              label: 'Number of sales',
-                                              data: [1,2,3,4,5,6,7,8,9,10,11,12],
+                                              label: 'Average Review',
+                                              data: this.state.data[2],
                                               borderColor: 'rgb(255, 99, 132)',
                                               backgroundColor: 'rgba(255, 99, 132, 0.7)',
                                               color: 'white',
@@ -247,7 +241,7 @@ class App extends Component {
               </div>
             </div>
             <div class="card-body">
-              <h6 class="mb-0 ">Completed Tasks</h6>
+              <h6 class="mb-0 "> Average Review per Rider </h6>
               <p class="text-sm "></p>
               <hr class="dark horizontal" />
             </div>

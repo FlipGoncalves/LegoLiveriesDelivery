@@ -42,7 +42,7 @@ public class OrderController {
 
     @GetMapping()
     public ResponseEntity<List<Order>> getAllOrders(){
-        log.info("Getting all orders");
+        log.info("GET Request -> All Orders Data");
 
         List<Order> orders = service.getAllOrders();
         return new ResponseEntity<>(orders, HttpStatus.OK);
@@ -50,44 +50,50 @@ public class OrderController {
 
     @GetMapping("/{orderId}")
     public ResponseEntity<Order> getOrderById(@PathVariable long orderId){
-        log.info("Getting order by id " + orderId);
+        log.info("GET Request -> Order by id {}", orderId);
 
         Order order;
         try {
             order = service.getOrderById(orderId);
         } catch (OrderNotFoundException e) {
+            log.info("ERROR: Order not found");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        log.info("SUCCESS: Order found");
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
     @GetMapping("/client/{clientId}")
     public ResponseEntity<List<Order>> getClientOrders(@PathVariable long clientId){
-        log.info("Getting orders of client with clientId " + clientId);
+        log.info("GET Request -> Client with clientId {}", clientId);
 
         List<Order> order;
         try {
             order = service.getClientOrders(clientId);
         } catch (ClientNotFoundException e) {
+            log.info("ERROR: Client not found");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        log.info("SUCCESS: Order found");
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
     @PostMapping()
     public ResponseEntity<Order> makeOrder(@RequestBody OrderDTO orderDTO){
-        log.info("Making new order");
+        log.info("POST Request -> Make new order");
 
         Order order = null;
         try {
             order = service.makeOrder(orderDTO);
         } catch (BadScheduledTimeOfDeliveryException | ClientNotFoundException | AddressNotFoundException
                 | LegoNotFoundException | BadOrderLegoDTOException | BadOrderLegoListException | OrderNotCreatedException e) {
+            log.info("ERROR: Creating Order returned error");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
+        
+        log.info("SUCCESS: Order Created");
         return new ResponseEntity<>(order, HttpStatus.CREATED);
     }
 

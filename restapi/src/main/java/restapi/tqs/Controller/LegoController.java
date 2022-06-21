@@ -47,9 +47,11 @@ public class LegoController {
         List<Lego> data = legoService.getLegosByName(name);
 
         if (data.isEmpty()) {
+            log.info("ERROR: Lego not Found");
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
+        log.info("SUCCESS: Lego Found");
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
@@ -61,23 +63,27 @@ public class LegoController {
         List<Lego> data = legoService.getLegosByPrice(Double.parseDouble(price));
 
         if (data.isEmpty()) {
+            log.info("SUCCESS: Lego not Found");
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
+        log.info("SUCCESS: Lego Found");
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
     @PostMapping()
     public ResponseEntity<Lego> insertLego(@RequestBody LegoDTO lego) {
-        log.info("Post Request -> Insert Lego: {}", lego);
+        log.info("POST Request -> Insert Lego: {}", lego);
 
         Lego lego2;
         try {
             lego2 = legoService.insertLego(lego);
         } catch (BadLegoDTOException e) {
+            log.info("ERROR: Bad Lego insertion");
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
+        log.info("SUCCESS: Lego created");
         return new ResponseEntity<>(lego2, HttpStatus.CREATED);
     }
 }

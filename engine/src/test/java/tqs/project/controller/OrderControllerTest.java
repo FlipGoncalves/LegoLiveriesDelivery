@@ -131,6 +131,8 @@ public class OrderControllerTest {
 
         order1.setOrderId(1);
 
+        Mockito.when(orderService.setRider(order1.getOrderId())).thenReturn(order1);
+
         given().contentType(ContentType.JSON).body(orderDTO1)
                .post("/api/orders")
                .then().log().body().assertThat()

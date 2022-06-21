@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import { BrowserRouter as Router,Routes, Route, Link } from 'react-router-dom';
+import axios from 'axios';
 
 class App extends Component {
 
@@ -13,18 +14,20 @@ class App extends Component {
           total_price: 0,
           total_products: 0,
           order: false,
-          error_message: ""
+          error_message: "",
+          testing: null
         };
       }
 
     additemtocart(item) {
+        console.log(item)
 
         this.setState({total_products: this.state.total_products + document.getElementById("qtty"+item["name"].replace(/\s/g, '')).value * 1})
         this.setState({total_price: this.state.total_price + document.getElementById("qtty"+item["name"].replace(/\s/g, '')).value * item["price"]})
 
         return (
             <div class="row">
-                <a class="img-wrap"><img class="left" src="assets/images/items/1.jpg" height="130" width="auto"/></a>
+                <a class="img-wrap"><img class="left" src={item["imageUrl"]} height="130" width="auto"/></a>
                 <div class="d-flex justify-content-between align-items-center">
                     <button type="button" class="close" aria-label="Close" onClick="Custombox.modal.close();">
                     </button>
@@ -32,79 +35,79 @@ class App extends Component {
                 <span class="d-block font-size-1" id={this.state.cart.length}>{item["name"]}</span>
                 <span class="d-block text-primary font-weight-semi-bold" id={this.state.cart.length+"price"}>{item["price"]*document.getElementById("qtty"+item["name"].replace(/\s/g, '')).value}</span>
                 <small class="d-block text-muted"  id={this.state.cart.length+"qtty"}>{document.getElementById("qtty"+item["name"].replace(/\s/g, '')).value}</small>
+                <small id={this.state.cart.length+"IDlego"} hidden>{item["legoId"]}</small>
             </div>
         )
     }
 
     additemtoarray(item) {
+        console.log(item)
         return (
-        <div>
-            <div class="col-xl-2 col-lg-3 col-md-4 col-6">
-                        <div class="card card-sm card-product-grid">
-                        <button type="button" class="btn openmodal" data-toggle="modal" data-target={"#"+item["name"].replace(/\s/g, '')}>
-                            <a class="img-wrap"> <img src="assets/images/items/1.jpg" width= '70%'/> </a>
+            <div>
+                <div class="col-xl-2 col-lg-3 col-md-4 col-6">
+                    <div class="card card-sm card-product-grid">
+                        <button type="button" class="btn openmodal" data-toggle="modal" data-target={"#"+item["name"].replace(/\s/g, '')} id={item["name"].replace(/\s/g, "")+"ID"} >
+                            <a class="img-wrap"> <img src={item["imageUrl"]} width= '70%'/> </a>
                             <figcaption class="info-wrap">
-                                <a class="title">{item["name"]}</a>
+                                <a class="title" id={item["name"].replace(/\s/g, "-")}>{item["name"]}</a>
                                 <div class="price mt-1">{item["price"]}</div>
                             </figcaption>
                         </button>
-                        </div>
                     </div>
-                    <div class="modal fade" id={item["name"].replace(/\s/g, '')}>
-                        <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
+                </div>
+                <div class="modal fade" id={item["name"].replace(/\s/g, '')}>
+                    <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h4 class="modal-title">{item["name"]}</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
                         
-                            <div class="modal-header">
-                            <h4 class="modal-title">{item["name"]}</h4>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <div class="modal-body">
+                            <div class="container">
+                            <h6>Item Details</h6>
+                            <div class="row">
+                                <div class="col">
+                                    <img class="img-fluid" src={item["imageUrl"]} />
+                                </div>
+                            </div>
+                            <h6>Order Details</h6>
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <ul type="none">
+                                        <li class="left">Order number:</li>
+                                        <li class="left">Price:</li>
+                                    </ul>
+                                </div>
+                                <div class="col-xs-6">
+                                    <ul class="right" type="none">
+                                        <li class="right"></li>
+                                        <li class="right">{item["price"]}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                                <h6>Quantity</h6>
+                                <div class="row" style={{borderBottom: 'none'}}>
+                                    <div class="col-xs-6">
+                                        <select class="custom-select border-right" name="qtty" id={"qtty"+item["name"].replace(/\s/g, '')}>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" id="_submit_cart" class="btn" onClick={() => this.setState(prevState => ({cart: [...prevState.cart, this.additemtocart(item)]}))} data-toggle="modal" data-target={"#"+item["name"].replace(/\s/g, '')}>Add to cart</button>
                             </div>
                             
-                            <div class="modal-body">
-                                <div class="container">
-                                <h6>Item Details</h6>
-                                <div class="row">
-                                    <div class="col">
-                                        <img class="img-fluid" src="assets/images/items/1.jpg" />
-                                    </div>
-                                </div>
-                                <h6>Order Details</h6>
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        <ul type="none">
-                                            <li class="left">Order number:</li>
-                                            <li class="left">Price:</li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-xs-6">
-                                        <ul class="right" type="none">
-                                            <li class="right"></li>
-                                            <li class="right">{item["price"]}</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                    <h6>Quantity</h6>
-                                    <div class="row" style={{borderBottom: 'none'}}>
-                                        <div class="col-xs-6">
-                                            <select class="custom-select border-right" name="qtty" id={"qtty"+item["name"].replace(/\s/g, '')}>
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                </div>
-                                
-                                <div class="modal-footer">
-                                    <button type="button" class="btn" onClick={() => this.setState(prevState => ({cart: [...prevState.cart, this.additemtocart(item)]}))} data-toggle="modal" data-target={"#"+item["name"].replace(/\s/g, '')}>Add to cart</button>
-                                </div>
-                                
-                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
         )
     }
 
@@ -119,17 +122,23 @@ class App extends Component {
 
         const RequestMapping = () => {
         
-            let resp = fetch('http://localhost:8080/lego/all_legos', {
+            let resp = fetch('http://localhost:8080/legos', {
                 method: 'GET'
             }).then((data) => {
                 this.setState({items: []})
                 data.json().then((list) => {
+                    console.log(list)
                     let newArray = []
                     list.forEach((item) => {
                         newArray.push(
                             this.additemtoarray(item)
                         )
                     }); 
+
+                    if (list.length === 0) {
+                        newArray.push(this.additemtoarray({name: 'Lego Test', price: '9.99', imageUrl: 'assets/images/items/1.jpg', legoId: 1}))
+                        this.setState({testing: "true"})
+                    }
                     this.setState({ items: newArray})
                 });
             })
@@ -139,12 +148,13 @@ class App extends Component {
         const searchRequest = () => {
             let searchparams = document.getElementById("search").value;
             let value_category = document.getElementById("category").value;
+            this.setState({testing: null})
 
             if (value_category === "all") {
                 RequestMapping();
             } else {
 
-                let resp = fetch('http://localhost:8080/lego/get_lego/'+value_category+'?'+value_category+'='+searchparams, {
+                let resp = fetch('http://localhost:8080/legos/'+value_category+'?'+value_category+'='+searchparams, {
                     method: 'GET'
                 }).then((data) => {
                     if (data.status === 200) {
@@ -159,7 +169,12 @@ class App extends Component {
                             this.setState({ items: newArray})
                         })
                     } else {
-                        alert("ERRO")
+                        if (this.state.items.length === 1) {
+                            console.log("testing in progress")
+                        } else {
+                            this.setState({ items: []})
+                        }
+                        return
                     }
                 })
                             
@@ -175,20 +190,12 @@ class App extends Component {
                 return false
             }
 
-            let dic = []
-            let count = 0
-
-            this.state.cart.forEach((item) => {
-                dic.push({  name: document.getElementById(count).textContent, 
-                            price: document.getElementById(count+'price').textContent,
-                            qtty: document.getElementById(count+'qtty').textContent});
-                count++;
-            })
-
             let street = document.getElementById("street").value;
             let city = document.getElementById("city").value;
             let country = document.getElementById("country").value;
             let postal = document.getElementById("postal").value;
+            let latit = document.getElementById("latit").value;
+            let longit = document.getElementById("longit").value;
 
             if (street === "") {
                 this.setState({error_message: "Please insert street"})
@@ -202,37 +209,94 @@ class App extends Component {
             } else if (postal === "") {
                 this.setState({error_message: "Please insert postal code"})
                 return false
+            } else if (latit === "") {
+                this.setState({error_message: "Please insert latittude"})
+                return false
+            } else if (longit === "") {
+                this.setState({error_message: "Please insert longitude"})
+                return false
+            } else if (latit < 0 || latit > 90) {
+                this.setState({error_message: "Please insert valid latitude values"})
+                return false
+            } else if (longit < -180 || longit > 180) {
+                this.setState({error_message: "Please insert valid longitude values"})
+                return false
+            }
+
+            if ((localStorage.getItem("user") === "null" || localStorage.getItem("user") === null) && this.state.testing !== "true") {
+                this.setState({error_message: "Please login in order to create an order "})
+                return false
             }
 
             let time_of_delivery = document.getElementById("hour").value
 
+            let count = 0
+
+            let dic = []
+            this.state.cart.forEach((item) => {
+                dic.push({
+                            legoId: document.getElementById(count+"IDlego").textContent * 1,
+                            legoPrice: document.getElementById(count+'price').textContent / document.getElementById(count+'qtty').textContent,
+                            quantity: document.getElementById(count+'qtty').textContent
+                        });
+                count++;
+            })
+
+            console.log("Order: ")
+            console.log({
+                clientId: localStorage.getItem('clientId')*1,
+                address: {
+                            street: street,
+                            city: city,
+                            country: country,
+                            postalCode: postal,
+                            latitude: latit*1,
+                            longitude: longit*1
+                        },
+                scheduledTimeOfDelivery: time_of_delivery*1,
+                legos: dic
+            });
+
             // create address
-            let resp = fetch('http://localhost:8080/lego/address', {
-                method: 'POST',
-                body: dic
-            }).then((data) => {
-                if (data.status === 200) {
-                    console.log("Success address")
-                }
+            axios.post('http://localhost:8080/orders', {
+                clientId: localStorage.getItem('clientId')*1,
+                address: {
+                            street: street,
+                            city: city,
+                            country: country,
+                            postalCode: postal,
+                            latitude: latit*1,
+                            longitude: longit*1
+                        },
+                scheduledTimeOfDelivery: time_of_delivery*1,
+                legos: dic
             })
+            .then((response) => {
+                console.log("Success Order")
+                console.log(response.data)
 
-            // create order
-            resp = fetch('http://localhost:8080/lego/order', {
-                method: 'POST',
-                body: dic
-            }).then((data) => {
-                if (data.status === 200) {
-                    console.log("Success")
-                    // close modal
-                    document.getElementById("btn-close").click();
-                }
+                this.setState({error_message: ""})
+                document.getElementById("btn-close").click();
+                this.setState({cart: []})
+                this.setState({total_price: 0})
+                this.setState({total_products: 0})
             })
-
-            this.setState({error_message: ""})
+            .catch((error) => {
+                console.log("ERROR IN ORDER CREATION");
+                this.setState({error_message: "Could not create the order, please try again"})
+                return
+            });
 
             console.log("here")
 
-            // error message
+            if (this.state.testing === "true") {
+                console.log("testing")
+                document.getElementById("btn-close").click();
+                this.setState({cart: []})
+                this.setState({total_price: 0})
+                this.setState({total_products: 0})
+            }
+
         }
 
         if (this.state.count === 1) {
@@ -263,7 +327,7 @@ class App extends Component {
                                             </select>
                                             <input type="text" class="form-control" placeholder="Search" id="search"/>
                                             <div class="input-group-append">
-                                            <button class="btn btn-primary" onClick={searchRequest}>
+                                            <button class="btn btn-primary" onClick={searchRequest} id="_search">
                                                 <i class="fa fa-search"></i> Search
                                             </button>
                                             </div>
@@ -273,24 +337,25 @@ class App extends Component {
                                 <div class="col-xl-4 col-lg-4 col-md-6">
                                     <div class="widgets-wrap float-md-right">
                                         <div class="widget-header mr-3">
-                                            <button data-toggle="modal" data-target="#cart" style={{outline: 'none', backgroundColor: 'transparent', border: 'none'}}>
+                                            <button data-toggle="modal" data-target="#cart" style={{outline: 'none', backgroundColor: 'transparent', border: 'none'}} id="cart_open">
                                                 <div class="icon-area">
                                                     <i class="fa fa-shopping-cart"></i>
-                                                    <span class="notify">{this.state.cart.length}</span>
+                                                    <span class="notify" id="cart_length">{this.state.cart.length}</span>
                                                 </div>
                                                 <small class="text"> Cart </small>
                                             </button>
                                         </div>
-
                                         {localStorage.getItem('user') != 'null' && localStorage.getItem('user') != null ? 
                                         <>
                                         <div class="widget-header mr-3">
-                                            <a class="widget-view">
-                                                <div class="icon-area">
-                                                    <i class="fa fa-store"></i> 
-                                                </div>
-                                                <small class="text"> Orders </small>
-                                            </a>
+                                            <Link to="/orders">
+                                                <a class="widget-view">
+                                                    <div class="icon-area">
+                                                        <i class="fa fa-store"></i> 
+                                                    </div>
+                                                    <small class="text"> Orders </small>
+                                                </a>
+                                            </Link>
                                         </div>
                                         <div class="widget-header mr-3">
                                             <a class="widget-view">
@@ -395,24 +460,38 @@ class App extends Component {
                                                 required type="text"/>
                                         </div>
                                     </div>
+                                     <div class="row">
+                                        <div className="form-group">
+                                            <b><label htmlFor="latit">Latitude</label></b>
+                                            <input className="form-control input-filled-valid" id="latit" name="latit"
+                                                required type="text"/>
+                                        </div>
+                                        <div className="form-group">
+                                            <b><label htmlFor="longit">Longitude</label></b>
+                                            <input className="form-control input-filled-valid" id="longit" name="longit"
+                                                required type="text"/>
+                                        </div>
+                                    </div>
                                     <div className="form-group">
                                         <b><label htmlFor="city">Delivery Time</label></b>
                                         <select class="custom-select border-right" name="hour" id="hour">
-                                            <option value="Whenever">Whenever</option>
-                                            <option value="Today">Today</option>
-                                            <option value="Tomorrow">Tomorrow</option>
-                                            <option value="Next Week">Next Week</option>
+                                            <option value="0">Whenever</option>
+                                            <option value="1">Next hour</option>
+                                            <option value="2">Next 2 hours</option>
+                                            <option value="4">Next 4 hours</option>
+                                            <option value="10">Next 10 hours</option>
+                                            <option value="20">Next 20 hours</option>
                                         </select>
                                     </div>
 
                                     {this.state.error_message !== "" ? <>
                                     <div>
-                                        <label class="form-check-label mb-0 ms-2" style={{color: 'red'}}>{this.state.error_message}</label>
+                                        <label class="form-check-label mb-0 ms-2" style={{color: 'red'}} id="error_message">{this.state.error_message}</label>
                                     </div>
                                     </> : null}
 
                                     <div class="modal-footer">
-                                        <button type="button" class="btn" onClick={order}>Order</button>
+                                        <button type="button" class="btn" onClick={order} id="_order">Order</button>
                                     </div>
                                     <div class="modal-footer" hidden>
                                         <button type="button" data-toggle="modal" data-target="#cart" id="btn-close" class="btn"></button>

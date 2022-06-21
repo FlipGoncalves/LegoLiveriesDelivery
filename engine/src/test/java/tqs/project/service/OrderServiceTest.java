@@ -33,9 +33,11 @@ import tqs.project.exceptions.OrderNotUpdatedException;
 import tqs.project.exceptions.StoreNotFoundException;
 import tqs.project.model.Address;
 import tqs.project.model.Order;
+import tqs.project.model.Rider;
 import tqs.project.model.Store;
 import tqs.project.repository.AddressRepository;
 import tqs.project.repository.OrderRepository;
+import tqs.project.repository.RiderRepository;
 import tqs.project.repository.StoreRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -52,6 +54,9 @@ class OrderServiceTest {
 
     @Mock
     private StoreRepository storeRepository;
+
+    @Mock
+    private RiderRepository riderRepository;
 
     public static MockWebServer mockBackEnd;
 
@@ -286,6 +291,28 @@ class OrderServiceTest {
 
         assertNotNull(order);
         assertEquals(2, order.getStatus());
+    }
+
+    @Test
+    void test_SetRider_ReturnsCorrectOrder(){
+
+        Rider rider1, rider2, rider3;
+        List<Rider> riders = new ArrayList<>();
+
+        rider1 = new Rider();
+        rider2 = new Rider();
+        rider3 = new Rider();
+        
+        riders.add(rider1);
+        riders.add(rider2);
+        riders.add(rider3);
+
+        when(riderRepository.findAll()).thenReturn(riders);
+        when(orderRepository.getById(1L)).thenReturn(order1);
+
+        Order result = service.setRider(1L);
+
+        assertTrue(riders.contains(result.getRider()));
     }
 
     Address buildAddressObject(long id){

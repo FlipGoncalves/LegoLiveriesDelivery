@@ -70,7 +70,6 @@ public class RiderControllerTest {
                .body("[1].user.username", is(rider2.getUser().getUsername())).and()
                .body("[1].user.email", is(rider2.getUser().getEmail()));
     }
-
     @Test
     void test_addRider_InvalidRiderDTO_ReturnsBadRequestStatus() throws RiderAlreadyExistsException{
         String username = "User 3";
@@ -78,7 +77,6 @@ public class RiderControllerTest {
         String password = "password3";
         int numRev = 7;
         int sumRev = 25;
-
         RiderDTO riderDTO = new RiderDTO(username, email, password, numRev, sumRev);
 
         when(riderService.insertRider(riderDTO)).thenThrow(RiderAlreadyExistsException.class);
@@ -88,7 +86,6 @@ public class RiderControllerTest {
                .then().log().body().assertThat()
                .status(HttpStatus.BAD_REQUEST);
     }
-
     
     @Test
     void test_addRider_ValidRiderDTO_ReturnsCorrectRider() throws UserAlreadyExistsException, RiderAlreadyExistsException{
@@ -97,13 +94,10 @@ public class RiderControllerTest {
         String password = "password1";
         int numRev = 4;
         int sumRev = 17;
-
         RiderDTO riderDTO = new RiderDTO(username, email, password, numRev, sumRev);
-
         User user = new User(username, email, password);
         Rider rider = new Rider(sumRev, numRev);
         rider.setUser(user);
-
         when(riderService.insertRider(riderDTO)).thenReturn(rider);
         
         given().contentType(ContentType.JSON).body(riderDTO)

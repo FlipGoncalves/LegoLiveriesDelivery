@@ -27,14 +27,19 @@ import tqs.project.exceptions.OrderNotUpdatedException;
 import tqs.project.exceptions.StoreNotFoundException;
 import tqs.project.model.Address;
 import tqs.project.model.Order;
+import tqs.project.model.Rider;
 import tqs.project.model.Store;
 import tqs.project.repository.AddressRepository;
 import tqs.project.repository.OrderRepository;
+import tqs.project.repository.RiderRepository;
 import tqs.project.repository.StoreRepository;
+
+import java.security.SecureRandom;
 
 @Service
 public class OrderService {    
     private static final Logger log = LoggerFactory.getLogger(OrderService.class);
+    private SecureRandom rand = new SecureRandom();
 
     @Autowired
     private OrderRepository orderRep;
@@ -45,6 +50,9 @@ public class OrderService {
     @Autowired
     private AddressRepository addressRep;
 
+    @Autowired
+    private RiderRepository riderRep;
+    
     private String engineURL = "legoliveries:8080/order";
 
     public List<Order> getAllOrders() {
@@ -114,6 +122,35 @@ public class OrderService {
         order.setStatus(0);
 
         order.setTimeOfDelivery(orderDTO.getTimeOfDelivery());
+
+        return order;
+    }
+
+    public Order setRider(Long orderId) {
+
+        Order order = orderRep.getById(orderId);
+
+        // set rider
+        Rider rider = new Rider();
+
+        List<Rider> riders = riderRep.findAll();
+
+        int max = 0;
+        Rider max_rider = null;
+        for (Rider rid: riders) {
+            int numBillings = rand.nextInt(16);
+            int billing = 0;
+            for (int i = 0; i < numBillings; i++) {
+                billing += rand.nextInt(5) + 1;
+            }
+            if (billing > max) {
+                max_rider = rid;
+                max = billing;
+            }
+        }
+
+        order.setRider(max_rider);
+        rider.addOrder(order);
 
         return order;
     }

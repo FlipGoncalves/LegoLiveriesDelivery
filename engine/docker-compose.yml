@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "9001:9001"
     environment:
       - spring.datasource.url=jdbc:mysql://mysqldba:3306/enginedb?useSSL=false
     networks:
