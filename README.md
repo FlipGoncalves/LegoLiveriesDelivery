@@ -92,3 +92,5 @@ Other tools used during the execution of the project.
 - [QA Manual](./deliverables/qa_manual.pdf)
 - [Specification Report](./deliverables/report.pdf)
 - [Presentation Slides](./deliverables/presentation.pdf)
+- <a href="http://deti-tqs-06-ua-pt/engine-swaggerdocs.html">API Documentation for the Engine</a>
+- <a href="http://deti-tqs-06-ua-pt/legoliveries-swaggerdocs.html">API Documentation for the RestAPI</a>
